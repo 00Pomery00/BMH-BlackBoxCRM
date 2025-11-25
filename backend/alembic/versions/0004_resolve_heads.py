@@ -4,7 +4,6 @@ Revision ID: 0004_resolve_heads
 Revises: 0003_migrate_users_to_fu_users, 0003_merge_fu_users
 Create Date: 2025-11-25 00:20:00.000000
 """
-from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = '0004_resolve_heads'

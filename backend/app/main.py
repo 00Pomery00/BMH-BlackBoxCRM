@@ -3,7 +3,6 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import weakref
 from app import crud, ai_processor, gamification, models, schemas, security, integrations, reporting
-import os
 import asyncio
 
 DATABASE_URL = "sqlite:///./test.db"
@@ -79,6 +78,11 @@ try:
 except Exception:
     # If sqladmin isn't installed in the environment, skip admin registration.
     pass
+try:
+    # Ensure automation flows are visible in admin UI
+    admin.add_view(ModelView(models.AutomationFlow, engine))
+except Exception:
+    pass
 # Register auth routes
 from app.users import router as users_router
 app.include_router(users_router)
@@ -93,6 +97,20 @@ except Exception:
 try:
     from .fastapi_users_impl import include_fastapi_users_impl as _include_fu_impl
     _include_fu_impl(app)
+except Exception:
+    pass
+
+# Provide a minimal compatibility shim for fastapi-users endpoints used in tests
+try:
+    from .fastapi_users_shim import router as _fu_shim
+    app.include_router(_fu_shim)
+except Exception:
+    pass
+
+# Register admin automation API
+try:
+    from .admin_automations import router as admin_automations_router
+    app.include_router(admin_automations_router)
 except Exception:
     pass
 

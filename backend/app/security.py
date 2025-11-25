@@ -13,9 +13,13 @@ import warnings
 load_dotenv()
 
 # Secrets and settings (use env vars in production)
-SECRET_KEY = os.getenv("BBH_SECRET_KEY") or os.getenv("SECRET_KEY") or "demo-secret-key-change-me"
-if SECRET_KEY == "demo-secret-key-change-me":
-    warnings.warn("Using demo SECRET_KEY; set BBH_SECRET_KEY in environment for production")
+# Prefer explicit env var. If not set, generate an ephemeral secret for this process
+# to avoid checking a hard-coded secret into source. In production set `BBH_SECRET_KEY`.
+SECRET_KEY = os.getenv("BBH_SECRET_KEY") or os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    import secrets
+    SECRET_KEY = secrets.token_hex(32)
+    warnings.warn("No BBH_SECRET_KEY set — generated ephemeral secret for this process. Set BBH_SECRET_KEY in environment for production.")
 
 ALGORITHM = os.getenv("BBH_JWT_ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("BBH_ACCESS_TOKEN_EXPIRE_MINUTES", 60 * 24))

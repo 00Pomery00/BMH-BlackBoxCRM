@@ -61,3 +61,18 @@ class WebhookQueue(Base):
     next_attempt_at = Column(DateTime, default=datetime.datetime.utcnow)
     dead = Column(Integer, default=0)
     created_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+
+class AutomationFlow(Base):
+    __tablename__ = "automation_flows"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False, unique=True)
+    description = Column(Text, default="")
+    # JSON definition stored as text for SQLite compatibility
+    definition = Column(Text, nullable=False)
+    is_active = Column(Integer, default=1)
+    allow_advanced_edit = Column(Integer, default=0)
+    protected = Column(Integer, default=0)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow)
+    created_by = Column(Integer, default=0)

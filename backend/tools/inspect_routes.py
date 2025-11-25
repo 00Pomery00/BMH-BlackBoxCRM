@@ -1,5 +1,7 @@
-import importlib, traceback
-import os, sys
+import importlib
+import traceback
+import os
+import sys
 
 print('cwd=', os.getcwd())
 print('sys.path[0]=', sys.path[0])

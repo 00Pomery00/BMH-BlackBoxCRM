@@ -1,4 +1,3 @@
-import json
 from app import integrations
 from app import models
 from app.integrations import SessionLocal

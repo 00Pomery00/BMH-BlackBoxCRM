@@ -23,8 +23,14 @@ try:
     from fastapi_users import schemas as fu_schemas
     from fastapi_users.manager import BaseUserManager
 except Exception as exc:  # pragma: no cover - optional deps
+    # Do not re-raise here — keep module importable even if optional deps
+    # are missing. The `include_fastapi_users_impl` function will handle
+    # runtime inclusion and log if it cannot be completed.
     logger.info("fastapi-users optional dependencies not available: %s", exc)
-    raise
+    # Mark that fastapi-users integration is unavailable
+    _FASTAPI_USERS_AVAILABLE = False
+else:
+    _FASTAPI_USERS_AVAILABLE = True
 
 # Configuration
 DATABASE_URL_ASYNC = os.getenv("DATABASE_URL_ASYNC", "sqlite+aiosqlite:///./test.db")
