@@ -21,13 +21,13 @@ FLOW_SCHEMA = {
                 "properties": {
                     "id": {"type": "string"},
                     "type": {"type": "string", "enum": ALLOWED_ACTIONS},
-                    "params": {"type": "object"}
+                    "params": {"type": "object"},
                 },
-                "required": ["type"]
-            }
-        }
+                "required": ["type"],
+            },
+        },
     },
-    "required": ["steps"]
+    "required": ["steps"],
 }
 
 validator = Draft7Validator(FLOW_SCHEMA)
@@ -49,8 +49,13 @@ def validate_flow(definition: str) -> Tuple[bool, List[str]]:
     return (len(errors) == 0), errors
 
 
-def execute_flow(db, flow, context: Dict[str, Any] = None, dry_run: bool = False) -> Dict[str, Any]:
-    """Execute a validated flow definition. Only a small whitelisted set of actions are allowed.
+def execute_flow(
+    db, flow, context: Dict[str, Any] = None, dry_run: bool = False
+) -> Dict[str, Any]:
+    """
+    Execute a validated flow definition.
+
+    Only a small whitelisted set of actions are allowed.
 
     Returns dict with run results and any errors.
     """
@@ -88,7 +93,9 @@ def execute_flow(db, flow, context: Dict[str, Any] = None, dry_run: bool = False
                 # delay in seconds
                 secs = float(params.get("seconds", 1))
                 if not dry_run:
-                    time.sleep(min(secs, 5))  # limit max blocking sleep to 5s for safety
+                    time.sleep(
+                        min(secs, 5)
+                    )  # limit max blocking sleep to 5s for safety
                 entry["result"] = {"slept": secs}
             else:
                 entry["error"] = "unsupported action"

@@ -45,7 +45,9 @@ def enrich_with_opengov(lead: Dict) -> Dict:
     }
 
 
-def apply_demo_scoring(companies: List[Dict], deterministic: bool = False) -> List[Dict]:
+def apply_demo_scoring(
+    companies: List[Dict], deterministic: bool = False
+) -> List[Dict]:
     scored = []
     for idx, c in enumerate(companies):
         seed = idx if deterministic else None

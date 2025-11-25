@@ -4,6 +4,7 @@ This module registers `fastapi-users` routers under `/fu_auth` using an
 async engine. It avoids running event-loop blocking operations at import time
 and will quietly skip integration if configuration or dependencies are missing.
 """
+
 from __future__ import annotations
 
 import logging
@@ -14,11 +15,19 @@ logger = logging.getLogger(__name__)
 
 try:
     from sqlalchemy import Column, Integer, String, Boolean, MetaData
-    from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
+    from sqlalchemy.ext.asyncio import (
+        create_async_engine,
+        async_sessionmaker,
+        AsyncSession,
+    )
     from sqlalchemy.orm import declarative_base
     from fastapi import Depends
     from fastapi_users import FastAPIUsers
-    from fastapi_users.authentication import AuthenticationBackend, BearerTransport, JWTStrategy
+    from fastapi_users.authentication import (
+        AuthenticationBackend,
+        BearerTransport,
+        JWTStrategy,
+    )
     from fastapi_users.db import SQLAlchemyUserDatabase
     from fastapi_users import schemas as fu_schemas
     from fastapi_users.manager import BaseUserManager
@@ -95,18 +104,33 @@ def include_fastapi_users_impl(app):
         UserCreate = fu_schemas.BaseUserCreate
         UserUpdate = fu_schemas.BaseUserUpdate
 
-        # Build authentication backend using new fastapi-users API (JWTStrategy + BearerTransport)
+        # Build authentication backend using new fastapi-users API
+        # (JWTStrategy + BearerTransport)
         bearer_transport = BearerTransport(tokenUrl="/fu_auth/jwt/login")
         jwt_strategy = JWTStrategy(secret=SECRET, lifetime_seconds=3600)
-        auth_backend = AuthenticationBackend(name="jwt", transport=bearer_transport, get_strategy=lambda: jwt_strategy)
+        auth_backend = AuthenticationBackend(
+            name="jwt", transport=bearer_transport, get_strategy=lambda: jwt_strategy
+        )
 
         global fastapi_users
         fastapi_users = FastAPIUsers(get_user_manager, [auth_backend])
 
         # Register routers under /fu_auth to avoid colliding with existing endpoints
-        app.include_router(fastapi_users.get_auth_router(auth_backend), prefix="/fu_auth/jwt", tags=["fu_auth"])
-        app.include_router(fastapi_users.get_register_router(UserRead, UserCreate), prefix="/fu_auth", tags=["fu_auth"])
-        app.include_router(fastapi_users.get_users_router(UserRead, UserUpdate), prefix="/fu_auth/users", tags=["fu_auth"])
+        app.include_router(
+            fastapi_users.get_auth_router(auth_backend),
+            prefix="/fu_auth/jwt",
+            tags=["fu_auth"],
+        )
+        app.include_router(
+            fastapi_users.get_register_router(UserRead, UserCreate),
+            prefix="/fu_auth",
+            tags=["fu_auth"],
+        )
+        app.include_router(
+            fastapi_users.get_users_router(UserRead, UserUpdate),
+            prefix="/fu_auth/users",
+            tags=["fu_auth"],
+        )
 
         logger.info("fastapi-users impl included at /fu_auth")
     except Exception as exc:

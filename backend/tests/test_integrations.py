@@ -21,7 +21,10 @@ def test_webhook_dispatch_retry(monkeypatch):
         return DummyResp(200)
 
     import httpx as _httpx
+
     monkeypatch.setattr(_httpx, "post", fake_post_fail_then_success)
 
-    success = integrations.webhook_dispatch("http://example.test/webhook", {"a": 1}, retries=4)
+    success = integrations.webhook_dispatch(
+        "http://example.test/webhook", {"a": 1}, retries=4
+    )
     assert success is True

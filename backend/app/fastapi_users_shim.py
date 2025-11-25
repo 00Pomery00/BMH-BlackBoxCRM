@@ -6,6 +6,7 @@ from pydantic import BaseModel
 
 router = APIRouter()
 
+
 class ShimRegister(BaseModel):
     email: str
     password: str
@@ -15,12 +16,16 @@ class ShimRegister(BaseModel):
 def fu_register(payload: ShimRegister):
     db: Session = SessionLocal()
     try:
-        existing = db.query(models.User).filter(models.User.email == payload.email).first()
+        existing = (
+            db.query(models.User).filter(models.User.email == payload.email).first()
+        )
         if existing:
             # mimic fastapi-users behavior: return 400 on already exists
             raise HTTPException(status_code=400, detail="REGISTER_USER_ALREADY_EXISTS")
         hashed = security.pwd_context.hash(payload.password)
-        u = models.User(username=payload.email, email=payload.email, hashed_password=hashed)
+        u = models.User(
+            username=payload.email, email=payload.email, hashed_password=hashed
+        )
         db.add(u)
         db.commit()
         db.refresh(u)
@@ -38,7 +43,9 @@ def fu_login(username: str = Form(...), password: str = Form(...)):
             raise HTTPException(status_code=401, detail="invalid credentials")
         if not security.pwd_context.verify(password, u.hashed_password):
             raise HTTPException(status_code=401, detail="invalid credentials")
-        token = security.create_access_token({"sub": u.email, "uid": u.id, "role": u.role})
+        token = security.create_access_token(
+            {"sub": u.email, "uid": u.id, "role": u.role}
+        )
         return {"access_token": token, "token_type": "bearer"}
     finally:
         db.close()

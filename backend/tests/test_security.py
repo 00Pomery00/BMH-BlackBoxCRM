@@ -26,8 +26,12 @@ def test_mfa_flow():
 
 def test_admin_rbac():
     # create tokens with admin and user roles
-    admin_token = security.create_access_token({"sub": "adminuser", "uid": 1, "role": "admin"})
-    user_token = security.create_access_token({"sub": "normaluser", "uid": 2, "role": "user"})
+    admin_token = security.create_access_token(
+        {"sub": "adminuser", "uid": 1, "role": "admin"}
+    )
+    user_token = security.create_access_token(
+        {"sub": "normaluser", "uid": 2, "role": "user"}
+    )
 
     # admin can access
     r = client.get("/admin/ping", headers={"Authorization": f"Bearer {admin_token}"})

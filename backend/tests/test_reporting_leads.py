@@ -10,6 +10,7 @@ def test_leads_export_filters():
     # create some companies
     # NOTE: test DB is the same test.db used by the app
     from app.main import SessionLocal
+
     db = SessionLocal()
     # cleanup companies table for predictable test
     db.query(models.Contact).delete()

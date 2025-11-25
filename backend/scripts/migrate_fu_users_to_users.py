@@ -8,15 +8,17 @@ The script is careful: it will not overwrite existing users with the same email.
 It prints a summary of planned inserts. When run with `--apply` it performs the inserts
 inside a transaction.
 """
+
 import argparse
 import sqlite3
 import os
 import sys
+# ruff: noqa: E501
 
 
 def get_db_path():
     # Use ALEMBIC config default if present, else fallback to ./test.db
-    return os.path.join(os.path.dirname(__file__), '..', '..', 'test.db')
+    return os.path.join(os.path.dirname(__file__), "..", "..", "test.db")
 
 
 def plan_migration(conn):
@@ -27,7 +29,9 @@ def plan_migration(conn):
         print("No `fu_users` table found; nothing to do.")
         return []
 
-    cur.execute("SELECT email, hashed_password, is_active, is_superuser, is_verified FROM fu_users WHERE email IS NOT NULL")
+    cur.execute(
+        "SELECT email, hashed_password, is_active, is_superuser, is_verified FROM fu_users WHERE email IS NOT NULL"
+    )
     fu_rows = cur.fetchall()
 
     planned = []
@@ -36,15 +40,24 @@ def plan_migration(conn):
         if cur.fetchone():
             # Skip existing user
             continue
-        role = 'admin' if is_superuser else 'user'
-        planned.append((email, hashed_password or '', int(is_active or 0), role, int(is_superuser or 0), int(is_verified or 0)))
+        role = "admin" if is_superuser else "user"
+        planned.append(
+            (
+                email,
+                hashed_password or "",
+                int(is_active or 0),
+                role,
+                int(is_superuser or 0),
+                int(is_verified or 0),
+            )
+        )
 
     return planned
 
 
 def apply_migration(conn, planned):
     cur = conn.cursor()
-    cur.execute('BEGIN')
+    cur.execute("BEGIN")
     try:
         for row in planned:
             cur.execute(
@@ -59,8 +72,8 @@ def apply_migration(conn, planned):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--apply', action='store_true', help='Perform the migration')
-    parser.add_argument('--db', default=None, help='Path to sqlite DB file')
+    parser.add_argument("--apply", action="store_true", help="Perform the migration")
+    parser.add_argument("--db", default=None, help="Path to sqlite DB file")
     args = parser.parse_args()
 
     db_path = args.db or get_db_path()
@@ -83,15 +96,15 @@ def main():
             print("Nothing to insert.")
 
         if args.apply:
-            confirm = input('Apply these changes? type YES to continue: ')
-            if confirm == 'YES':
+            confirm = input("Apply these changes? type YES to continue: ")
+            if confirm == "YES":
                 apply_migration(conn, planned)
-                print('Applied.')
+                print("Applied.")
             else:
-                print('Aborted by user.')
+                print("Aborted by user.")
     finally:
         conn.close()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

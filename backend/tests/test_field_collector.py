@@ -19,7 +19,9 @@ def test_mobile_add_and_sync():
     assert data.get("status") == "ok"
     assert "lead_id" in data
 
-    batch = {"leads": [lead, {"name": "SyncCo", "email": "a@syncco.com", "lead_score": 0.9}]}
+    batch = {
+        "leads": [lead, {"name": "SyncCo", "email": "a@syncco.com", "lead_score": 0.9}]
+    }
     r2 = client.post("/mobile/sync", json=batch)
     assert r2.status_code == 200
     d2 = r2.json()

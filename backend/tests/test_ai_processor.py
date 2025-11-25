@@ -2,7 +2,11 @@ from app import ai_processor
 
 
 def test_score_lead_range_and_determinism():
-    lead = {"name": "Example Company", "email": "contact@example.com", "lead_score": 0.5}
+    lead = {
+        "name": "Example Company",
+        "email": "contact@example.com",
+        "lead_score": 0.5,
+    }
     s1 = ai_processor.score_lead(lead, seed=42)
     s2 = ai_processor.score_lead(lead, seed=42)
     assert 0.0 <= s1 <= 1.0

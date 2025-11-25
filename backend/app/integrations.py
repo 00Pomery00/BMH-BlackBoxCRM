@@ -83,7 +83,9 @@ def _consume_token(host: str) -> bool:
         return True
 
 
-def webhook_dispatch(url: str, payload: Dict, retries: int = 3, backoff: float = 0.5) -> bool:
+def webhook_dispatch(
+    url: str, payload: Dict, retries: int = 3, backoff: float = 0.5
+) -> bool:
     for attempt in range(1, retries + 1):
         try:
             r = httpx.post(url, json=payload, timeout=5.0)
@@ -96,7 +98,12 @@ def webhook_dispatch(url: str, payload: Dict, retries: int = 3, backoff: float =
 
 
 def enqueue_webhook(db, url: str, payload: Dict):
-    w = models.WebhookQueue(url=url, payload=json.dumps(payload), attempts=0, next_attempt_at=datetime.datetime.utcnow())
+    w = models.WebhookQueue(
+        url=url,
+        payload=json.dumps(payload),
+        attempts=0,
+        next_attempt_at=datetime.datetime.utcnow(),
+    )
     db.add(w)
     db.commit()
     db.refresh(w)
@@ -110,7 +117,11 @@ def process_queue_once(db=None, max_attempts: int = 5):
         db = SessionLocal()
         local_db = True
     now = datetime.datetime.utcnow()
-    rows = db.query(models.WebhookQueue).filter(models.WebhookQueue.next_attempt_at <= now).all()
+    rows = (
+        db.query(models.WebhookQueue)
+        .filter(models.WebhookQueue.next_attempt_at <= now)
+        .all()
+    )
     processed = 0
     for row in rows:
         payload = json.loads(row.payload)
@@ -125,8 +136,10 @@ def process_queue_once(db=None, max_attempts: int = 5):
                 row.attempts = (row.attempts or 0) + 1
                 row.last_error = (row.last_error or "") + ";failed"
                 # exponential backoff
-                delay = (2 ** row.attempts) * 1
-                row.next_attempt_at = datetime.datetime.utcnow() + datetime.timedelta(seconds=delay)
+                delay = (2**row.attempts) * 1
+                row.next_attempt_at = datetime.datetime.utcnow() + datetime.timedelta(
+                    seconds=delay
+                )
                 if row.attempts >= max_attempts:
                     # mark as dead-letter (keep record for admin review)
                     row.dead = 1
@@ -139,7 +152,9 @@ def process_queue_once(db=None, max_attempts: int = 5):
         except Exception as e:
             row.attempts = (row.attempts or 0) + 1
             row.last_error = str(e)
-            row.next_attempt_at = datetime.datetime.utcnow() + datetime.timedelta(seconds=30)
+            row.next_attempt_at = datetime.datetime.utcnow() + datetime.timedelta(
+                seconds=30
+            )
             db.add(row)
             db.commit()
     if local_db:

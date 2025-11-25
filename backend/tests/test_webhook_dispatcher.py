@@ -24,7 +24,7 @@ def test_enqueue_and_process(monkeypatch):
             raise Exception("network error")
         return R(200)
 
-    monkeypatch.setattr('httpx.post', fake_post)
+    monkeypatch.setattr("httpx.post", fake_post)
 
     # enqueue a webhook
     w = integrations.enqueue_webhook(db, "http://example.invalid/webhook", {"x": 1})
@@ -38,6 +38,7 @@ def test_enqueue_and_process(monkeypatch):
 
     # make row due immediately (fast-forward backoff) and process again - should succeed
     import datetime
+
     row = db.query(models.WebhookQueue).filter(models.WebhookQueue.id == w.id).first()
     row.next_attempt_at = datetime.datetime.utcnow() - datetime.timedelta(seconds=1)
     db.add(row)
