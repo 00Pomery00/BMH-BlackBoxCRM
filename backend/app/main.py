@@ -1,9 +1,22 @@
 from fastapi import FastAPI, Depends
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 import weakref
-from app import crud, ai_processor, gamification, models, schemas, security, integrations, reporting
 import asyncio
+import datetime
+from contextlib import asynccontextmanager
+from app import (
+    crud,
+    ai_processor,
+    gamification,
+    models,
+    schemas,
+    security,
+    integrations,
+    reporting,
+    audit,
+)
+ 
 
 DATABASE_URL = "sqlite:///./test.db"
 
@@ -11,6 +24,7 @@ engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 
 # Wrap the sessionmaker so we can keep weakrefs to created Session instances.
 _maker = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
 
 class SessionFactory:
     def __init__(self, maker):
@@ -32,9 +46,9 @@ class SessionFactory:
             except Exception:
                 pass
 
+
 SessionLocal = SessionFactory(_maker)
 
-from sqlalchemy import text
 
 # Try to ensure the `dead` column exists on older DBs created before the column
 # was introduced. If the table doesn't exist yet, creating all tables will set
@@ -42,7 +56,9 @@ from sqlalchemy import text
 models.Base.metadata.create_all(bind=engine)
 try:
     with engine.connect() as conn:
-        conn.execute(text("ALTER TABLE webhook_queue ADD COLUMN dead INTEGER DEFAULT 0"))
+        conn.execute(
+            text("ALTER TABLE webhook_queue ADD COLUMN dead INTEGER DEFAULT 0")
+        )
         conn.commit()
 except Exception:
     # if the table doesn't exist yet or column already present, ignore errors
@@ -61,16 +77,7 @@ except Exception:
 app = FastAPI(title="BlackBox CRM 2025 - Demo")
 
 # Register audit middleware for structured logging
-from app import audit
 app.middleware("http")(audit.audit_middleware)
-from fastapi import FastAPI, Depends
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
-import weakref
-from app import crud, ai_processor, gamification, models, schemas, security, integrations, reporting, audit
-from contextlib import asynccontextmanager
-import asyncio
-import datetime
 
 # --- Admin UI (sqladmin) registration ---
 try:
@@ -92,18 +99,20 @@ try:
 except Exception:
     pass
 # Register auth routes
-from app.users import router as users_router
+from app.users import router as users_router  # noqa: E402
 app.include_router(users_router)
 
 # Optionally include fastapi-users scaffold or implementation (best-effort)
 try:
     from .fastapi_users import include_fastapi_users as _include_fu
+
     _include_fu(app)
 except Exception:
     pass
 
 try:
     from .fastapi_users_impl import include_fastapi_users_impl as _include_fu_impl
+
     _include_fu_impl(app)
 except Exception:
     pass
@@ -111,6 +120,7 @@ except Exception:
 # Provide a minimal compatibility shim for fastapi-users endpoints used in tests
 try:
     from .fastapi_users_shim import router as _fu_shim
+
     app.include_router(_fu_shim)
 except Exception:
     pass
@@ -118,6 +128,7 @@ except Exception:
 # Register admin automation API
 try:
     from .admin_automations import router as admin_automations_router
+
     app.include_router(admin_automations_router)
 except Exception:
     pass
@@ -168,7 +179,9 @@ def mobile_sync(payload: dict, db=Depends(get_db)):
     for lead in leads:
         normalized = ai_processor.apply_demo_scoring([lead], deterministic=True)[0]
         comp = crud.create_or_update_lead(db, normalized)
-        results.append({"lead_id": comp.id, "name": comp.name, "lead_score": comp.lead_score})
+        results.append(
+            {"lead_id": comp.id, "name": comp.name, "lead_score": comp.lead_score}
+        )
     return {"status": "ok", "synced": len(results), "results": results}
 
 
@@ -209,13 +222,27 @@ def export_companies_json(db=Depends(get_db)):
 
 
 @app.get("/reports/leads.csv")
-def export_leads_csv(name: str = None, min_score: float = None, max_score: float = None, db=Depends(get_db)):
-    return reporting.leads_csv_response(db, name_contains=name, min_score=min_score, max_score=max_score)
+def export_leads_csv(
+    name: str = None,
+    min_score: float = None,
+    max_score: float = None,
+    db=Depends(get_db),
+):
+    return reporting.leads_csv_response(
+        db, name_contains=name, min_score=min_score, max_score=max_score
+    )
 
 
 @app.get("/reports/leads.json")
-def export_leads_json(name: str = None, min_score: float = None, max_score: float = None, db=Depends(get_db)):
-    return reporting.leads_json_response(db, name_contains=name, min_score=min_score, max_score=max_score)
+def export_leads_json(
+    name: str = None,
+    min_score: float = None,
+    max_score: float = None,
+    db=Depends(get_db),
+):
+    return reporting.leads_json_response(
+        db, name_contains=name, min_score=min_score, max_score=max_score
+    )
 
 
 # --- Security / Admin / MFA demo endpoints ---
@@ -243,16 +270,17 @@ def admin_ping(user: schemas.User = Depends(security.get_current_user)):
 
 @app.post("/webhook/enqueue")
 def webhook_enqueue(payload: dict, db=Depends(get_db)):
-    """Enqueue a webhook for later dispatch. JSON body: {"url": "https://...", "payload": {...}}"""
+    """
+    Enqueue a webhook for later dispatch.
+
+    Expected JSON body: {"url": "https://...", "payload": {...}}
+    """
     url = payload.get("url")
     pl = payload.get("payload", {})
     if not url:
         return {"status": "error", "message": "missing url"}
     w = integrations.enqueue_webhook(db, url, pl)
     return {"status": "ok", "id": w.id}
-
-
-from contextlib import asynccontextmanager
 
 
 @asynccontextmanager
@@ -279,6 +307,7 @@ async def lifespan(app: FastAPI):
         except Exception:
             pass
 
+
 app.router.lifespan_context = lifespan
 
 # --- Admin UI (sqladmin) ---
@@ -298,25 +327,35 @@ except Exception:
 
 
 @app.get("/admin/webhooks")
-def admin_list_webhooks(user: schemas.User = Depends(security.get_current_user), db=Depends(get_db)):
+def admin_list_webhooks(
+    user: schemas.User = Depends(security.get_current_user), db=Depends(get_db)
+):
     security.require_role(user, ("admin",))
     rows = db.query(models.WebhookQueue).all()
     out = []
     for r in rows:
-        out.append({
-            "id": r.id,
-            "url": r.url,
-            "attempts": r.attempts,
-            "last_error": r.last_error,
-            "next_attempt_at": r.next_attempt_at.isoformat() if r.next_attempt_at else None,
-            "dead": bool(r.dead),
-            "created_at": r.created_at.isoformat() if r.created_at else None,
-        })
+        out.append(
+            {
+                "id": r.id,
+                "url": r.url,
+                "attempts": r.attempts,
+                "last_error": r.last_error,
+                "next_attempt_at": (
+                    r.next_attempt_at.isoformat() if r.next_attempt_at else None
+                ),
+                "dead": bool(r.dead),
+                "created_at": r.created_at.isoformat() if r.created_at else None,
+            }
+        )
     return {"webhooks": out}
 
 
 @app.post("/admin/webhooks/{wid}/requeue")
-def admin_requeue_webhook(wid: int, user: schemas.User = Depends(security.get_current_user), db=Depends(get_db)):
+def admin_requeue_webhook(
+    wid: int,
+    user: schemas.User = Depends(security.get_current_user),
+    db=Depends(get_db),
+):
     security.require_role(user, ("admin",))
     row = db.query(models.WebhookQueue).filter(models.WebhookQueue.id == wid).first()
     if not row:
