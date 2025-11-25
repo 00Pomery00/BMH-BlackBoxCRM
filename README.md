@@ -29,6 +29,26 @@ Set-Location 'C:\BMH\SW\BMH-BlackBoxCRM'
 docker compose up --build
 ```
 
+Deployment z CI (artefakty):
+
+1. CI vytvoří artefakty `backend-image.tar` a `frontend-image.tar` (job `build-images`). Stáhněte je z GitHub Actions runu.
+2. Na cílovém stroji nahrajte tar soubory a načtěte do Dockeru:
+
+```bash
+docker load -i backend-image.tar
+docker load -i frontend-image.tar
+```
+
+3. Spusťte `docker compose up -d` (přizpůsobte `docker-compose.yml` pro produkční nastavení a sítě).
+
+Automatické pushování do Docker Hubu:
+
+Přidal jsem workflow `.github/workflows/publish-images.yml`, které při pushi na `main` sestaví a pushne obrazy do Docker Hubu pokud jsou nastaveny tyto `secrets` v GitHub repozitáři:
+
+- `DOCKERHUB_USERNAME` — vaše Docker Hub uživatelské jméno
+- `DOCKERHUB_TOKEN` — personal access token (nebo heslo) pro Docker Hub
+
+Po nastavení secretů workflow automaticky pushne `blackboxcrm-backend:latest` a `blackboxcrm-frontend:latest` do vašeho Docker Hub účtu.
 Testy (backend):
 
 ```powershell
