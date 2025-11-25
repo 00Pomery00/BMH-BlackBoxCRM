@@ -1,0 +1,11 @@
+/.venv
+backend/.venv
+web-frontend/node_modules
+web-frontend/dist
+*.pyc
+__pycache__/
+test.db
+test.db.bak
+/.vscode
+.DS_Store
+/.pytest_cache

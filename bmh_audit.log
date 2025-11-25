@@ -1,0 +1,546 @@
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/admin/webhooks/1/requeue", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks/1/requeue", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/admin/webhooks/1/requeue", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks/1/requeue", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/admin/webhooks/1/requeue", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks/1/requeue", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/admin/webhooks/1/requeue", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks/1/requeue", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/admin/webhooks/1/requeue", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks/1/requeue", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/admin/webhooks/1/requeue", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks/1/requeue", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 404}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 404}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 404}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/admin/webhooks/1/requeue", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks/1/requeue", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/admin/webhooks/1/requeue", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks/1/requeue", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/admin/webhooks/1/requeue", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks/1/requeue", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/admin/webhooks/1/requeue", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks/1/requeue", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/admin/webhooks/1/requeue", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks/1/requeue", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/webhooks", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/admin/webhooks/1/requeue", "query": "", "user": null}}
+{"event": "response", "path": "/admin/webhooks/1/requeue", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/mobile/status", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/status", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mobile/sync", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/sync", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/health", "query": "", "user": null}}
+{"event": "response", "path": "/health", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/companies.json", "query": "", "user": null}}
+{"event": "response", "path": "/reports/companies.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.csv", "query": "", "user": null}}
+{"event": "response", "path": "/reports/leads.csv", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "min_score=6", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/reports/leads.json", "query": "name=Beta", "user": null}}
+{"event": "response", "path": "/reports/leads.json", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/request", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/request", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "POST", "path": "/mfa/verify", "query": "", "user": null}}
+{"event": "response", "path": "/mfa/verify", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "testserver", "client": "testclient", "method": "GET", "path": "/admin/ping", "query": "", "user": null}}
+{"event": "response", "path": "/admin/ping", "data": {"status_code": 403}}

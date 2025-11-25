@@ -1,0 +1,15 @@
+fastapi>=0.95.0
+uvicorn>=0.22.0
+sqlalchemy>=1.4
+pydantic>=1.10
+pytest>=7.0
+httpx>=0.23
+passlib[bcrypt]>=1.7
+python-jose>=3.3.0
+cryptography>=40.0
+python-dotenv>=1.0
+alembic>=1.9
+sqladmin>=0.3
+fastapi-users>=10.1
+fastapi-users-db-sqlalchemy>=2.1
+sqladmin>=0.5
