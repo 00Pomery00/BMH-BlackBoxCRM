@@ -63,6 +63,14 @@ app = FastAPI(title="BlackBox CRM 2025 - Demo")
 # Register audit middleware for structured logging
 from app import audit
 app.middleware("http")(audit.audit_middleware)
+from fastapi import FastAPI, Depends
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
+import weakref
+from app import crud, ai_processor, gamification, models, schemas, security, integrations, reporting, audit
+from contextlib import asynccontextmanager
+import asyncio
+import datetime
 
 # --- Admin UI (sqladmin) registration ---
 try:
@@ -157,8 +165,8 @@ def mobile_add_lead(payload: dict, db=Depends(get_db)):
 def mobile_sync(payload: dict, db=Depends(get_db)):
     leads = payload.get("leads", [])
     results = []
-    for l in leads:
-        normalized = ai_processor.apply_demo_scoring([l], deterministic=True)[0]
+    for lead in leads:
+        normalized = ai_processor.apply_demo_scoring([lead], deterministic=True)[0]
         comp = crud.create_or_update_lead(db, normalized)
         results.append({"lead_id": comp.id, "name": comp.name, "lead_score": comp.lead_score})
     return {"status": "ok", "synced": len(results), "results": results}
@@ -316,7 +324,6 @@ def admin_requeue_webhook(wid: int, user: schemas.User = Depends(security.get_cu
     row.attempts = 0
     row.last_error = ""
     row.dead = 0
-    import datetime
     row.next_attempt_at = datetime.datetime.utcnow()
     db.add(row)
     db.commit()

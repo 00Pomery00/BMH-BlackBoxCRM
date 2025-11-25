@@ -30,7 +30,7 @@ def test_leads_export_filters():
     r2 = client.get("/reports/leads.json", params={"min_score": 6})
     assert r2.status_code == 200
     data = r2.json()
-    names = [l["name"] for l in data.get("leads", [])]
+    names = [lead["name"] for lead in data.get("leads", [])]
     assert "Alpha Co" in names and "Gamma Inc" in names and "Beta Ltd" not in names
 
     # name contains

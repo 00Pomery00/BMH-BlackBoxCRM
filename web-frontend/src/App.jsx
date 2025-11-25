@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Dashboard from './components/Dashboard'
 import GamificationPanel from './components/GamificationPanel'
 import MapView from './components/MapView'
+import Automations from './components/Automations'
 import { fetchCompanies, fetchGamification } from './api'
 
 export default function App() {
@@ -22,6 +23,9 @@ export default function App() {
       <GamificationPanel stats={gamification} />
       <Dashboard companies={companies} />
       <MapView companies={companies} />
+      <div className="mt-8">
+        <Automations />
+      </div>
     </div>
   )
 }

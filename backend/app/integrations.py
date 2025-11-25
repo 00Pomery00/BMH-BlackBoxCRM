@@ -1,6 +1,7 @@
 import httpx
 import time
 import json
+import logging
 from typing import Dict
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
@@ -89,7 +90,7 @@ def webhook_dispatch(url: str, payload: Dict, retries: int = 3, backoff: float =
             if 200 <= r.status_code < 300:
                 return True
         except Exception as e:
-            last = str(e)
+            logging.debug("webhook_dispatch attempt %s failed: %s", attempt, e)
         time.sleep(backoff * attempt)
     return False
 

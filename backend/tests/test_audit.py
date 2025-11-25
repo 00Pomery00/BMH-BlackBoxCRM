@@ -21,5 +21,5 @@ def test_audit_logs_request_and_response(tmp_path, monkeypatch):
 
     lines = read_audit_lines()
     # Expect at least two JSON lines (request and response)
-    assert any('"event": "request"' in l for l in lines)
-    assert any('"event": "response"' in l for l in lines)
+    assert any('"event": "request"' in line for line in lines)
+    assert any('"event": "response"' in line for line in lines)
