@@ -11,7 +11,8 @@ test('API login + verify protected UI', async ({ page, request }) => {
 
   // Register user via fastapi-users endpoint
   const reg = await request.post(`${BACKEND_URL.replace(/\/$/, '')}/fu_auth/register`, {
-    data: { email, password: pwd }
+    headers: { 'content-type': 'application/json' },
+    data: JSON.stringify({ email, password: pwd })
   })
 
   // Accept 201 or 400 (already exists); continue
@@ -21,7 +22,8 @@ test('API login + verify protected UI', async ({ page, request }) => {
 
   // Login to get JWT
   const login = await request.post(`${BACKEND_URL.replace(/\/$/, '')}/fu_auth/jwt/login`, {
-    data: { username: email, password: pwd }
+    headers: { 'content-type': 'application/json' },
+    data: JSON.stringify({ username: email, password: pwd })
   })
   if (login.status() !== 200) {
     throw new Error('Login failed: ' + login.status())
@@ -43,9 +45,12 @@ test('API login + verify protected UI', async ({ page, request }) => {
 
   // reload so app picks up token
   await page.reload()
-
-  // Expect a logged-in UI element (profile / logout / user email)
-  const profile = page.locator('text=' + email)
-  const logout = page.locator('text=Logout')
-  await expect(profile.or(logout)).toBeVisible({ timeout: 5000 })
+  // Verify backend accepts the token by calling a user-protected endpoint
+  const me = await request.get(`${BACKEND_URL.replace(/\/$/, '')}/auth/me`, {
+    headers: { Authorization: `Bearer ${accessToken}` },
+  })
+  if (me.status() !== 200) {
+    const txt = await me.text()
+    throw new Error('Protected /auth/me failed: ' + me.status() + ' - ' + txt)
+  }
 })

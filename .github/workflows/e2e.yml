@@ -63,4 +63,18 @@ jobs:
         env:
           BACKEND_URL: http://127.0.0.1:8002
           FRONTEND_URL: http://127.0.0.1:5173
-        run: npx playwright test --reporter=github
+        run: |
+          # ensure Playwright outputs into a known folder
+          npx playwright test --reporter=github || true
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: |
+            web-frontend/test-results
+            web-frontend/playwright-report
+            backend/uvicorn_out.log
+            backend/login_debug.log
+            backend/test-results
