@@ -33,6 +33,11 @@ jobs:
         working-directory: web-frontend
         run: npm ci
 
+      - name: Make prevent-logs script executable
+        run: |
+          # Ensure the local helper script is executable on Linux runners
+          if [ -f scripts/prevent-logs-commit.sh ]; then chmod +x scripts/prevent-logs-commit.sh || true; fi
+
       - name: Run pre-commit hooks
         run: |
           python -m pip install --upgrade pip
