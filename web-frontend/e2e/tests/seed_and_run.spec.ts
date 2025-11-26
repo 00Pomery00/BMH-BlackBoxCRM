@@ -19,8 +19,34 @@ test.describe('Seed backend and verify UI', () => {
     }
   })
 
+  // helper: wait until backend /companies returns an entry with our lead name
+  async function waitForSeed(request: any, timeout = 15000) {
+    const start = Date.now()
+    while (Date.now() - start < timeout) {
+      try {
+        const resp = await request.get(`${BACKEND_URL.replace(/\/$/, '')}/companies`)
+        if (resp.status() === 200) {
+          const json = await resp.json()
+          if (Array.isArray(json) && json.find((c: any) => (c.name || '').includes(leadName))) return true
+        }
+      } catch (e) {
+        // ignore network hiccups and retry
+      }
+      await new Promise((r) => setTimeout(r, 500))
+    }
+    return false
+  }
+
   test('UI shows seeded lead', async ({ page }) => {
     const url = FRONTEND_URL || ('file://' + distIndex)
+
+    // if backend was used to seed, poll the backend until the seed is visible there
+    if (BACKEND_URL) {
+      const ok = await waitForSeed((global as any).request || (await (await import('@playwright/test')).request), 15000)
+      // proceed even if polling failed — the page assertions will fail and surface errors
+      if (!ok) console.warn('Timed out waiting for seed to appear in /companies')
+    }
+
     await page.goto(url)
 
     // wait for lead list to render — select the first matching element to avoid strict-mode collisions

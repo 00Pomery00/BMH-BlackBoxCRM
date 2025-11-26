@@ -16,3 +16,8 @@ backend/test-results/
 backend/test.db.bak.*
 bmh_audit.log
 backend/bmh_audit.log
+
+# CI / local artifacts and test results
+artifacts/
+ci-artifacts/
+web-frontend/test-results/

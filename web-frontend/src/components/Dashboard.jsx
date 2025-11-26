@@ -11,23 +11,23 @@ export default function Dashboard({ companies = [] }) {
 
   return (
     <section className="mb-6">
-      <h2 className="text-xl font-semibold mb-4">Overview</h2>
+      <h2 className="text-xl font-semibold mb-4">Přehled</h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-        <KpiCard title="Companies" value={total} />
-        <KpiCard title="Avg Lead Score" value={avg} />
-        <KpiCard title="Top Lead" value={top ? top.name : '—'} />
+        <KpiCard title="Firmy" value={total} />
+        <KpiCard title="Prům. skóre leadů" value={avg} />
+        <KpiCard title="Nejlepší lead" value={top ? top.name : '—'} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div>
-          <h3 className="text-lg font-medium mb-2">Leads</h3>
+          <h3 className="text-lg font-medium mb-2">Leady</h3>
           <LeadList companies={companies} />
         </div>
 
         <div>
-          <h3 className="text-lg font-medium mb-2">Recent Activity</h3>
-          <div className="p-4 bg-white rounded border">No recent activity.</div>
+          <h3 className="text-lg font-medium mb-2">Nedávné aktivity</h3>
+          <div className="p-4 bg-white rounded border">Zatím žádné aktivity.</div>
         </div>
       </div>
     </section>

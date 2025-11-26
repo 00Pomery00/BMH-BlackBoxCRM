@@ -57,14 +57,14 @@ export default function Automations() {
 
   return (
     <div className="p-4 rounded border mt-4">
-      <h2 className="text-xl font-semibold mb-2">Automations (admin)</h2>
+      <h2 className="text-xl font-semibold mb-2">Automatizace (admin)</h2>
       {message && <div className="mb-2 text-sm text-gray-700">{message}</div>}
       <div className="mb-4">
         <form onSubmit={handleCreate} className="space-y-2">
           <div>
             <input
               className="border px-2 py-1 w-full"
-              placeholder="Flow name"
+              placeholder="Název procesu"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
             />
@@ -78,19 +78,19 @@ export default function Automations() {
           </div>
           <div>
             <button className="bg-blue-600 text-white px-3 py-1 rounded" type="submit">
-              Create (validate)
+              Vytvořit (ověřit)
             </button>
           </div>
         </form>
       </div>
 
       <div>
-        <h3 className="font-medium mb-2">Existing flows</h3>
+        <h3 className="font-medium mb-2">Existující toky</h3>
         {loading ? (
-          <div>Loading...</div>
+          <div>Načítání...</div>
         ) : (
           <div className="space-y-2">
-            {flows.length === 0 && <div className="text-sm text-gray-500">No flows</div>}
+            {flows.length === 0 && <div className="text-sm text-gray-500">Žádné toky</div>}
             {flows.map((f) => (
               <div key={f.id} className="p-2 border rounded flex items-center justify-between">
                 <div>
@@ -101,7 +101,7 @@ export default function Automations() {
                     className="px-2 py-1 bg-green-600 text-white rounded"
                     onClick={() => handleRun(f.id)}
                   >
-                    Dry-run
+                    Simulace
                   </button>
                 </div>
               </div>

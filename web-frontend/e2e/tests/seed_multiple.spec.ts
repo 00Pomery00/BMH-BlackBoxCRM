@@ -15,10 +15,36 @@ test.describe('Seed multiple leads and verify UI list', () => {
     }
   })
 
+  // helper: wait until backend /companies returns at least N entries for this prefix
+  async function waitForSeeds(request: any, count = 3, timeout = 15000) {
+    const start = Date.now()
+    while (Date.now() - start < timeout) {
+      try {
+        const resp = await request.get(`${BACKEND_URL.replace(/\/$/, '')}/companies`)
+        if (resp.status() === 200) {
+          const json = await resp.json()
+          if (Array.isArray(json)) {
+            const matches = json.filter((c: any) => (c.name || '').startsWith(prefix))
+            if (matches.length >= count) return true
+          }
+        }
+      } catch (e) {
+        // ignore
+      }
+      await new Promise((r) => setTimeout(r, 500))
+    }
+    return false
+  }
+
   test('UI lists the seeded items', async ({ page }) => {
     const url = FRONTEND_URL || `file://${process.cwd()}/web-frontend/dist/index.html`
+    // if backend was used, wait until seeding is visible on the backend
+    if (BACKEND_URL) {
+      const ok = await waitForSeeds((global as any).request || (await (await import('@playwright/test')).request), 3, 15000)
+      if (!ok) console.warn('Timed out waiting for seeded batch to appear in /companies')
+    }
     await page.goto(url)
     // check at least one seeded item is visible
-    await expect(page.locator('text=E2E-Batch').first()).toBeVisible({ timeout: 10_000 })
+    await expect(page.locator('text=E2E-Batch').first()).toBeVisible({ timeout: 15_000 })
   })
 })

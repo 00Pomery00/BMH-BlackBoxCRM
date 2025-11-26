@@ -18,7 +18,7 @@ export default function App() {
     <div className="p-6 max-w-6xl mx-auto">
       <div className="flex items-center gap-4 mb-6">
         <img src="/logo.png" alt="BlackBox CRM" className="w-12 h-12" />
-        <h1 className="text-3xl font-bold">BlackBox CRM Dashboard</h1>
+        <h1 className="text-3xl font-bold">Přehled BlackBox CRM</h1>
       </div>
       <GamificationPanel stats={gamification} />
       <Dashboard companies={companies} />

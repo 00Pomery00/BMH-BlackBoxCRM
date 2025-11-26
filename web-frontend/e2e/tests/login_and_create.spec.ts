@@ -29,8 +29,18 @@ test.describe('App flows (file://)', () => {
     // ensure there is a lead list with at least one item; if not, create one via backend
     if (BACKEND_URL) {
       await page.request.post(`${BACKEND_URL.replace(/\/$/, '')}/mobile/leads`, { data: { name: 'E2E Modal Lead ' + Date.now(), email: `e2e+modal${Date.now()}@example.com`, lead_score: 0.5 } })
-      // allow UI a moment to refresh
-      await page.waitForTimeout(300)
+      // wait until backend reports at least one company/lead so the UI can fetch it
+      const start = Date.now()
+      while (Date.now() - start < 10000) {
+        try {
+          const resp = await page.request.get(`${BACKEND_URL.replace(/\/$/, '')}/companies`)
+          if (resp.status() === 200) {
+            const json = await resp.json()
+            if (Array.isArray(json) && json.length > 0) break
+          }
+        } catch (e) {}
+        await page.waitForTimeout(200)
+      }
     }
     const firstLead = page.locator('.p-3.bg-white.rounded.border').first()
     await expect(firstLead).toBeVisible({ timeout: 10_000 })
