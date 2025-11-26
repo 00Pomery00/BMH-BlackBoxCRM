@@ -860,3 +860,35 @@
 {"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "GET", "path": "/gamification", "query": "", "user": null}}
 {"event": "response", "path": "/gamification", "data": {"status_code": 200}}
 {"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "POST", "path": "/fu_auth/register", "query": "", "user": null}}
+{"event": "response", "path": "/fu_auth/register", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "GET", "path": "/gamification", "query": "", "user": null}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "GET", "path": "/gamification", "query": "", "user": null}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "POST", "path": "/fu_auth/jwt/login", "query": "", "user": null}}
+{"event": "response", "path": "/gamification", "data": {"status_code": 200}}
+{"event": "response", "path": "/gamification", "data": {"status_code": 200}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "response", "path": "/fu_auth/jwt/login", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "POST", "path": "/mobile/leads", "query": "", "user": null}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "GET", "path": "/gamification", "query": "", "user": null}}
+{"event": "response", "path": "/gamification", "data": {"status_code": 200}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "response", "path": "/mobile/leads", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "GET", "path": "/gamification", "query": "", "user": null}}
+{"event": "response", "path": "/gamification", "data": {"status_code": 200}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "GET", "path": "/companies", "query": "", "user": null}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "GET", "path": "/gamification", "query": "", "user": null}}
+{"event": "request", "data": {"ts": "127.0.0.1", "client": "127.0.0.1", "method": "GET", "path": "/auth/me", "query": "", "user": null}}
+{"event": "response", "path": "/gamification", "data": {"status_code": 200}}
+{"event": "response", "path": "/auth/me", "data": {"status_code": 200}}
+{"event": "response", "path": "/companies", "data": {"status_code": 200}}
