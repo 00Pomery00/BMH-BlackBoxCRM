@@ -1,0 +1,66 @@
+name: E2E tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install frontend deps
+        working-directory: web-frontend
+        run: npm ci
+
+      - name: Build frontend
+        working-directory: web-frontend
+        run: npm run build
+
+      - name: Install Playwright browsers
+        working-directory: web-frontend
+        run: npx playwright install --with-deps
+
+      - name: Start backend (uvicorn)
+        working-directory: backend
+        run: |
+          nohup python -m uvicorn app.main:app --host 127.0.0.1 --port 8002 > uvicorn_out.log 2>&1 &
+          echo $! > uvicorn.pid
+
+      - name: Serve frontend dist
+        run: |
+          npx http-server web-frontend/dist -p 5173 &
+
+      - name: Wait for backend
+        run: |
+          for i in {1..30}; do
+            if curl -sSf http://127.0.0.1:8002/companies >/dev/null; then echo ready && break; fi
+            sleep 1
+          done
+
+      - name: Run Playwright tests
+        working-directory: web-frontend
+        env:
+          BACKEND_URL: http://127.0.0.1:8002
+          FRONTEND_URL: http://127.0.0.1:5173
+        run: npx playwright test --reporter=github

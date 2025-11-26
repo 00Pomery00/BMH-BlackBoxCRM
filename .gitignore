@@ -9,3 +9,8 @@ test.db.bak
 /.vscode
 .DS_Store
 /.pytest_cache
+backend/login_debug.log
+backend/uvicorn_out.log
+backend/uvicorn_err.log
+backend/test-results/
+backend/test.db.bak.*
