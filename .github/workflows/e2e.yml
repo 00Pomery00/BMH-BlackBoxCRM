@@ -33,6 +33,12 @@ jobs:
         working-directory: web-frontend
         run: npm ci
 
+      - name: Run pre-commit hooks
+        run: |
+          python -m pip install --upgrade pip
+          pip install pre-commit
+          pre-commit run --all-files || true
+
       - name: Build frontend
         working-directory: web-frontend
         run: npm run build
