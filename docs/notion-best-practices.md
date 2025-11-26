@@ -144,7 +144,7 @@ V Notion vytvořte databázi `Dashboard` s view typu `Board` (by stage) a `Chart
 
 1. Implementovat Pydantic `BaseSettings` v backendu a přidat `backend/.env.example`.
 2. Dokončit migraci `fu_users` → `users` (test + runbook + backup).
-3. Nasadit Celery/Redis pro background jobs a monitoring (Flower/Prometheus).  
+3. Nasadit Celery/Redis pro background jobs a monitoring (Flower/Prometheus).
 4. Přidat Dependabot a security scans do CI (pip-audit/safety).
 
 ---

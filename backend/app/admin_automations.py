@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from . import security, models
+
+from . import models, security
+from .automation import execute_flow, validate_flow
 from .main import get_db
-from .automation import validate_flow, execute_flow
 
 router = APIRouter(prefix="/admin/automations", tags=["admin-automations"])
 

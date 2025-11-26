@@ -5,8 +5,8 @@ Revises: 0004_resolve_heads
 Create Date: 2025-11-25 00:40:00.000000
 """
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = "0005_add_automation_flow"

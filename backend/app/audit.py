@@ -1,6 +1,7 @@
+import json
 import logging
 import logging.handlers
-import json
+
 from fastapi import Request
 
 AUDIT_LOG = "bmh_audit.log"

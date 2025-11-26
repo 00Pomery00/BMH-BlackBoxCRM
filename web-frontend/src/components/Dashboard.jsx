@@ -1,11 +1,13 @@
-import React from 'react'
-import KpiCard from './ui/KpiCard'
-import LeadList from './LeadList'
+import React from 'react';
+import KpiCard from './ui/KpiCard';
+import LeadList from './LeadList';
 
 export default function Dashboard({ companies = [] }) {
-  const total = companies.length
-  const avg = total ? (companies.reduce((s, c) => s + (c.lead_score || 0), 0) / total).toFixed(1) : 0
-  const top = companies.slice().sort((a, b) => (b.lead_score || 0) - (a.lead_score || 0))[0]
+  const total = companies.length;
+  const avg = total
+    ? (companies.reduce((s, c) => s + (c.lead_score || 0), 0) / total).toFixed(1)
+    : 0;
+  const top = companies.slice().sort((a, b) => (b.lead_score || 0) - (a.lead_score || 0))[0];
 
   return (
     <section className="mb-6">
@@ -29,5 +31,5 @@ export default function Dashboard({ companies = [] }) {
         </div>
       </div>
     </section>
-  )
+  );
 }

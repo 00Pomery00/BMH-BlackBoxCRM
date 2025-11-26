@@ -1,25 +1,25 @@
-import fetch from 'cross-fetch'
+import fetch from 'cross-fetch';
 
-const BASE = process.env.VITE_API_URL || 'http://localhost:8000'
+const BASE = process.env.VITE_API_URL || 'http://localhost:8000';
 
 export async function fetchCompanies() {
-  const res = await fetch(`${BASE}/companies`)
-  if (!res.ok) throw new Error('Failed to fetch companies')
-  const data = await res.json()
-  return data.companies || []
+  const res = await fetch(`${BASE}/companies`);
+  if (!res.ok) throw new Error('Failed to fetch companies');
+  const data = await res.json();
+  return data.companies || [];
 }
 
 export async function fetchGamification() {
-  const res = await fetch(`${BASE}/gamification`)
-  if (!res.ok) return {}
-  return await res.json()
+  const res = await fetch(`${BASE}/gamification`);
+  if (!res.ok) return {};
+  return await res.json();
 }
 
 // Automations admin API
 export async function listAutomations() {
-  const res = await fetch(`${BASE}/admin/automations`)
-  if (!res.ok) throw new Error('Failed to fetch automations')
-  return await res.json()
+  const res = await fetch(`${BASE}/admin/automations`);
+  if (!res.ok) throw new Error('Failed to fetch automations');
+  return await res.json();
 }
 
 export async function createAutomation(payload) {
@@ -27,8 +27,8 @@ export async function createAutomation(payload) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
-  })
-  return res
+  });
+  return res;
 }
 
 export async function runAutomation(id, payload) {
@@ -36,6 +36,6 @@ export async function runAutomation(id, payload) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload || {}),
-  })
-  return res
+  });
+  return res;
 }

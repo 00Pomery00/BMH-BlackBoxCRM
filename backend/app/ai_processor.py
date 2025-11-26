@@ -1,5 +1,5 @@
 import random
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
 
 def score_lead(lead: Dict, seed: Optional[int] = None) -> float:

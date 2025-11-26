@@ -10,9 +10,10 @@ inside a transaction.
 """
 
 import argparse
-import sqlite3
 import os
+import sqlite3
 import sys
+
 # ruff: noqa: E501
 
 

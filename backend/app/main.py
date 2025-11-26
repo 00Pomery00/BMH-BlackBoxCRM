@@ -1,24 +1,24 @@
-from fastapi import FastAPI, Depends
-import os
-from pathlib import Path
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
-import weakref
 import asyncio
 import datetime
+import os
+import weakref
 from contextlib import asynccontextmanager
+from pathlib import Path
+
 from app import (
-    crud,
     ai_processor,
+    audit,
+    crud,
     gamification,
+    integrations,
     models,
+    reporting,
     schemas,
     security,
-    integrations,
-    reporting,
-    audit,
 )
- 
+from fastapi import Depends, FastAPI
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATABASE_URL = f"sqlite:///{BASE_DIR / 'test.db'}"
@@ -117,6 +117,7 @@ except Exception:
     pass
 # Register auth routes
 from app.users import router as users_router  # noqa: E402
+
 app.include_router(users_router)
 
 # Provide a minimal compatibility shim for fastapi-users endpoints used in tests
@@ -124,6 +125,7 @@ app.include_router(users_router)
 # even if optional fastapi-users scaffolding is present.
 try:
     from .fastapi_users_shim import router as _fu_shim
+
     app.include_router(_fu_shim)
 except Exception:
     pass
@@ -159,11 +161,17 @@ try:
     from fastapi.routing import APIRoute
 
     try:
-        from .fastapi_users_shim import fu_register as _fu_register, fu_login as _fu_login
+        from .fastapi_users_shim import fu_login as _fu_login
+        from .fastapi_users_shim import fu_register as _fu_register
 
         # Insert login then register at the front so they are matched first
-        app.router.routes.insert(0, APIRoute(path="/fu_auth/jwt/login", endpoint=_fu_login, methods=["POST"]))
-        app.router.routes.insert(0, APIRoute(path="/fu_auth/register", endpoint=_fu_register, methods=["POST"]))
+        app.router.routes.insert(
+            0, APIRoute(path="/fu_auth/jwt/login", endpoint=_fu_login, methods=["POST"])
+        )
+        app.router.routes.insert(
+            0,
+            APIRoute(path="/fu_auth/register", endpoint=_fu_register, methods=["POST"]),
+        )
     except Exception:
         pass
 except Exception:

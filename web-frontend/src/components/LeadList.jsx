@@ -1,11 +1,11 @@
-import React, { useState } from 'react'
-import LeadDetail from './LeadDetail'
+import React, { useState } from 'react';
+import LeadDetail from './LeadDetail';
 
 export default function LeadList({ companies = [] }) {
-  const [selected, setSelected] = useState(null)
+  const [selected, setSelected] = useState(null);
 
   if (!companies.length) {
-    return <div className="p-4 bg-white rounded border">No leads yet.</div>
+    return <div className="p-4 bg-white rounded border">No leads yet.</div>;
   }
 
   return (
@@ -18,7 +18,12 @@ export default function LeadList({ companies = [] }) {
               <div className="text-sm text-gray-600">Score: {c.lead_score}</div>
             </div>
             <div>
-              <button onClick={() => setSelected(c)} className="px-3 py-1 bg-blue-600 text-white rounded">Open</button>
+              <button
+                onClick={() => setSelected(c)}
+                className="px-3 py-1 bg-blue-600 text-white rounded"
+              >
+                Open
+              </button>
             </div>
           </div>
         ))}
@@ -26,5 +31,5 @@ export default function LeadList({ companies = [] }) {
 
       <LeadDetail lead={selected} onClose={() => setSelected(null)} />
     </div>
-  )
+  );
 }

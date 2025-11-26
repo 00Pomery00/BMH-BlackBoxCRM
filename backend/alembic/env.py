@@ -1,8 +1,9 @@
-from logging.config import fileConfig
 import os
 import sys
-from sqlalchemy import engine_from_config, pool
+from logging.config import fileConfig
+
 from alembic import context
+from sqlalchemy import engine_from_config, pool
 
 # ensure app package is importable for autogenerate
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))

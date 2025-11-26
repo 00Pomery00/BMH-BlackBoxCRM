@@ -1,5 +1,4 @@
-from app import integrations
-from app import models
+from app import integrations, models
 from app.integrations import SessionLocal
 
 

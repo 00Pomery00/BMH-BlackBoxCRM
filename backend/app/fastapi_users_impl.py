@@ -14,23 +14,23 @@ from typing import Optional
 logger = logging.getLogger(__name__)
 
 try:
-    from sqlalchemy import Column, Integer, String, Boolean, MetaData
-    from sqlalchemy.ext.asyncio import (
-        create_async_engine,
-        async_sessionmaker,
-        AsyncSession,
-    )
-    from sqlalchemy.orm import declarative_base
     from fastapi import Depends
     from fastapi_users import FastAPIUsers
+    from fastapi_users import schemas as fu_schemas
     from fastapi_users.authentication import (
         AuthenticationBackend,
         BearerTransport,
         JWTStrategy,
     )
     from fastapi_users.db import SQLAlchemyUserDatabase
-    from fastapi_users import schemas as fu_schemas
     from fastapi_users.manager import BaseUserManager
+    from sqlalchemy import Boolean, Column, Integer, MetaData, String
+    from sqlalchemy.ext.asyncio import (
+        AsyncSession,
+        async_sessionmaker,
+        create_async_engine,
+    )
+    from sqlalchemy.orm import declarative_base
 except Exception as exc:  # pragma: no cover - optional deps
     # Do not re-raise here — keep module importable even if optional deps
     # are missing. The `include_fastapi_users_impl` function will handle

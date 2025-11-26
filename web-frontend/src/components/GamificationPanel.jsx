@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export default function GamificationPanel({ stats = {} }) {
   return (
@@ -10,5 +10,5 @@ export default function GamificationPanel({ stats = {} }) {
         <div>Level: {stats.Level ?? 1}</div>
       </div>
     </section>
-  )
+  );
 }

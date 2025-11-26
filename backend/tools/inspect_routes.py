@@ -1,7 +1,7 @@
 import importlib
-import traceback
 import os
 import sys
+import traceback
 
 print("cwd=", os.getcwd())
 print("sys.path[0]=", sys.path[0])

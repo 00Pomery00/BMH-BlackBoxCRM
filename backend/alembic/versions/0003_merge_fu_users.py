@@ -7,8 +7,8 @@ Create Date: 2025-11-25 00:10:00.000000
 
 # ruff: noqa: E501
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = "0003_merge_fu_users"

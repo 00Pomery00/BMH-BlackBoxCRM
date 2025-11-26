@@ -13,32 +13,32 @@ repos:
         name: Prevent committing runtime log or DB files
         entry: scripts/prevent-logs-commit.sh
         language: script
-        files: '\\.(log|db|bak|sqlite)$'
+        files: '\.(log|db|bak|sqlite)$'
 
-# Python formatters
-- repo: https://github.com/psf/black
-  rev: 23.9.1
-  hooks:
-    - id: black
-      language_version: python3
-      args: ["--line-length=88"]
+  # Python formatters
+  - repo: https://github.com/psf/black
+    rev: 23.9.1
+    hooks:
+      - id: black
+        language_version: python3
+        args: ["--line-length=88"]
 
-- repo: https://github.com/PyCQA/isort
-  rev: 5.12.0
-  hooks:
-    - id: isort
-      args: ["--profile=black"]
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.12.0
+    hooks:
+      - id: isort
+        args: ["--profile=black"]
 
-# Frontend linting via npm script (requires npm deps installed)
-- repo: local
-  hooks:
-    - id: frontend-lint
-      name: Lint frontend via npm (ESLint)
-      entry: bash -c "cd web-frontend && npm run lint"
-      language: script
-      files: '^web-frontend/'
-    - id: format-frontend
-      name: Format frontend (Prettier + ESLint --fix)
-      entry: bash -lc "cd web-frontend && npx prettier --write \"src/**/*.{js,jsx,ts,tsx,css,md,json}\" && npx eslint --fix \"src/**/*.{js,jsx,ts,tsx}\" || true"
-      language: script
-      files: '^web-frontend/(src|public)/'
+  # Frontend linting via npm script (requires npm deps installed)
+  - repo: local
+    hooks:
+      - id: frontend-lint
+        name: Lint frontend via npm (ESLint)
+        entry: npm --prefix web-frontend run lint
+        language: system
+        files: '^web-frontend/'
+      - id: format-frontend
+        name: Format frontend (Prettier + ESLint --fix)
+        entry: npm --prefix web-frontend run format:fix
+        language: system
+        files: '^web-frontend/(src|public)/'

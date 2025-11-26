@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export default function KpiCard({ title, value, delta }) {
   return (
@@ -9,5 +9,5 @@ export default function KpiCard({ title, value, delta }) {
         <div className="text-sm text-green-600 mt-1">{delta >= 0 ? `+${delta}%` : `${delta}%`}</div>
       )}
     </div>
-  )
+  );
 }

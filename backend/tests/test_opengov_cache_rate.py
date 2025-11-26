@@ -1,5 +1,6 @@
-from app import integrations
 import time
+
+from app import integrations
 
 
 def test_opengov_cache_and_rate(monkeypatch):

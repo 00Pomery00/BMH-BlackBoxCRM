@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from 'react'
-import Dashboard from './components/Dashboard'
-import GamificationPanel from './components/GamificationPanel'
-import MapView from './components/MapView'
-import Automations from './components/Automations'
-import { fetchCompanies, fetchGamification } from './api'
+import React, { useEffect, useState } from 'react';
+import Dashboard from './components/Dashboard';
+import GamificationPanel from './components/GamificationPanel';
+import MapView from './components/MapView';
+import Automations from './components/Automations';
+import { fetchCompanies, fetchGamification } from './api';
 
 export default function App() {
-  const [companies, setCompanies] = useState([])
-  const [gamification, setGamification] = useState({})
+  const [companies, setCompanies] = useState([]);
+  const [gamification, setGamification] = useState({});
 
   useEffect(() => {
-    fetchCompanies().then(setCompanies).catch(console.error)
-    fetchGamification().then(setGamification).catch(console.error)
-  }, [])
+    fetchCompanies().then(setCompanies).catch(console.error);
+    fetchGamification().then(setGamification).catch(console.error);
+  }, []);
 
   return (
     <div className="p-6 max-w-6xl mx-auto">
@@ -27,5 +27,5 @@ export default function App() {
         <Automations />
       </div>
     </div>
-  )
+  );
 }

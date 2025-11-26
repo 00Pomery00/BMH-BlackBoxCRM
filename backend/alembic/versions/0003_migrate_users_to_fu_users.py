@@ -6,8 +6,8 @@ Revises: 0002_add_fu_users
 Create Date: 2025-11-25 00:10:00.000000
 """
 
-from alembic import op
 import sqlalchemy as sa
+from alembic import op
 
 # revision identifiers, used by Alembic.
 revision = "0003_migrate_users_to_fu_users"

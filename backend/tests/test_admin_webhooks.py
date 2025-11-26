@@ -1,7 +1,6 @@
-from fastapi.testclient import TestClient
+from app import integrations, models
 from app.main import app
-from app import integrations
-from app import models
+from fastapi.testclient import TestClient
 
 client = TestClient(app)
 

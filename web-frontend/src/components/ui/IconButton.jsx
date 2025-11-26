@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 
 export default function IconButton({ icon, label, onClick, title }) {
   return (
@@ -10,5 +10,5 @@ export default function IconButton({ icon, label, onClick, title }) {
       {icon}
       {label ? <span className="text-sm text-gray-700">{label}</span> : null}
     </button>
-  )
+  );
 }

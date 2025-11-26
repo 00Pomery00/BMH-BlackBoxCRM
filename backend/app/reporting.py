@@ -1,7 +1,8 @@
-from fastapi.responses import StreamingResponse, JSONResponse
 import csv
 from io import StringIO
+
 from app import crud
+from fastapi.responses import JSONResponse, StreamingResponse
 
 
 def _filter_companies(

@@ -342,4 +342,3 @@ jobs:
           else
             pkill -f uvicorn || true
           fi
-

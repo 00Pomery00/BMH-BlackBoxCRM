@@ -1,12 +1,14 @@
-from fastapi import APIRouter, HTTPException, Form, Request
 import json as _json
-from urllib.parse import parse_qs as _parse_qs
-from sqlalchemy.orm import Session
-from .main import SessionLocal
-from . import security, models
-from pydantic import BaseModel
-from pathlib import Path
 import os
+from pathlib import Path
+from urllib.parse import parse_qs as _parse_qs
+
+from fastapi import APIRouter, Form, HTTPException, Request
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
+
+from . import models, security
+from .main import SessionLocal
 
 router = APIRouter()
 
@@ -16,9 +18,6 @@ class ShimRegister(BaseModel):
     password: str
 
 
-
-
-
 def _dump_debug(tag: str, request: Request, extra: bytes | None = None) -> None:
     try:
         header_lines = []
@@ -26,7 +25,11 @@ def _dump_debug(tag: str, request: Request, extra: bytes | None = None) -> None:
             header_lines.append(f"{k}: {v}")
         body = b""
         try:
-            body = request._body if hasattr(request, "_body") and request._body is not None else b""
+            body = (
+                request._body
+                if hasattr(request, "_body") and request._body is not None
+                else b""
+            )
         except Exception:
             body = b""
         if extra:
@@ -79,7 +82,7 @@ async def fu_register(request: Request):
 
     # Try JSON body first
     try:
-        body = raw_body if 'raw_body' in locals() else await request.body()
+        body = raw_body if "raw_body" in locals() else await request.body()
         if body:
             s = body.decode(errors="ignore")
             try:
@@ -160,7 +163,7 @@ async def fu_login(request: Request):
 
     # Try JSON or urlencoded in body
     try:
-        body = raw_body if 'raw_body' in locals() else await request.body()
+        body = raw_body if "raw_body" in locals() else await request.body()
         if body:
             s = body.decode(errors="ignore")
             try:
@@ -210,7 +213,9 @@ async def fu_login(request: Request):
             raise HTTPException(status_code=401, detail="invalid credentials")
         if not security.pwd_context.verify(password, u.hashed_password):
             raise HTTPException(status_code=401, detail="invalid credentials")
-        token = security.create_access_token({"sub": u.email, "uid": u.id, "role": u.role})
+        token = security.create_access_token(
+            {"sub": u.email, "uid": u.id, "role": u.role}
+        )
         return {"access_token": token, "token_type": "bearer"}
     finally:
         db.close()
