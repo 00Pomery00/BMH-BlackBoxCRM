@@ -1,0 +1,16 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-added-large-files
+
+# Local hook to prevent accidentally committing runtime logs or DB backups
+  - repo: local
+    hooks:
+      - id: prevent-logs
+        name: Prevent committing runtime log or DB files
+        entry: scripts/prevent-logs-commit.sh
+        language: script
+        files: '\\.(log|db|bak|sqlite)$'
