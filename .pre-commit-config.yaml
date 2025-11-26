@@ -21,11 +21,13 @@ repos:
   hooks:
     - id: black
       language_version: python3
+      args: ["--line-length=88"]
 
 - repo: https://github.com/PyCQA/isort
   rev: 5.12.0
   hooks:
     - id: isort
+      args: ["--profile=black"]
 
 # Frontend linting via npm script (requires npm deps installed)
 - repo: local
@@ -35,3 +37,8 @@ repos:
       entry: bash -c "cd web-frontend && npm run lint"
       language: script
       files: '^web-frontend/'
+    - id: format-frontend
+      name: Format frontend (Prettier + ESLint --fix)
+      entry: bash -lc "cd web-frontend && npx prettier --write \"src/**/*.{js,jsx,ts,tsx,css,md,json}\" && npx eslint --fix \"src/**/*.{js,jsx,ts,tsx}\" || true"
+      language: script
+      files: '^web-frontend/(src|public)/'
