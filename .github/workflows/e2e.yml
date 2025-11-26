@@ -67,12 +67,24 @@ jobs:
           # ensure Playwright outputs into a known folder
           npx playwright test --reporter=github || true
 
+      - name: Prepare Playwright artifacts archive and list files
+        if: always()
+        run: |
+          mkdir -p artifacts
+          if [ -d web-frontend/test-results ]; then zip -r artifacts/playwright-test-results.zip web-frontend/test-results; fi
+          if [ -d web-frontend/playwright-report ]; then zip -r artifacts/playwright-report.zip web-frontend/playwright-report; fi
+          echo "--- test-results listing ---"
+          ls -la web-frontend/test-results || true
+          echo "--- playwright-report listing ---"
+          ls -la web-frontend/playwright-report || true
+
       - name: Upload Playwright artifacts
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-test-results
           path: |
+            artifacts/*.zip
             web-frontend/test-results
             web-frontend/playwright-report
             backend/uvicorn_out.log
