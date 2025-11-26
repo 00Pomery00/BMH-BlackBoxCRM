@@ -23,8 +23,8 @@ test.describe('Seed backend and verify UI', () => {
     const url = FRONTEND_URL || ('file://' + distIndex)
     await page.goto(url)
 
-    // wait for lead list to render
-    const leadItem = page.locator(`text=${leadName}`)
+    // wait for lead list to render — select the first matching element to avoid strict-mode collisions
+    const leadItem = page.locator(`text=${leadName}`).first()
     await expect(leadItem).toBeVisible({ timeout: 10_000 })
   })
 })
