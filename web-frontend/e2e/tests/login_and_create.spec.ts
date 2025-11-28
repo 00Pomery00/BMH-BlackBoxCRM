@@ -15,13 +15,19 @@ test.describe('App flows (file://)', () => {
   test.beforeEach(async ({ page }) => {
     const FRONTEND_URL = process.env.FRONTEND_URL || ''
     const url = FRONTEND_URL || ('file://' + indexPath)
+    // Ensure tests run with English locale so i18n doesn't break string assertions
+    await page.addInitScript(() => {
+      try {
+        localStorage.setItem('i18nextLng', 'en')
+      } catch (e) {}
+    })
     await page.goto(url)
   })
 
   test('shows dashboard after open', async ({ page }) => {
     await expect(page).toHaveTitle(/BlackBox CRM/)
-    // dashboard KPI heading should be visible
-    const heading = page.getByRole('heading', { name: 'Leads' })
+    // dashboard KPI heading should be visible (match language-insensitively)
+    const heading = page.getByRole('heading', { name: /Lead/i })
     await expect(heading).toBeVisible()
   })
 

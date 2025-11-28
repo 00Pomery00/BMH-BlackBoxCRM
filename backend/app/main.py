@@ -153,6 +153,22 @@ try:
 except Exception:
     pass
 
+# Telemetry API
+try:
+    from .api.telemetry import router as telemetry_router
+
+    app.include_router(telemetry_router)
+except Exception:
+    pass
+
+# Admin telemetry summary
+try:
+    from .api.admin_telemetry import router as admin_telemetry_router
+
+    app.include_router(admin_telemetry_router)
+except Exception:
+    pass
+
 # Ensure our compatibility shim routes take precedence by inserting
 # explicit APIRoute entries at the front of the router list. This
 # guarantees the E2E tests hit our flexible handlers even if other
