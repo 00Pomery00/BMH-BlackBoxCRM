@@ -1,0 +1,12 @@
+{
+  "id": "contacts",
+  "label": "Contacts",
+  "icon": "Contacts",
+  "defaultView": "list",
+  "allowedWidgets": ["list", "custom"],
+  "fields": [
+    { "id": "name", "type": "string", "label": "Name" },
+    { "id": "email", "type": "string", "label": "Email" },
+    { "id": "phone", "type": "string", "label": "Phone" }
+  ]
+}

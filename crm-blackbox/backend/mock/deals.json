@@ -1,0 +1,27 @@
+[
+  {
+    "id": "deals-1",
+    "name": "deals sample 1",
+    "createdAt": "2025-11-28T07:50:17.892Z"
+  },
+  {
+    "id": "deals-2",
+    "name": "deals sample 2",
+    "createdAt": "2025-11-28T07:50:17.892Z"
+  },
+  {
+    "id": "deals-3",
+    "name": "deals sample 3",
+    "createdAt": "2025-11-28T07:50:17.892Z"
+  },
+  {
+    "id": "deals-4",
+    "name": "deals sample 4",
+    "createdAt": "2025-11-28T07:50:17.892Z"
+  },
+  {
+    "id": "deals-5",
+    "name": "deals sample 5",
+    "createdAt": "2025-11-28T07:50:17.892Z"
+  }
+]

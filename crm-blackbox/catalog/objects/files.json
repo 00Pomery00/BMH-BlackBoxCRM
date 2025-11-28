@@ -1,0 +1,24 @@
+{
+  "id": "files",
+  "label": "Files",
+  "icon": "Objects",
+  "defaultView": "table",
+  "allowedWidgets": [
+    "list",
+    "kanban",
+    "stats",
+    "custom"
+  ],
+  "fields": [
+    {
+      "id": "name",
+      "type": "string",
+      "label": "Name"
+    },
+    {
+      "id": "createdAt",
+      "type": "datetime",
+      "label": "Created At"
+    }
+  ]
+}

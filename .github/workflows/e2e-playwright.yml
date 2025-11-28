@@ -68,10 +68,13 @@ jobs:
           done
 
       - name: Install Playwright browsers
-        run: npx playwright install --with-deps
+        run: |
+          cd web-frontend
+          npx playwright install --with-deps
 
       - name: Run Playwright tests
         run: |
+          cd web-frontend
           export BACKEND_URL=http://127.0.0.1:8000
           export FRONTEND_URL=http://127.0.0.1:5173
-          npx playwright test -c web-frontend/e2e/playwright.config.ts --reporter=list
+          npx playwright test -c e2e/playwright.config.ts --reporter=list

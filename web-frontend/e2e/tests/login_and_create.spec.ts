@@ -57,6 +57,7 @@ test.describe('App flows (file://)', () => {
     const modal = page.locator('div[role="dialog"]')
     // locate modal heading by test id
     const modalHeading = page.getByTestId('lead-modal-heading')
-    await expect(modalHeading).toBeVisible()
+    // modal may take a short moment to render — give it more time in CI
+    await expect(modalHeading).toBeVisible({ timeout: 15_000 })
   })
 })

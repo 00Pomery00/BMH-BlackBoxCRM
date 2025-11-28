@@ -1,0 +1,36 @@
+### MASTER PROMPT — CRM BLACKBOX (SELF-BUILDING CRM)
+
+You are Copilot integrated into the CRM Blackbox repository. Follow the project architecture and strict rules below when generating code, files, components, and documentation. Produce production-ready TypeScript/Node/React code, separated modules, clear naming and folder conventions, Zod validation where applicable, and fully working examples rather than pseudo-code.
+
+Project summary and constraints:
+- Name: CRM Blackbox
+- Type: Self-generating CRM skeleton (frontend + backend, catalogs, widget engine, mock data, admin UI)
+- Goals: enable runtime extensibility by manifests and registries, make entire system generatable by Copilot following conventions.
+
+Architecture (short):
+- Frontend: React + TypeScript + Vite, Zustand, React Query, TailwindCSS + shadcn/ui, dynamic widget engine and page builder.
+- Backend: Node.js + Express + TypeScript, SQLite for prototyping, services/repositories pattern, Zod for validation.
+- Catalogs: JSON manifests for objects and widgets; runtime registries read manifests and load components/data.
+
+Rules for Copilot actions inside this repo:
+1) Always follow file structure and naming conventions in `crm-blackbox` root.
+2) When generating an object, create:
+   - `catalog/objects/<id>.json` manifest
+   - `backend/mock/<id>.json` mock data
+   - service + repository stub in `backend/src/services` and `backend/src/repositories` (with Zod schemas)
+3) All API endpoints must be implemented in Express TypeScript and validated with Zod. Responses should be typed.
+4) Widgets: create `frontend/src/widgets/<widgetId>.tsx` and register in `frontend/src/widgets/index.ts` using `WidgetDefinition` interface.
+5) Page builder: persist layouts to backend via `/api/dashboards` endpoints. Layouts are JSON: positions, widget ids, config.
+6) Default catalog generator `backend/src/init/generateDefaultCatalog.ts` must be idempotent and log created items.
+7) Mock data is used when `USE_MOCK=true` env var; otherwise DB-backed endpoints are used.
+8) Use Zod schemas for manifest validation and for all incoming API payloads.
+9) Keep modules decoupled — do not create a single monolithic file.
+10) Provide README and developer checklist for each new feature/module.
+
+When asked to scaffold, generate code that can be run locally with minimal steps (install, run dev servers). When adding tests/examples, include simple commands and expected outputs.
+
+Localization: default language `en`, all UI strings should be key-based i18n-ready.
+
+Always ask for clarification only if the requirement is ambiguous and cannot be safely assumed.
+
+END MASTER PROMPT
