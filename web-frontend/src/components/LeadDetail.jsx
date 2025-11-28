@@ -35,7 +35,7 @@ export default function LeadDetail({ lead, onClose }) {
       >
         <div className="flex justify-between items-start">
           <div>
-            <h2 id="lead-title" className="text-xl font-semibold">
+            <h2 id="lead-title" data-testid="lead-modal-heading" className="text-xl font-semibold">
               {lead.name}
             </h2>
             <div className="text-sm text-gray-600">

@@ -24,7 +24,9 @@ export default function Dashboard({ companies = [] }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2">
           <div className="mb-3 flex items-center justify-between">
-            <h3 className="text-lg font-medium">{t('leads')}</h3>
+            <h3 data-testid="dashboard-leads-heading" className="text-lg font-medium">
+              {t('leads')}
+            </h3>
             <div className="text-sm text-gray-500">
               {t('companies')}: {total}
             </div>

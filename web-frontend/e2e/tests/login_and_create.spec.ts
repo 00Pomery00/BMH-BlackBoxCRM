@@ -26,8 +26,8 @@ test.describe('App flows (file://)', () => {
 
   test('shows dashboard after open', async ({ page }) => {
     await expect(page).toHaveTitle(/BlackBox CRM/)
-    // dashboard KPI heading should be visible (match language-insensitively)
-    const heading = page.getByRole('heading', { name: /Lead/i })
+    // dashboard KPI heading should be visible via stable test id
+    const heading = page.getByTestId('dashboard-leads-heading')
     await expect(heading).toBeVisible()
   })
 
@@ -48,14 +48,14 @@ test.describe('App flows (file://)', () => {
         await page.waitForTimeout(200)
       }
     }
-    const firstLead = page.locator('.p-3.bg-white.rounded.border').first()
+    const firstLead = page.locator('[data-testid^="lead-item-"]').first()
     await expect(firstLead).toBeVisible({ timeout: 10_000 })
     await firstLead.click()
 
     // modal should open and show lead name in heading
     const modal = page.locator('div[role="dialog"]')
-    // fallback: locate modal by visible lead name heading
-    const modalHeading = page.locator('h2.text-xl').first()
+    // locate modal heading by test id
+    const modalHeading = page.getByTestId('lead-modal-heading')
     await expect(modalHeading).toBeVisible()
   })
 })

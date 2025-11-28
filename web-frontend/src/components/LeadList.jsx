@@ -11,11 +11,12 @@ export default function LeadList({ companies = [] }) {
   }
 
   return (
-    <div>
-      <div className="space-y-2">
+    <div data-testid="lead-list-root">
+      <div className="space-y-2" data-testid="lead-list">
         {companies.map((c) => (
           <div
             key={c.id}
+            data-testid={`lead-item-${c.id}`}
             className="p-3 bg-white rounded border flex justify-between items-center hover:shadow-sm"
           >
             <div>
@@ -27,6 +28,7 @@ export default function LeadList({ companies = [] }) {
             <div>
               <button
                 onClick={() => setSelected(c)}
+                data-testid={`lead-open-${c.id}`}
                 className="px-3 py-1 bg-blue-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
                 aria-label={t('open')}
               >
