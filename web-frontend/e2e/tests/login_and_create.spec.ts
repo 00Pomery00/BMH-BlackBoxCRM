@@ -50,7 +50,8 @@ test.describe('App flows (file://)', () => {
     }
     const firstLead = page.locator('[data-testid^="lead-item-"]').first()
     await expect(firstLead).toBeVisible({ timeout: 10_000 })
-    await firstLead.click()
+    // click the open button inside the lead item to reliably open modal
+    await firstLead.locator('button[data-testid^="lead-open-"]').first().click()
 
     // modal should open and show lead name in heading
     const modal = page.locator('div[role="dialog"]')
