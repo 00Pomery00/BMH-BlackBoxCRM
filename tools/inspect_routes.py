@@ -2,7 +2,7 @@ import importlib
 import json
 import os
 
-os.chdir(r"C:\BMH\SW\BMH-BlackBoxCRM\backend")
+os.chdir(r"C:\BMH\SW\BMHBlackBoxCRM\backend")
 app = importlib.import_module("app.main").app
 out = []
 for r in app.routes:

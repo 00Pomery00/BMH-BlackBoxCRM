@@ -5,7 +5,7 @@ This is a minimal React Native / Expo scaffold for the BlackBox CRM mobile addon
 Run locally (with Expo CLI installed):
 
 ```powershell
-Set-Location 'C:\BMH\SW\BMH-BlackBoxCRM\mobile-addon'
+Set-Location 'C:\BMH\SW\BMHBlackBoxCRM\mobile-addon'
 npm install
 npm start
 ```

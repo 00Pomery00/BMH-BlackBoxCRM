@@ -1,0 +1,4 @@
+[
+  { "id": "customers-1", "name": "ACME s.r.o.", "ico": "12345678", "segment": "Enterprise" },
+  { "id": "customers-2", "name": "Example Ltd.", "ico": "87654321", "segment": "SMB" }
+]

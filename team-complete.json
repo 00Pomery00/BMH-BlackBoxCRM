@@ -1,0 +1,12 @@
+{
+  "version": "2025.12",
+  "total_roles": 17,
+  "pods": [
+    {"name": "Core Pod", "size": 6, "roles": ["Agentic PO", "AI Architect", "Agentic Engineer", "UI/UX", "Security", "QA"]},
+    {"name": "Data/ML Pod", "size": 5, "roles": ["Data Engineer", "Data Scientist", "MLOps", "AI Trainer", "Business Analyst"]},
+    {"name": "Management Pod", "size": 4, "roles": ["Tech Lead", "PM/Scrum", "Grafik", "Documentation"]},
+    {"name": "Infra Pod", "size": 2, "roles": ["Multi-Tenant Specialist", "System Admin"]}
+  ],
+  "quality_gates": {"coverage": "95%", "duplication": "<5%", "security": "A+", "uptime": "99.99%"},
+  "nis2_compliant": true
+}

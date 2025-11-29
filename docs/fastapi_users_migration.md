@@ -55,7 +55,7 @@ Notes and caveats
 
 Commands to run locally
 ```powershell
-Set-Location 'C:\BMH\SW\BMH-BlackBoxCRM\backend'
+Set-Location 'C:\BMH\SW\BMHBlackBoxCRM\backend'
 .\.venv\Scripts\Activate.ps1
 python -m alembic -c alembic.ini upgrade head
 python -m pytest -q tests

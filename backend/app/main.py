@@ -1,9 +1,12 @@
 import asyncio
 import datetime
-import os
 import weakref
 from contextlib import asynccontextmanager
 from pathlib import Path
+
+from fastapi import Depends, FastAPI
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
 
 from app import (
     ai_processor,
@@ -16,9 +19,6 @@ from app import (
     schemas,
     security,
 )
-from fastapi import Depends, FastAPI
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATABASE_URL = f"sqlite:///{BASE_DIR / 'test.db'}"
@@ -150,6 +150,22 @@ try:
     from .admin_automations import router as admin_automations_router
 
     app.include_router(admin_automations_router)
+except Exception:
+    pass
+
+# Telemetry API
+try:
+    from .api.telemetry import router as telemetry_router
+
+    app.include_router(telemetry_router)
+except Exception:
+    pass
+
+# Admin telemetry summary
+try:
+    from .api.admin_telemetry import router as admin_telemetry_router
+
+    app.include_router(admin_telemetry_router)
 except Exception:
     pass
 
@@ -407,7 +423,7 @@ def admin_requeue_webhook(
     row.attempts = 0
     row.last_error = ""
     row.dead = 0
-    row.next_attempt_at = datetime.datetime.utcnow()
+    row.next_attempt_at = datetime.datetime.now(datetime.timezone.utc)
     db.add(row)
     db.commit()
     # Ensure any other in-process sessions (like test sessions) see this update

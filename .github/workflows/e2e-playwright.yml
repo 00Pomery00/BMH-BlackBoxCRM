@@ -1,0 +1,11 @@
+﻿name: Playwright E2E (placeholder)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  e2e-placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: echo "Playwright E2E placeholder  real job runs in ci.yml"

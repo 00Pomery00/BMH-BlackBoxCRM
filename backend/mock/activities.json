@@ -1,0 +1,27 @@
+[
+  {
+    "id": "activities-1",
+    "name": "activities sample 1",
+    "createdAt": "2025-11-28T07:50:17.894Z"
+  },
+  {
+    "id": "activities-2",
+    "name": "activities sample 2",
+    "createdAt": "2025-11-28T07:50:17.894Z"
+  },
+  {
+    "id": "activities-3",
+    "name": "activities sample 3",
+    "createdAt": "2025-11-28T07:50:17.894Z"
+  },
+  {
+    "id": "activities-4",
+    "name": "activities sample 4",
+    "createdAt": "2025-11-28T07:50:17.894Z"
+  },
+  {
+    "id": "activities-5",
+    "name": "activities sample 5",
+    "createdAt": "2025-11-28T07:50:17.894Z"
+  }
+]

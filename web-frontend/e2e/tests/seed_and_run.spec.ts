@@ -47,6 +47,11 @@ test.describe('Seed backend and verify UI', () => {
       if (!ok) console.warn('Timed out waiting for seed to appear in /companies')
     }
 
+    // Inject BACKEND_URL into the page so the static build fetches the correct API
+    if (BACKEND_URL) {
+      await page.addInitScript((b) => { try { window.__BACKEND_URL = b } catch(e){} }, BACKEND_URL)
+    }
+
     await page.goto(url)
 
     // wait for lead list to render — select the first matching element to avoid strict-mode collisions

@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class CompanyBase(BaseModel):
@@ -15,15 +15,39 @@ class CompanyCreate(CompanyBase):
 class Company(CompanyBase):
     id: int
     lead_score: float
-
-    class Config:
-        orm_mode = True
+    model_config: ConfigDict = ConfigDict(from_attributes=True)
 
 
 class User(BaseModel):
     id: int = Field(default=0)
-    username: str
+    username: Optional[str] = None
+    email: Optional[str] = None
     role: str = "user"
+    model_config: ConfigDict = ConfigDict(from_attributes=True)
 
-    class Config:
-        orm_mode = True
+
+class UserCreate(BaseModel):
+    username: str
+    email: Optional[str] = None
+    password: str
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+
+
+class SessionInfo(BaseModel):
+    id: int
+    user_id: int
+    client: Optional[str] = None
+    started_at: Optional[str] = None
+    last_seen_at: Optional[str] = None
+
+
+class TelemetryEventIn(BaseModel):
+    event_type: str
+    path: Optional[str] = None
+    payload: Optional[dict] = None
+    user_id: Optional[int] = None
+    model_config: ConfigDict = ConfigDict(from_attributes=True)

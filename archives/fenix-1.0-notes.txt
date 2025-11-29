@@ -1,0 +1,25 @@
+FENIX 1.0 — Restore Point
+Datum: 29. listopadu 2025
+Branch: feat/ui-i18n-ux
+Commit: eb2e64e
+
+Poznámka: Při archivaci byly identifikovány následující (9) problémů / bodů k vyřešení:
+
+1) Python linter (ruff): původně se vyskytovaly chyby E701, F821 a množství E501 (dlouhé řádky). Část oprav byla aplikována.
+2) Pre-commit: původně chybějící lokální instalace a konfigurace, nyní nainstalováno a hooky fungují.
+3) Frontend ESLint: nepoužitá proměnná `gamification` v `web-frontend/src/App.jsx` (odstraněno).
+4) Frontend ESLint: prázdné `catch` bloky v `LeadDetail.jsx` a `LeadList.jsx` (nahrazeno logováním).
+5) Vite / Tailwind PostCSS build: potřeba `@tailwindcss/postcss` a úprava `postcss.config.cjs` (provedeno), build poté narazil na další chybějící importy.
+6) Vite build: chybějící (nebo nesprávný) import `./components/Login` v `App.jsx` — ověřit existenci `Login` komponenty.
+7) Pydantic: varování o deprecaci class-based `Config` (doporučeno přejít na `ConfigDict`).
+8) Datetime: více míst používá `datetime.utcnow()` — generují DeprecationWarning; doporučeno přejít na timezone-aware `datetime.now(datetime.UTC)`.
+9) CI/CD (GitHub Actions): několik workflow YAMLs vyžadovalo opravy a konsolidaci (byly upraveny během práce, je dobré zkontrolovat CI běhy na GitHubu).
+
+Poznámka k archivaci: Archiv obsahuje snapshot aktuálního commitu `eb2e64e` (tracked files). Neobsahuje necommitované změny ani složky v `.gitignore` (např. node_modules nebo .venv), pokud jsou necommitované.
+
+Doporučené další kroky:
+- Ověřit a doplnit chybějící `Login` komponentu nebo opravit importy ve frontend kódu.
+- Migrovat Pydantic Config a opravit timezone-aware datetimes.
+- Spustit CI na GitHubu a zkontrolovat workflow běhy.
+
+Archiv vytvořen jako `fenix-1.0.zip` (viz vedlejší soubor) a git tag `fenix-1.0` byl přidán jako bod obnovy.

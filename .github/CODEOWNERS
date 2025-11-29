@@ -1,0 +1,8 @@
+# CODEOWNERS - assign ownership to repository workflows and infra to repo owner
+# Format: <pattern> <owner>
+
+# Make the repo owner responsible for workflow changes and CI gates
+.github/workflows/ @00Pomery00
+
+# Default owner for repo-level changes
+/ @00Pomery00

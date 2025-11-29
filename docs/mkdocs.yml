@@ -1,0 +1,7 @@
+site_name: BMH AI Team Docs
+nav:
+  - Home: index.md
+  - Compliance: compliance/nis2-report.md
+
+plugins:
+  - search
