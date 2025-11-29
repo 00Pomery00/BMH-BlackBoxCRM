@@ -7,7 +7,7 @@ from sqlalchemy import engine_from_config, pool
 
 # ensure app package is importable for autogenerate
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from app import models
+from app import models  # noqa: E402
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
