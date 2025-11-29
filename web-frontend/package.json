@@ -13,7 +13,6 @@
     "format:fix": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css,md,json}\" && eslint --no-error-on-unmatched-pattern --fix --ext .js,.jsx,.ts,.tsx src"
   },
   "dependencies": {
-    "@tailwindcss/postcss": "^4.1.17",
     "body-parser": "^2.2.1",
     "caniuse-lite": "^1.0.30001757",
     "cors": "^2.8.5",
@@ -26,6 +25,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.35.0",
+    "@tailwindcss/postcss": "^4.1.17",
     "@types/react": "^18.2.21",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.15.0",
