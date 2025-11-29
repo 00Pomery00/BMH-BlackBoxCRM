@@ -1,4 +1,5 @@
 import json as _json
+import logging
 import os
 from pathlib import Path
 from urllib.parse import parse_qs as _parse_qs
@@ -133,7 +134,17 @@ async def fu_register(request: Request):
         existing = db.query(models.User).filter(models.User.email == email).first()
         if existing:
             raise HTTPException(status_code=400, detail="REGISTER_USER_ALREADY_EXISTS")
-        hashed = get_password_hash(password)
+            # Log password metadata (type/length) for CI debugging — do not log actual secret
+            _log = logging.getLogger("app.fastapi_users_shim")
+            try:
+                if isinstance(password, (bytes, bytearray)):
+                    _log.info("Register password type=bytes length=%d", len(password))
+                else:
+                    _pwbytes = str(password).encode("utf-8", errors="ignore")
+                    _log.info("Register password type=str utf8_bytes=%d", len(_pwbytes))
+            except Exception:
+                _log.debug("Could not determine password length/type")
+            hashed = get_password_hash(password)
         u = models.User(username=email, email=email, hashed_password=hashed)
         db.add(u)
         db.commit()
