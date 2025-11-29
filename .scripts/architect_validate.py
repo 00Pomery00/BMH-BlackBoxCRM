@@ -32,7 +32,8 @@ def check_file(p: Path):
         list(yaml.safe_load_all(txt))
     except Exception as e:
         problems.append(f"YAML parse error: {e}")
-    # Simple secrets heuristics: look for suspicious keywords but ignore values that use GitHub secrets interpolation (e.g. ${{ secrets.X }})
+    # Simple secrets heuristics: look for suspicious keywords but ignore values
+    # that use GitHub secrets interpolation (e.g. ${{ secrets.X }})
     secrets = []
     suspicious_patterns = [
         r"(?i)aws[_-]?secret",

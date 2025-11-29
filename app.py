@@ -156,7 +156,7 @@ def generate_invoice_pdf(df, month_label):
     for _, r in df.iterrows():
         pdf.cell(40, 8, str(r.get("login", "")), border=1)
         pdf.cell(60, 8, str(r.get("name", ""))[:30], border=1)
-        pdf.cell(30, 8, f"{r.get('commission',0):.2f}", border=1, ln=True)
+        pdf.cell(30, 8, f"{r.get('commission', 0):.2f}", border=1, ln=True)
     buf = io.BytesIO()
     pdf.output(buf)
     buf.seek(0)
