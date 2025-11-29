@@ -1,0 +1,11 @@
+name: CRM Smoke (placeholder)
+
+on:
+	workflow_dispatch:
+
+jobs:
+	smoke-placeholder:
+		runs-on: ubuntu-latest
+		steps:
+			- name: Placeholder
+				run: echo "CRM smoke workflow placeholder"

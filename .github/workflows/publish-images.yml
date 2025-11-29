@@ -1,3 +1,14 @@
+name: Publish Images (placeholder)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish-placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: echo "Publish-images workflow merged into ci.yml; placeholder kept."
 
 
 # Tento workflow je nyní sloučen do ci.yml pod jobem publish-images

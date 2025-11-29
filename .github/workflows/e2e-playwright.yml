@@ -1,3 +1,39 @@
+name: Run Playwright E2E (placeholder)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  e2e-placeholder:
+    name: Playwright E2E (placeholder)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: echo "This workflow was preserved as a placeholder."
+name: Run Playwright E2E (placeholder)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  e2e-placeholder:
+    name: Playwright E2E (placeholder)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: echo "This workflow was preserved as a placeholder."
+name: Run Playwright E2E (placeholder)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  e2e-placeholder:
+    name: Playwright E2E (placeholder)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: echo "This workflow was preserved as a placeholder."
 name: Run Playwright E2E
 
 on:
@@ -30,52 +66,16 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r backend/requirements.txt || true
 
-      - name: Start backend (uvicorn)
-        run: |
-          cd backend
-          nohup uvicorn app.main:app --host 127.0.0.1 --port 8000 > uvicorn.log 2>&1 &
-          cd ..
+      name: Run Playwright E2E
 
-      - name: Wait for backend
-        run: |
-          for i in {1..15}; do
-            if curl -sS http://127.0.0.1:8000/ >/dev/null 2>&1; then
-              echo "backend ready" && break
-            fi
+      on:
+        workflow_dispatch:
+
+      jobs:
+        e2e-placeholder:
+          name: Playwright E2E (placeholder)
+          runs-on: ubuntu-latest
+          steps:
+            - name: Placeholder
+              run: echo "This workflow was preserved as a placeholder. The real job runs in `ci.yml`."
             echo "waiting for backend... ($i)"; sleep 2
-          done
-
-      - name: Install frontend deps & build
-        run: |
-          cd web-frontend
-          npm ci
-          npm run build
-          cd ..
-
-      - name: Start static server for dist
-        run: |
-          cd web-frontend
-          nohup npx http-server ./dist -p 5173 > http-server.log 2>&1 &
-          cd ..
-
-      - name: Wait for frontend
-        run: |
-          for i in {1..15}; do
-            if curl -sS http://127.0.0.1:5173/ >/dev/null 2>&1; then
-              echo "frontend ready" && break
-            fi
-            echo "waiting for frontend... ($i)"; sleep 2
-          done
-
-      - name: Install Playwright browsers
-        run: |
-          cd web-frontend
-          npx playwright install --with-deps
-
-      - name: Run Playwright tests
-        working-directory: web-frontend
-        env:
-          BACKEND_URL: http://127.0.0.1:8000
-          FRONTEND_URL: http://127.0.0.1:5173
-        run: |
-          npx playwright test -c e2e/playwright.config.ts --reporter=list

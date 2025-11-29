@@ -1,3 +1,14 @@
+name: Deploy via SSH (placeholder)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy-placeholder:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder
+        run: echo "Deploy via SSH workflow is consolidated into ci.yml; placeholder kept."
 
 
 # Tento workflow je nyní sloučen do ci.yml pod jobem publish-images

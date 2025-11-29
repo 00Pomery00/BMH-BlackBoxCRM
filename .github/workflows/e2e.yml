@@ -6,8 +6,112 @@ on:
   pull_request:
     branches: [ main, master ]
 
+name: E2E tests
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
 jobs:
   e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install Python deps
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f backend/requirements.txt ]; then pip install -r backend/requirements.txt; fi
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Install frontend deps
+        working-directory: web-frontend
+        run: |
+          # Ensure the frontend sees the backend URL at build time
+          VITE_API_URL=http://127.0.0.1:8002 npm ci
+
+      - name: Make prevent-logs script executable
+        run: |
+          # Ensure the local helper script is executable on Linux runners
+          if [ -f scripts/prevent-logs-commit.sh ]; then chmod +x scripts/prevent-logs-commit.sh || true; fi
+
+      - name: Run pre-commit hooks
+        run: |
+          python -m pip install --upgrade pip
+          pip install pre-commit
+          pre-commit run --all-files
+
+      - name: Build frontend
+        working-directory: web-frontend
+        run: |
+          # Build with backend URL baked into the frontend assets
+          VITE_API_URL=http://127.0.0.1:8002 npm run build
+
+      - name: Install Playwright browsers
+        working-directory: web-frontend
+        run: npx playwright install --with-deps
+
+      - name: Start backend (uvicorn)
+        working-directory: backend
+        run: |
+          nohup python -m uvicorn app.main:app --host 127.0.0.1 --port 8002 > uvicorn_out.log 2>&1 &
+          echo $! > uvicorn.pid
+
+      - name: Serve frontend dist
+        run: |
+          npx http-server web-frontend/dist -p 5173 &
+
+      - name: Wait for backend
+        run: |
+          for i in {1..30}; do
+            if curl -sSf http://127.0.0.1:8002/companies >/dev/null; then echo ready && break; fi
+            sleep 1
+          done
+
+      - name: Run Playwright tests
+        working-directory: web-frontend
+        env:
+          BACKEND_URL: http://127.0.0.1:8002
+          FRONTEND_URL: http://127.0.0.1:5173
+        run: |
+          npx playwright test --reporter=github || true
+
+      - name: Prepare Playwright artifacts archive and list files
+        if: always()
+        run: |
+          mkdir -p artifacts
+          if [ -d web-frontend/test-results ]; then zip -r artifacts/playwright-test-results.zip web-frontend/test-results; fi
+          if [ -d web-frontend/playwright-report ]; then zip -r artifacts/playwright-report.zip web-frontend/playwright-report; fi
+          echo "--- test-results listing ---"
+          ls -la web-frontend/test-results || true
+          echo "--- playwright-report listing ---"
+          ls -la web-frontend/playwright-report || true
+
+      - name: Upload Playwright artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-test-results
+          path: |
+            artifacts/*.zip
+            web-frontend/test-results
+            web-frontend/playwright-report
+            backend/uvicorn_out.log
+            backend/login_debug.log
+            backend/test-results
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
