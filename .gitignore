@@ -21,3 +21,4 @@ backend/bmh_audit.log
 artifacts/
 ci-artifacts/
 web-frontend/test-results/
+# Local test DB\ntest.db
