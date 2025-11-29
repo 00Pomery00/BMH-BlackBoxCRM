@@ -2,6 +2,7 @@ import datetime
 import json
 import logging
 import time
+from pathlib import Path
 from threading import Lock
 from typing import Dict
 
@@ -24,8 +25,9 @@ _buckets_lock = Lock()
 _RATE_CAPACITY = 5
 _RATE_REFILL_PER_SEC = 1
 
-# Use the same sqlite file as the app for demo purposes
-DATABASE_URL = "sqlite:///./test.db"
+# Use the same sqlite file as the app for demo purposes (absolute backend path)
+BACKEND_DIR = Path(__file__).resolve().parent.parent
+DATABASE_URL = f"sqlite:///{BACKEND_DIR / 'test.db'}"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
