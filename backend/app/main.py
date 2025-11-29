@@ -1,6 +1,5 @@
 import asyncio
 import datetime
-import os
 import weakref
 from contextlib import asynccontextmanager
 from pathlib import Path

@@ -1,7 +1,13 @@
-from datetime import datetime
 from typing import Optional
 
-from app import models, schemas, security
+from app import models, schemas
+from app.core.security import get_password_hash
+from app.security import (
+    get_current_user,
+    require_role,
+    verify_password,
+    create_access_token,
+)
 from app.main import SessionLocal
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
@@ -43,7 +49,7 @@ def register(payload: RegisterPayload):
             )
         if existing:
             raise HTTPException(status_code=400, detail="username/email taken")
-        hashed = security.pwd_context.hash(payload.password)
+        hashed = get_password_hash(payload.password)
         # create user with available fields
         u = models.User(
             email=payload.email or payload.username,
@@ -106,9 +112,9 @@ def login(payload: LoginPayload, request: Request = None):
             )
         if not u or not u.hashed_password:
             raise HTTPException(status_code=401, detail="invalid credentials")
-        if not security.pwd_context.verify(payload.password, u.hashed_password):
+        if not verify_password(payload.password, u.hashed_password):
             raise HTTPException(status_code=401, detail="invalid credentials")
-        token = security.create_access_token(
+        token = create_access_token(
             {
                 "sub": getattr(u, "username", u.email),
                 "uid": u.id,
@@ -161,7 +167,7 @@ class RoleChange(BaseModel):
 
 
 @router.get("/me")
-def me(user: schemas.User = Depends(security.get_current_user)):
+def me(user: schemas.User = Depends(get_current_user)):
     return {
         "username": user.username,
         "role": user.role,
@@ -170,8 +176,8 @@ def me(user: schemas.User = Depends(security.get_current_user)):
 
 
 @router.get("/list")
-def list_users(user: schemas.User = Depends(security.get_current_user)):
-    security.require_role(user, ("admin",))
+def list_users(user: schemas.User = Depends(get_current_user)):
+    require_role(user, ("admin",))
     db: Session = SessionLocal()
     try:
         rows = db.query(models.User).all()
@@ -193,9 +199,9 @@ def list_users(user: schemas.User = Depends(security.get_current_user)):
 
 @router.post("/role")
 def change_role(
-    payload: RoleChange, user: schemas.User = Depends(security.get_current_user)
+    payload: RoleChange, user: schemas.User = Depends(get_current_user)
 ):
-    security.require_role(user, ("admin",))
+    require_role(user, ("admin",))
     db: Session = SessionLocal()
     try:
         target = (
@@ -219,9 +225,9 @@ class DeactivatePayload(BaseModel):
 
 @router.post("/deactivate")
 def deactivate_user(
-    payload: DeactivatePayload, user: schemas.User = Depends(security.get_current_user)
+    payload: DeactivatePayload, user: schemas.User = Depends(get_current_user)
 ):
-    security.require_role(user, ("admin",))
+    require_role(user, ("admin",))
     db: Session = SessionLocal()
     try:
         target = (
@@ -247,16 +253,16 @@ class ChangePasswordPayload(BaseModel):
 @router.post("/change-password")
 def change_password(
     payload: ChangePasswordPayload,
-    user: schemas.User = Depends(security.get_current_user),
+    user: schemas.User = Depends(get_current_user),
 ):
     db: Session = SessionLocal()
     try:
         u = db.query(models.User).filter(models.User.id == user.id).first()
         if not u or not u.hashed_password:
             raise HTTPException(status_code=401, detail="invalid user")
-        if not security.pwd_context.verify(payload.old_password, u.hashed_password):
+        if not verify_password(payload.old_password, u.hashed_password):
             raise HTTPException(status_code=401, detail="invalid credentials")
-        u.hashed_password = security.pwd_context.hash(payload.new_password)
+        u.hashed_password = get_password_hash(payload.new_password)
         db.add(u)
         db.commit()
         return {"status": "ok"}

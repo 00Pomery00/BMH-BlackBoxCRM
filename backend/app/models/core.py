@@ -1,6 +1,5 @@
 from app.models.base import Base
 from sqlalchemy import (
-    JSON,
     Boolean,
     Column,
     DateTime,

@@ -23,12 +23,12 @@ export default function Header({ onLogout } = {}) {
   const user = window._BBX && window._BBX.username ? window._BBX : null;
 
   return (
-    <header className="mb-6 flex items-center justify-between" role="banner">
+    <header data-testid="app-header" className="mb-6 flex items-center justify-between" role="banner">
       <div className="flex items-center gap-4">
         <img src="/logo.png" alt={t('app_title')} className="w-10 h-10" />
         <div>
           <div className="text-lg font-semibold">{t('app_title')}</div>
-          <div className="text-xs text-slate-500">{t('app_subtitle')}</div>
+          <div className="text-xs text-slate-200">{t('app_subtitle')}</div>
         </div>
       </div>
 
@@ -62,12 +62,13 @@ export default function Header({ onLogout } = {}) {
               }}
               className="ml-2 text-xs text-red-600 focus:outline-none focus:ring-2 focus:ring-red-300"
               aria-label={t('logout')}
+              data-testid="btn-logout"
             >
               {t('logout')}
             </button>
           </div>
         ) : (
-          <a href="/login" className="text-sm border px-3 py-1 rounded">
+          <a data-testid="link-login" href="/login" className="text-sm border px-3 py-1 rounded">
             {t('login')}
           </a>
         )}

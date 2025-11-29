@@ -14,6 +14,11 @@ def verify_password(plain_password: str, hashed_password: str) -> bool:
 
 
 def get_password_hash(password: str) -> str:
+    # bcrypt omezení: max 72 bajtů
+    if password is None:
+        password = ""
+    else:
+        password = str(password)[:72]
     return pwd_context.hash(password)
 
 

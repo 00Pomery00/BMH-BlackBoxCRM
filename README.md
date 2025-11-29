@@ -1,11 +1,21 @@
-# BlackBox CRM — demo
+---
+# BlackBox CRM – jediná vývojová větev a best practices
 
-Krátký návod pro spuštění projektu lokálně a v kontejneru.
+Tento repozitář obsahuje pouze jednu oficiální vývojovou větev a jedinou pravdu pro vývoj, testování, deployment i dokumentaci.
 
-Lokální vývoj (Windows / PowerShell):
+## Struktura projektu
 
-1. Backend
+- `backend/` – FastAPI backend (produkční, testy, migrace, katalog, mock data)
+- `web-frontend/` – React frontend (Vite, Playwright, E2E, mock-backend)
+- `mobile-addon/` – mobilní demo (volitelně)
+- `app.py` – analytický/reportovací nástroj (Streamlit)
+- `scripts/`, `tools/`, `docs/`, `design/` – utility, dokumentace, návrhy
 
+Všechny ostatní složky a soubory jsou archivní, pomocné nebo dočasné a nejsou určeny pro další vývoj.
+
+## Rychlý start
+
+### Backend (Windows / PowerShell)
 ```powershell
 Set-Location 'C:\BMH\SW\BMH-BlackBoxCRM\backend'
 .\.venv\Scripts\Activate.ps1
@@ -14,90 +24,53 @@ python -m alembic -c alembic.ini upgrade head
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-2. Frontend
-
+### Frontend
 ```powershell
 Set-Location 'C:\BMH\SW\BMH-BlackBoxCRM\web-frontend'
 npm install
 npm run dev
 ```
 
-Spuštění v Docker Compose (rychlý staging):
-
+### Docker Compose (rychlý staging)
 ```powershell
 Set-Location 'C:\BMH\SW\BMH-BlackBoxCRM'
 docker compose up --build
 ```
 
-Deployment z CI (artefakty):
-
-1. CI vytvoří artefakty `backend-image.tar` a `frontend-image.tar` (job `build-images`). Stáhněte je z GitHub Actions runu.
-2. Na cílovém stroji nahrajte tar soubory a načtěte do Dockeru:
-
-```bash
-docker load -i backend-image.tar
-docker load -i frontend-image.tar
-```
-
-3. Spusťte `docker compose up -d` (přizpůsobte `docker-compose.yml` pro produkční nastavení a sítě).
-
-Automatické pushování do Docker Hubu:
-
-Přidal jsem workflow `.github/workflows/publish-images.yml`, které při pushi na `main` sestaví a pushne obrazy do Docker Hubu pokud jsou nastaveny tyto `secrets` v GitHub repozitáři:
-
-- `DOCKERHUB_USERNAME` — vaše Docker Hub uživatelské jméno
-- `DOCKERHUB_TOKEN` — personal access token (nebo heslo) pro Docker Hub
-
-Po nastavení secretů workflow automaticky pushne `blackboxcrm-backend:latest` a `blackboxcrm-frontend:latest` do vašeho Docker Hub účtu.
-Testy (backend):
-
+### Testy (backend)
 ```powershell
 Set-Location 'C:\BMH\SW\BMH-BlackBoxCRM\backend'
 .\.venv\Scripts\Activate.ps1
 python -m pytest -q
 ```
 
-Migrace a datová konsolidace `fu_users` → `users`:
-
+### E2E testy (frontend)
 ```powershell
-# preview
-python scripts\migrate_fu_users_to_users.py --db ./test.db
-
-# apply (vo výchozím režimu vás skript požádá o potvrzení)
-python scripts\migrate_fu_users_to_users.py --db ./test.db --apply
+Set-Location 'C:\BMH\SW\BMH-BlackBoxCRM\web-frontend'
+npx playwright test
 ```
 
-Poznámka: projekt je demo; před nasazením do produkce doplňte správu secretů, zálohování a bezpečnostní hardening.
+## Best practices a prevence duplicit
 
-Triggerování nasazení přes GitHub Actions (SSH)
+- Všechny nové funkce, katalogy, schémata a testy přidávejte pouze do složek `backend/` a `web-frontend/`.
+- Před implementací nové funkce vždy zkontrolujte, zda již podobná neexistuje (vyhledávání v kódu, katalogu, testech).
+- Všechny manifesty a mock data jsou pouze v `backend/catalog/objects/` a `backend/mock/`.
+- Historické a archivní složky (`crm-blackbox/`, `_archive/`, staré frontendy/backendy) jsou pouze pro referenci a nikdy se do nich nevyvíjí.
+- Dokumentace, onboarding a návody jsou pouze v tomto README a v `docs/`.
+- CI/CD, build a testy jsou popsány v `.github/workflows/` a reflektují pouze tuto strukturu.
 
-1. V GitHub Actions UI otevřete workflow `Deploy via SSH (from artifacts)` (soubor `.github/workflows/deploy-via-ssh.yml`) a spusťte ho ručně (`Run workflow`).
-2. Workflow stáhne artifacty pojmenované `docker-images` (očekává `backend-image.tar` a `frontend-image.tar`) a přenese je na vzdálený host přes `scp`.
-3. Na vzdáleném hostu se obrazy načtou (`docker load`) a spustí se `docker compose up -d`.
+## Pravidla pro budoucí vývoj
 
-Požadované `secrets` v repozitáři (Settings → Secrets):
+- Každý nový požadavek musí být nejprve ověřen, zda již není implementován.
+- Pokud je potřeba rozšířit katalog, vždy zachovejte zpětnou kompatibilitu a dokumentujte změnu.
+- Všechny změny musí být popsány v changelogu nebo v pull requestu.
+- Při refaktoringu vždy nejprve archivujte starý kód, až poté mažte.
 
-- `DEPLOY_SSH_KEY` — privátní SSH klíč (obsah souboru, včetně hlavičky `-----BEGIN OPENSSH PRIVATE KEY-----`).
-- `DEPLOY_HOST` — uživatel a host (např. `ubuntu@1.2.3.4`).
-- `DEPLOY_DIR` — cílový adresář na vzdáleném stroji, kam se nahrají tar soubory (např. `/home/ubuntu/deploy`).
+## Historie a poznámky pro vývojáře
 
-Poznámka: workflow vypíná kontrolu host key (`StrictHostKeyChecking=no`) pro pohodlí; v produkci raději přidejte ověřování host keys.
-Pro bezpečnější nasazení můžete do `Secrets` přidat také:
+Všechny staré větve, duplicity a experimentální scaffoldy byly přesunuty do archivu nebo odstraněny. Pokud potřebujete historická data, najdete je ve složkách `_archive/` nebo v historii repozitáře.
 
-- `DEPLOY_KNOWN_HOSTS` — obsah souboru `known_hosts` (výstup `ssh-keyscan your.host`), workflow pak použije ověřování host key namísto vypnutí kontroly.
-
-Runbook: bezpečná produkční migrace `fu_users` → `users`
-
-1. Zálohujte databázi a soubory (nezbytné):
-
-```powershell
-Copy-Item backend\test.db backend\test.db.bak
-# nebo dump v produkci podle DB engine
-```
-
-2. Spusťte preview migrace:
-
-```powershell
+---
 python scripts\migrate_fu_users_to_users.py --db ./backend/test.db --dry-run
 ```
 
@@ -119,7 +92,7 @@ This workspace contains a demo CRM (FastAPI backend, React frontend, mobile addo
 Quick backend setup (Windows PowerShell):
 
 ```powershell
-Set-Location 'C:\BMH\SW\BMH-BlackBoxCRM\backend'
+Set-Location 'C:\BMH\SW\BMHBlackBoxCRM\backend'
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
@@ -152,7 +125,7 @@ I included a small helper script `scripts/prepare_release.ps1` (PowerShell) whic
 Example usage (PowerShell):
 
 ```powershell
-Set-Location 'C:\BMH\SW\BMH-BlackBoxCRM'
+Set-Location 'C:\BMH\SW\BMHBlackBoxCRM'
 .\scripts\prepare_release.ps1 v1.0.0
 
 # then locally create and push tag when ready
@@ -169,7 +142,7 @@ Spuštění E2E lokálně (rychlý návod):
 1) Připrav frontend a nainstalujte Playwright browsere:
 
 ```powershell
-Set-Location 'C:\BMH\SW\BMH-BlackBoxCRM\web-frontend'
+Set-Location 'C:\BMH\SW\BMHBlackBoxCRM\web-frontend'
 npm ci
 npm run build
 npx playwright install --with-deps

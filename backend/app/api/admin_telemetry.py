@@ -1,7 +1,7 @@
 from app import models
 from app.core import security
 from app.main import SessionLocal
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy import func
 
 router = APIRouter(prefix="/admin", tags=["admin"])
@@ -23,7 +23,7 @@ def telemetry_summary(user: models.User = Depends(security.get_current_user)):
         )
         top_paths = (
             db.query(models.TelemetryEvent.path, func.count(models.TelemetryEvent.id))
-            .filter(models.TelemetryEvent.path != None)
+            .filter(models.TelemetryEvent.path is not None)
             .group_by(models.TelemetryEvent.path)
             .order_by(func.count(models.TelemetryEvent.id).desc())
             .limit(10)
@@ -31,7 +31,7 @@ def telemetry_summary(user: models.User = Depends(security.get_current_user)):
         )
         active_sessions = (
             db.query(func.count(models.UserSession.id))
-            .filter(models.UserSession.ended_at == None)
+            .filter(models.UserSession.ended_at is None)
             .scalar()
             or 0
         )

@@ -2,110 +2,6 @@ name: CI
 
 on:
   push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:13
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: bmh
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd "pg_isready -U postgres" --health-interval 10s --health-timeout 5s --health-retries 5
-      redis:
-        image: redis:6
-        ports:
-          - 6379:6379
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Install backend dependencies
-        run: |
-          python -m venv .venv
-          . .venv/bin/activate
-          pip install --upgrade pip
-          pip install -r backend/requirements.txt || true
-          pip install alembic || true
-
-      - name: Wait for Postgres
-        run: |
-          for i in {1..30}; do pg_isready -h localhost -p 5432 -U postgres && break || sleep 1; done
-
-      - name: Run Alembic migrations (Postgres)
-        env:
-          DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/bmh
-        run: |
-          . .venv/bin/activate
-          cd backend
-          alembic upgrade head || true
-
-      - name: Run backend unit tests (SQLite fallback)
-        env:
-          DATABASE_URL: sqlite:///./test.db
-        run: |
-          . .venv/bin/activate
-          cd backend
-          pytest -q
-
-      - name: Start backend (background)
-        env:
-          DATABASE_URL: postgresql+psycopg2://postgres:postgres@localhost:5432/bmh
-        run: |
-          . .venv/bin/activate
-          cd backend
-          nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 &
-          sleep 3
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-
-      - name: Install frontend dependencies
-        run: |
-          cd web-frontend
-          npm ci
-          npx playwright install --with-deps
-
-      - name: Build and serve frontend
-        run: |
-          cd web-frontend
-          npm run build
-          npx serve -s dist -l 5173 &
-          sleep 2
-
-      - name: Run Playwright E2E
-        env:
-          BACKEND_URL: http://localhost:8000
-          FRONTEND_URL: http://localhost:5173
-        run: |
-          cd web-frontend
-          npx playwright test --reporter=list || true
-
-      - name: Upload Playwright Report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: playwright-report
-          path: web-frontend/playwright-report || web-frontend/test-results || ''
-name: CI
-
-on:
-  push:
     branches: [ main, master ]
   pull_request:
     branches: [ main, master ]
@@ -239,11 +135,11 @@ jobs:
         run: |
           npm test --if-present || true
 
-  publish-to-dockerhub:
-    name: Publish images to Docker Hub
+
+  publish-images:
+    name: Publish Docker images
     runs-on: ubuntu-latest
     needs: build-images
-    if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
@@ -255,58 +151,35 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-      - name: Build and push backend image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./
-          file: backend/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/blackboxcrm-backend:latest
-      - name: Build and push frontend image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./
-          file: web-frontend/Dockerfile
-          push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/blackboxcrm-frontend:latest
-
-  publish-to-ghcr:
-    name: Publish images to GHCR
-    runs-on: ubuntu-latest
-    needs: build-images
-    if: ${{ secrets.GHCR_USERNAME && secrets.GHCR_TOKEN }}
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
       - name: Login to GHCR
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ secrets.GHCR_USERNAME }}
           password: ${{ secrets.GHCR_TOKEN }}
-      - name: Build and push backend image to GHCR
+      - name: Build and push backend image
         uses: docker/build-push-action@v4
         with:
           context: ./
           file: backend/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/blackboxcrm-backend:latest
-      - name: Build and push frontend image to GHCR
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/blackboxcrm-backend:latest
+            ghcr.io/${{ github.repository_owner }}/blackboxcrm-backend:latest
+      - name: Build and push frontend image
         uses: docker/build-push-action@v4
         with:
           context: ./
           file: web-frontend/Dockerfile
           push: true
-          tags: ghcr.io/${{ github.repository_owner }}/blackboxcrm-frontend:latest
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/blackboxcrm-frontend:latest
+            ghcr.io/${{ github.repository_owner }}/blackboxcrm-frontend:latest
 
   push-artifacts-to-dockerhub:
     name: Push loaded artifacts to Docker Hub
     runs-on: ubuntu-latest
     needs: build-images
-    if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_TOKEN }}
     steps:
       - name: Download docker-images artifact
         uses: actions/download-artifact@v4
@@ -336,7 +209,6 @@ jobs:
     name: Push loaded artifacts to GHCR
     runs-on: ubuntu-latest
     needs: build-images
-    if: ${{ secrets.GHCR_USERNAME && secrets.GHCR_TOKEN }}
     steps:
       - name: Download docker-images artifact
         uses: actions/download-artifact@v4

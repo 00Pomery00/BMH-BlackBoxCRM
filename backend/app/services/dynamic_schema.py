@@ -7,7 +7,8 @@ class SchemaValidationError(Exception):
 
 
 def validate_against_schema(schema: Dict[str, Any], payload: Dict[str, Any]) -> None:
-    """Basic validation stub: ensure required fields exist according to schema definition.
+    """Basic validation stub:
+    ensure required fields exist according to schema definition.
 
     Schema shape (example):
     {

@@ -3,11 +3,12 @@ import os
 from pathlib import Path
 from urllib.parse import parse_qs as _parse_qs
 
-from fastapi import APIRouter, Form, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from . import models, security
+from . import models
+from app.core.security import get_password_hash, verify_password, create_access_token
 from .main import SessionLocal
 
 router = APIRouter()
@@ -131,7 +132,7 @@ async def fu_register(request: Request):
         existing = db.query(models.User).filter(models.User.email == email).first()
         if existing:
             raise HTTPException(status_code=400, detail="REGISTER_USER_ALREADY_EXISTS")
-        hashed = security.pwd_context.hash(password)
+        hashed = get_password_hash(password)
         u = models.User(username=email, email=email, hashed_password=hashed)
         db.add(u)
         db.commit()
@@ -211,9 +212,9 @@ async def fu_login(request: Request):
         u = db.query(models.User).filter(models.User.email == username).first()
         if not u or not u.hashed_password:
             raise HTTPException(status_code=401, detail="invalid credentials")
-        if not security.pwd_context.verify(password, u.hashed_password):
+        if not verify_password(password, u.hashed_password):
             raise HTTPException(status_code=401, detail="invalid credentials")
-        token = security.create_access_token(
+        token = create_access_token(
             {"sub": u.email, "uid": u.id, "role": u.role}
         )
         return {"access_token": token, "token_type": "bearer"}

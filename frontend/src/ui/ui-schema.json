@@ -1,9 +1,0 @@
-[
-  {
-    "id": "bbx-card-company-detail",
-    "objectClass": "company",
-    "bindsTo": "companyId",
-    "permissions": ["read", "update"],
-    "actions": ["open", "edit", "merge"]
-  }
-]

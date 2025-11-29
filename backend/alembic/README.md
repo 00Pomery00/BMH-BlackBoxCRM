@@ -3,7 +3,7 @@ Usage:
 Run migrations from the `backend` folder using the alembic CLI. Example:
 
 ```powershell
-Set-Location 'C:\BMH\SW\BMH-BlackBoxCRM\backend'
+Set-Location 'C:\BMH\SW\BMHBlackBoxCRM\backend'
 # create a virtualenv and install alembic if not present
 python -m venv .venv && .\.venv\Scripts\Activate.ps1
 pip install -r requirements.txt alembic

@@ -79,7 +79,6 @@ jobs:
           BACKEND_URL: http://127.0.0.1:8002
           FRONTEND_URL: http://127.0.0.1:5173
         run: |
-          # ensure Playwright outputs into a known folder
           npx playwright test --reporter=github || true
 
       - name: Prepare Playwright artifacts archive and list files

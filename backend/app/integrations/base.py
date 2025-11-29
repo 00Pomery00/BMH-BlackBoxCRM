@@ -7,7 +7,10 @@ class ConnectorError(Exception):
 
 
 class BaseConnector:
-    """Base class for integration connectors. Subclasses must implement auth and request methods."""
+    """
+    Base class for integration connectors.
+    Subclasses must implement auth and request methods.
+    """
 
     name: str = "base"
 

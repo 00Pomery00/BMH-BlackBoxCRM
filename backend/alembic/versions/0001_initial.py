@@ -35,9 +35,12 @@ def upgrade():
             ]
             for tbl in tables:
                 op.execute(f"ALTER TABLE {tbl} ENABLE ROW LEVEL SECURITY;")
-                op.execute(
-                    f"CREATE POLICY {tbl}_tenant_isolation ON {tbl} USING (tenant_id = current_setting('bbx.tenant', true)) WITH CHECK (tenant_id = current_setting('bbx.tenant', true));"
+                policy_sql = (
+                    f"CREATE POLICY {tbl}_tenant_isolation ON {tbl} "
+                    "USING (tenant_id = current_setting('bbx.tenant', true)) "
+                    "WITH CHECK (tenant_id = current_setting('bbx.tenant', true));"
                 )
+                op.execute(policy_sql)
         except Exception:
             # If DB does not support RLS or policy creation fails, continue gracefully
             pass

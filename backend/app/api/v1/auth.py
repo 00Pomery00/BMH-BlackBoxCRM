@@ -1,3 +1,4 @@
+
 from datetime import timedelta
 
 from app.core.config import settings
@@ -10,6 +11,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.exc import IntegrityError
 
+router = APIRouter()
+
 
 @router.get("/me", tags=["auth"])
 async def me(current_user=Depends(get_current_user)):
@@ -19,7 +22,8 @@ async def me(current_user=Depends(get_current_user)):
 # Compatibility endpoints expected by existing E2E tests (fastapi-users style)
 @router.post("/fu_auth/register")
 async def fu_register(payload: dict):
-    # payload may contain email & password; tenant not provided in tests — default to 'default'
+    # payload may contain email & password
+    # tenant not provided in tests — default to 'default'
     email = payload.get("email")
     password = payload.get("password")
     if not email or not password:
@@ -58,9 +62,6 @@ async def fu_jwt_login(payload: dict):
             expires_delta=access_token_expires,
         )
         return {"access_token": token, "token_type": "bearer"}
-
-
-router = APIRouter()
 
 
 @router.post("/register", response_model=UserRead, status_code=status.HTTP_201_CREATED)
