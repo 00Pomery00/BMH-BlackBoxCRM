@@ -7,8 +7,9 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
+from app.core.security import create_access_token, get_password_hash, verify_password
+
 from . import models
-from app.core.security import get_password_hash, verify_password, create_access_token
 from .main import SessionLocal
 
 router = APIRouter()
@@ -214,9 +215,7 @@ async def fu_login(request: Request):
             raise HTTPException(status_code=401, detail="invalid credentials")
         if not verify_password(password, u.hashed_password):
             raise HTTPException(status_code=401, detail="invalid credentials")
-        token = create_access_token(
-            {"sub": u.email, "uid": u.id, "role": u.role}
-        )
+        token = create_access_token({"sub": u.email, "uid": u.id, "role": u.role})
         return {"access_token": token, "token_type": "bearer"}
     finally:
         db.close()

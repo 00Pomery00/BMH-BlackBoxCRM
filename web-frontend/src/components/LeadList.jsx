@@ -16,16 +16,30 @@ export default function LeadList({ companies = [] }) {
     try {
       window.BBX_OPEN_LEAD = (id) => {
         try {
-          const found = (list || []).find((x) => x.id === id || (`lead-item-${x.id}`) === id);
+          const found = (list || []).find((x) => x.id === id || `lead-item-${x.id}` === id);
           if (found) {
             console.debug('BBX_OPEN_LEAD found', id);
-            try { window.__LAST_SELECTED = found; } catch (e) {}
+            try {
+              window.__LAST_SELECTED = found;
+            } catch (e) {
+              console.error('LeadList: failed to set __LAST_SELECTED', e);
+            }
             setSelected(found);
           }
-        } catch (e) { console.error('BBX_OPEN_LEAD error', e); }
+        } catch (e) {
+          console.error('BBX_OPEN_LEAD error', e);
+        }
       };
-    } catch (e) {}
-    return () => { try { delete window.BBX_OPEN_LEAD } catch (e) {} };
+    } catch (e) {
+      console.error('LeadList: register BBX_OPEN_LEAD failed', e);
+    }
+    return () => {
+      try {
+        delete window.BBX_OPEN_LEAD;
+      } catch (e) {
+        console.error('LeadList: cleanup BBX_OPEN_LEAD failed', e);
+      }
+    };
   }, [list]);
 
   if (!list.length) {
@@ -43,7 +57,11 @@ export default function LeadList({ companies = [] }) {
             tabIndex={0}
             onClick={() => {
               console.debug('LeadList: item clicked', c && c.id);
-              try { window.__LAST_SELECTED = c; } catch(e) {}
+              try {
+                window.__LAST_SELECTED = c;
+              } catch (e) {
+                console.error('LeadList: failed to set __LAST_SELECTED on click', e);
+              }
               setSelected(c);
             }}
             className="p-3 bg-white rounded border flex justify-between items-center hover:shadow-sm cursor-pointer"
@@ -56,7 +74,10 @@ export default function LeadList({ companies = [] }) {
             </div>
             <div>
               <button
-                  onClick={(e) => { e.stopPropagation(); setSelected(c); }}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelected(c);
+                }}
                 data-testid={`lead-open-${c.id}`}
                 className="px-3 py-1 bg-blue-600 text-white rounded focus:outline-none focus:ring-2 focus:ring-blue-300 transition"
                 aria-label={t('open')}

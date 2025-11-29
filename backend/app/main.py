@@ -4,6 +4,10 @@ import weakref
 from contextlib import asynccontextmanager
 from pathlib import Path
 
+from fastapi import Depends, FastAPI
+from sqlalchemy import create_engine, text
+from sqlalchemy.orm import sessionmaker
+
 from app import (
     ai_processor,
     audit,
@@ -15,9 +19,6 @@ from app import (
     schemas,
     security,
 )
-from fastapi import Depends, FastAPI
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 DATABASE_URL = f"sqlite:///{BASE_DIR / 'test.db'}"

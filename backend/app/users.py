@@ -1,17 +1,18 @@
 from typing import Optional
 
-from app import models, schemas
-from app.core.security import get_password_hash
-from app.security import (
-    get_current_user,
-    require_role,
-    verify_password,
-    create_access_token,
-)
-from app.main import SessionLocal
 from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
+
+from app import models, schemas
+from app.core.security import get_password_hash
+from app.main import SessionLocal
+from app.security import (
+    create_access_token,
+    get_current_user,
+    require_role,
+    verify_password,
+)
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -198,9 +199,7 @@ def list_users(user: schemas.User = Depends(get_current_user)):
 
 
 @router.post("/role")
-def change_role(
-    payload: RoleChange, user: schemas.User = Depends(get_current_user)
-):
+def change_role(payload: RoleChange, user: schemas.User = Depends(get_current_user)):
     require_role(user, ("admin",))
     db: Session = SessionLocal()
     try:

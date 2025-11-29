@@ -23,7 +23,11 @@ export default function Header({ onLogout } = {}) {
   const user = window._BBX && window._BBX.username ? window._BBX : null;
 
   return (
-    <header data-testid="app-header" className="mb-6 flex items-center justify-between" role="banner">
+    <header
+      data-testid="app-header"
+      className="mb-6 flex items-center justify-between"
+      role="banner"
+    >
       <div className="flex items-center gap-4">
         <img src="/logo.png" alt={t('app_title')} className="w-10 h-10" />
         <div>

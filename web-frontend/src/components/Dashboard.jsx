@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import KpiCard from './ui/KpiCard';
@@ -12,7 +11,6 @@ export default function Dashboard({ companies = [] }) {
     ? (companies.reduce((s, c) => s + (c.lead_score || 0), 0) / total).toFixed(1)
     : 0;
   const top = companies.slice().sort((a, b) => (b.lead_score || 0) - (a.lead_score || 0))[0];
-
 
   // Zobrazení ID/kategorií podle nastavení uživatele (centralizovaně)
   const { showIds, showCategories } = useElementDebug();
@@ -63,7 +61,9 @@ export default function Dashboard({ companies = [] }) {
 
   return (
     <section className="mb-6" data-id="dashboard-section" data-category="panel">
-      <h2 className="text-xl font-semibold mb-4" data-id="dashboard-title" data-category="nadpis">{t('overview')}</h2>
+      <h2 className="text-xl font-semibold mb-4" data-id="dashboard-title" data-category="nadpis">
+        {t('overview')}
+      </h2>
 
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         {order.map((key) => {
@@ -81,8 +81,36 @@ export default function Dashboard({ companies = [] }) {
               style={{ position: 'relative' }}
             >
               <KpiCard title={kpi.title} value={kpi.value} />
-              {showIds && <span style={{position:'absolute',top:4,right:8,fontSize:10,background:'#eee',padding:'0 4px',borderRadius:3}}>{kpi.id}</span>}
-              {showCategories && <span style={{position:'absolute',top:20,right:8,fontSize:10,background:'#e0e7ff',padding:'0 4px',borderRadius:3}}>{kpi.category}</span>}
+              {showIds && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: 4,
+                    right: 8,
+                    fontSize: 10,
+                    background: '#eee',
+                    padding: '0 4px',
+                    borderRadius: 3,
+                  }}
+                >
+                  {kpi.id}
+                </span>
+              )}
+              {showCategories && (
+                <span
+                  style={{
+                    position: 'absolute',
+                    top: 20,
+                    right: 8,
+                    fontSize: 10,
+                    background: '#e0e7ff',
+                    padding: '0 4px',
+                    borderRadius: 3,
+                  }}
+                >
+                  {kpi.category}
+                </span>
+              )}
             </div>
           );
         })}
@@ -91,21 +119,42 @@ export default function Dashboard({ companies = [] }) {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div className="lg:col-span-2" data-id="dashboard-leads-panel" data-category="panel">
           <div className="mb-3 flex items-center justify-between">
-            <h3 data-testid="dashboard-leads-heading" className="text-lg font-medium" data-id="dashboard-leads-title" data-category="nadpis">
+            <h3
+              data-testid="dashboard-leads-heading"
+              className="text-lg font-medium"
+              data-id="dashboard-leads-title"
+              data-category="nadpis"
+            >
               {t('leads')}
             </h3>
             <div className="text-sm text-gray-500">
               {t('companies')}: {total}
             </div>
           </div>
-          <div className="bg-gray-50 p-4 rounded" data-id="dashboard-leads-list" data-category="tabulka">
+          <div
+            className="bg-gray-50 p-4 rounded"
+            data-id="dashboard-leads-list"
+            data-category="tabulka"
+          >
             <LeadList companies={companies} />
           </div>
         </div>
 
         <aside data-id="dashboard-activity-panel" data-category="panel">
-          <h3 className="text-lg font-medium mb-2" data-id="dashboard-activity-title" data-category="nadpis">{t('recent_activity')}</h3>
-          <div className="p-4 bg-white rounded border" data-id="dashboard-activity-list" data-category="tabulka">{t('no_recent_activity')}</div>
+          <h3
+            className="text-lg font-medium mb-2"
+            data-id="dashboard-activity-title"
+            data-category="nadpis"
+          >
+            {t('recent_activity')}
+          </h3>
+          <div
+            className="p-4 bg-white rounded border"
+            data-id="dashboard-activity-list"
+            data-category="tabulka"
+          >
+            {t('no_recent_activity')}
+          </div>
         </aside>
       </div>
     </section>

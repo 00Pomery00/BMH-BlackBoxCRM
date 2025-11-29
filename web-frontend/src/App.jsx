@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './i18n';
 
 import Header from './components/Header';
-import { fetchCompanies, fetchGamification } from './api';
+import { fetchCompanies } from './api';
 import Login from './components/Login';
 import AdminTelemetry from './components/AdminTelemetry';
 import Home from './pages/Home';
@@ -27,11 +27,9 @@ export default function App() {
   }, []);
   // useTranslation not required here; i18n is initialized globally via ./i18n
   const [companies, setCompanies] = useState([]);
-  const [gamification, setGamification] = useState({});
 
   useEffect(() => {
     fetchCompanies().then(setCompanies).catch(console.error);
-    fetchGamification().then(setGamification).catch(console.error);
   }, []);
 
   const [isLoggedIn, setIsLoggedIn] = React.useState(!!localStorage.getItem('bbx_token'));
@@ -57,24 +55,55 @@ export default function App() {
           <span className="text-2xl font-bold tracking-wide">BlackBox</span>
         </div>
         <nav className="flex-1 flex flex-col gap-1 px-2">
-          <button className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${page==='home'?'bg-violet-600/80':''}`} onClick={()=>setPage('home')}>
+          <button
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+              page === 'home' ? 'bg-violet-600/80' : ''
+            }`}
+            onClick={() => setPage('home')}
+          >
             <span className="material-icons">dashboard</span> <span>Dashboard</span>
           </button>
-          <button className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${page==='leads'?'bg-violet-600/80':''}`} onClick={()=>setPage('leads')}>
+          <button
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+              page === 'leads' ? 'bg-violet-600/80' : ''
+            }`}
+            onClick={() => setPage('leads')}
+          >
             <span className="material-icons">list_alt</span> <span>Leady</span>
           </button>
-          <button className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${page==='companies'?'bg-violet-600/80':''}`} onClick={()=>setPage('companies')}>
+          <button
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+              page === 'companies' ? 'bg-violet-600/80' : ''
+            }`}
+            onClick={() => setPage('companies')}
+          >
             <span className="material-icons">business</span> <span>Firmy</span>
           </button>
-          <button className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${page==='stats'?'bg-violet-600/80':''}`} onClick={()=>setPage('stats')}>
+          <button
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+              page === 'stats' ? 'bg-violet-600/80' : ''
+            }`}
+            onClick={() => setPage('stats')}
+          >
             <span className="material-icons">bar_chart</span> <span>Statistiky</span>
           </button>
-          <button className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${page==='profile'?'bg-violet-600/80':''}`} onClick={()=>setPage('profile')}>
+          <button
+            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
+              page === 'profile' ? 'bg-violet-600/80' : ''
+            }`}
+            onClick={() => setPage('profile')}
+          >
             <span className="material-icons">person</span> <span>Profil</span>
           </button>
         </nav>
         <div className="mt-8 px-6">
-          <button onClick={()=>{window.localStorage.removeItem('bbx_token'); setIsLoggedIn(false);}} className="flex items-center gap-2 text-sm text-violet-200 hover:text-white">
+          <button
+            onClick={() => {
+              window.localStorage.removeItem('bbx_token');
+              setIsLoggedIn(false);
+            }}
+            className="flex items-center gap-2 text-sm text-violet-200 hover:text-white"
+          >
             <span className="material-icons">logout</span> Odhlásit
           </button>
         </div>
@@ -85,8 +114,14 @@ export default function App() {
           <Header onLogout={() => setIsLoggedIn(false)} />
           {/* User box vpravo nahoře */}
           <div className="flex items-center gap-3">
-            <img src="/avatar.png" alt="avatar" className="w-9 h-9 rounded-full border-2 border-violet-400" />
-            <div className="text-sm font-medium text-gray-700">{window._BBX?.username || 'Uživatel'}</div>
+            <img
+              src="/avatar.png"
+              alt="avatar"
+              className="w-9 h-9 rounded-full border-2 border-violet-400"
+            />
+            <div className="text-sm font-medium text-gray-700">
+              {window._BBX?.username || 'Uživatel'}
+            </div>
           </div>
         </div>
         <div className="flex-1 p-8">

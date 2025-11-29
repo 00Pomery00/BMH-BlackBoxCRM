@@ -3,7 +3,8 @@ import fetch from 'cross-fetch';
 // Allow runtime override via `window.__BACKEND_URL` or `window.BBX_API_URL` so
 // E2E tests can point the static `file://` build at a mock backend without
 // rebuilding the app.
-const RUNTIME_BASE = (typeof window !== 'undefined' && (window.__BACKEND_URL || window.BBX_API_URL)) || null;
+const RUNTIME_BASE =
+  (typeof window !== 'undefined' && (window.__BACKEND_URL || window.BBX_API_URL)) || null;
 // Pro vývoj s Vite proxy používejme prázdný string (relativní cesta)
 const BASE = RUNTIME_BASE || process.env.VITE_API_URL || '';
 

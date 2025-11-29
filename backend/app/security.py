@@ -27,6 +27,7 @@ if not SECRET_KEY:
         )
     else:
         import secrets
+
         SECRET_KEY = secrets.token_hex(32)
         warnings.warn(
             (
@@ -70,8 +71,6 @@ def mfa_verify(username: str, code: str) -> bool:
 
 def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
-
-
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):

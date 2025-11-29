@@ -20,14 +20,12 @@
   "leads_heading": "Leady",
   "kpi_companies": "Počet společností",
   "kpi_avg_score": "Průměrné skóre",
-  "kpi_top_lead": "Top lead"
-  ,
+  "kpi_top_lead": "Top lead",
   "app_title": "BMH BlackBox",
   "app_subtitle": "Interní CRM přehled",
   "toggle_theme": "Přepnout téma",
   "dark": "Tmavé",
-  "light": "Světlé"
-  ,
+  "light": "Světlé",
   "open": "Otevřít",
   "username_or_email": "Uživatelské jméno nebo e-mail",
   "password": "Heslo",
