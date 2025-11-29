@@ -423,7 +423,7 @@ def admin_requeue_webhook(
     row.attempts = 0
     row.last_error = ""
     row.dead = 0
-    row.next_attempt_at = datetime.datetime.utcnow()
+    row.next_attempt_at = datetime.datetime.now(datetime.timezone.utc)
     db.add(row)
     db.commit()
     # Ensure any other in-process sessions (like test sessions) see this update

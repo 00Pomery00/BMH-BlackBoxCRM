@@ -1,3 +1,5 @@
+import datetime
+
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -86,7 +88,7 @@ def update_automation(
         row.definition = definition
     if name:
         row.name = name
-    row.updated_at = __import__("datetime").datetime.utcnow()
+    row.updated_at = datetime.datetime.now(datetime.timezone.utc)
     db.add(row)
     db.commit()
     return {"id": row.id, "name": row.name}

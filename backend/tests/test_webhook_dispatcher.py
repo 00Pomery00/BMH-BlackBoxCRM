@@ -39,7 +39,9 @@ def test_enqueue_and_process(monkeypatch):
     import datetime
 
     row = db.query(models.WebhookQueue).filter(models.WebhookQueue.id == w.id).first()
-    row.next_attempt_at = datetime.datetime.utcnow() - datetime.timedelta(seconds=1)
+    row.next_attempt_at = datetime.datetime.now(
+        datetime.timezone.utc
+    ) - datetime.timedelta(seconds=1)
     db.add(row)
     db.commit()
     processed = integrations.process_queue_once(db=db, max_attempts=3)
