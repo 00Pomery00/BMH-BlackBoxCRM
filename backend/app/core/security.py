@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
@@ -9,18 +10,33 @@ from app.core.config import settings
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 ALGORITHM = "HS256"
 
+_logger = logging.getLogger("app.core.security")
+
+
+def _truncate_password_to_bcrypt_limit(password: Optional[str]) -> str:
+    # bcrypt limit: 72 bytes. Work at the byte level to avoid multi-byte surprises.
+    if password is None:
+        return ""
+    pw = str(password)
+    b = pw.encode("utf-8", errors="ignore")
+    if len(b) <= 72:
+        return pw
+    _logger.warning(
+        "Password longer than 72 bytes detected; truncating to bcrypt limit"
+    )
+    truncated = b[:72]
+    # decode back to str, ignore partial multibyte sequences at the end
+    return truncated.decode("utf-8", errors="ignore")
+
 
 def verify_password(plain_password: str, hashed_password: str) -> bool:
+    plain_password = _truncate_password_to_bcrypt_limit(plain_password)
     return pwd_context.verify(plain_password, hashed_password)
 
 
 def get_password_hash(password: str) -> str:
-    # bcrypt omezení: max 72 bajtů
-    if password is None:
-        password = ""
-    else:
-        password = str(password)[:72]
-    return pwd_context.hash(password)
+    pw = _truncate_password_to_bcrypt_limit(password)
+    return pwd_context.hash(pw)
 
 
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None) -> str:
