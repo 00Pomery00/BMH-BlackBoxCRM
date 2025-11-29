@@ -1,6 +1,6 @@
 from typing import Any, Dict, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, ConfigDict
 
 
 class CompanyCreate(BaseModel):
@@ -13,9 +13,7 @@ class CompanyRead(BaseModel):
     id: int
     name: str
     data: Optional[Dict[str, Any]] = None
-
-    class Config:
-        orm_mode = True
+    model_config: ConfigDict = ConfigDict(from_attributes=True)
 
 
 class DsRecordCreate(BaseModel):
@@ -28,6 +26,4 @@ class DsRecordRead(BaseModel):
     id: int
     object_class: str
     data: Dict[str, Any]
-
-    class Config:
-        orm_mode = True
+    model_config: ConfigDict = ConfigDict(from_attributes=True)
