@@ -103,10 +103,10 @@ jobs:
         working-directory: ./web-frontend
         run: |
           npx playwright install --with-deps
-      - name: Run frontend E2E smoke tests
+      - name: Skip e2e here (run in `e2e-with-backend` job)
         working-directory: ./web-frontend
         run: |
-          npm run e2e
+          echo "Skipping Playwright e2e in frontend-build; e2e run is performed in the 'e2e-with-backend' job which starts the backend and serves the frontend."
 
   build-images:
     name: Build Docker images
