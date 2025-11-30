@@ -88,10 +88,16 @@ jobs:
           key: ${{ runner.os }}-node-${{ matrix.node-version }}-${{ hashFiles('web-frontend/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-${{ matrix.node-version }}-
-      - name: Run frontend build
+      - name: Run frontend build (fail if build missing)
         working-directory: ./web-frontend
         run: |
-          npm run build --if-present || true
+          # Run Vite build and fail loudly if dist is not produced
+          npm run build
+          if [ ! -f dist/index.html ]; then
+            echo "ERROR: build did not produce dist/index.html"
+            echo "Listing web-frontend/ after build:"; ls -la || true
+            exit 1
+          fi
       - name: Install Playwright browsers
         working-directory: ./web-frontend
         run: |
