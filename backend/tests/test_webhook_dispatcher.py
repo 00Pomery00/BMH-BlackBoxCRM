@@ -1,5 +1,5 @@
 from app import integrations, models
-from app.integrations import SessionLocal
+from backend.app.integrations import SessionLocal
 
 
 def test_enqueue_and_process(monkeypatch):

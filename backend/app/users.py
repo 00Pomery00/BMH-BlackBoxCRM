@@ -4,10 +4,10 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app import models, schemas
-from app.core.security import get_password_hash
-from app.main import SessionLocal
-from app.security import (
+from . import models, schemas
+from .core.security import get_password_hash
+from .main import SessionLocal
+from .security import (
     create_access_token,
     get_current_user,
     require_role,

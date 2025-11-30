@@ -4,10 +4,10 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.core.deps import get_current_user, get_db
-from app.models.core import DsRecord, DynamicSchema
-from app.schemas.core import DsRecordCreate, DsRecordRead
-from app.services.dynamic_schema import SchemaValidationError, validate_against_schema
+from ...core.deps import get_current_user, get_db
+from ...models.core import DsRecord, DynamicSchema
+from ...schemas.core import DsRecordCreate, DsRecordRead
+from ...services.dynamic_schema import SchemaValidationError, validate_against_schema
 
 router = APIRouter()
 

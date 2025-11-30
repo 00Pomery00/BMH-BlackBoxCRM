@@ -1,13 +1,13 @@
 from fastapi.testclient import TestClient
 
 from app import integrations, models
-from app.main import app
+from backend.app.main import app
 
 client = TestClient(app)
 
 
 def test_admin_webhook_dlq_and_requeue():
-    from app.main import SessionLocal
+    from backend.app.main import SessionLocal
 
     db = SessionLocal()
     # cleanup

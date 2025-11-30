@@ -1,4 +1,4 @@
-from app.ai.stub import score_lead, summarize_communications
+from backend.app.ai.stub import score_lead, summarize_communications
 
 
 def test_score_lead():

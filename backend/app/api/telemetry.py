@@ -2,7 +2,8 @@ from fastapi import APIRouter, Request
 from pydantic import BaseModel
 
 from app import models
-from app.main import SessionLocal
+
+from ..main import SessionLocal
 
 router = APIRouter(prefix="/telemetry", tags=["telemetry"])
 

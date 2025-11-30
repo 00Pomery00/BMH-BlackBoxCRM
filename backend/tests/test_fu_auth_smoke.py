@@ -2,7 +2,7 @@ import uuid
 
 from fastapi.testclient import TestClient
 
-from app.main import app
+from backend.app.main import app
 
 
 def test_fu_auth_register_and_login():

@@ -8,9 +8,8 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from app.core.security import create_access_token, get_password_hash, verify_password
-
 from . import models
+from .core.security import create_access_token, get_password_hash, verify_password
 from .main import SessionLocal
 
 router = APIRouter()

@@ -2,8 +2,9 @@ from fastapi import APIRouter, Depends
 from sqlalchemy import func
 
 from app import models
-from app.core import security
-from app.main import SessionLocal
+
+from ..core import security
+from ..main import SessionLocal
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 

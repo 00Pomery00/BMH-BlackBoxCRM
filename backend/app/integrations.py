@@ -10,7 +10,7 @@ import httpx
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from app import models
+from . import models
 
 # Simple in-memory cache and rate limiter for OpenGov enrichment
 _cache = {}

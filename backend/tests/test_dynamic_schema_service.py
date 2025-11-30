@@ -1,6 +1,9 @@
 import pytest
 
-from app.services.dynamic_schema import SchemaValidationError, validate_against_schema
+from backend.app.services.dynamic_schema import (
+    SchemaValidationError,
+    validate_against_schema,
+)
 
 
 def test_validate_missing_required():

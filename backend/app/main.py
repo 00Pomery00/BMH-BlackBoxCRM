@@ -8,7 +8,7 @@ from fastapi import Depends, FastAPI
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
 
-from app import (
+from . import (
     ai_processor,
     audit,
     crud,
@@ -116,7 +116,7 @@ try:
 except Exception:
     pass
 # Register auth routes
-from app.users import router as users_router  # noqa: E402
+from .users import router as users_router  # noqa: E402
 
 app.include_router(users_router)
 
