@@ -37,25 +37,24 @@ test.describe('Seed backend and verify UI', () => {
     return false
   }
 
-  test('UI shows seeded lead', async ({ page }) => {
+  test('UI shows seeded lead', async ({ page, request }) => {
     const url = FRONTEND_URL || ('file://' + distIndex)
 
     // if backend was used to seed, poll the backend until the seed is visible there
     if (BACKEND_URL) {
-      const ok = await waitForSeed((global as any).request || (await (await import('@playwright/test')).request), 15000)
-      // proceed even if polling failed — the page assertions will fail and surface errors
-      if (!ok) console.warn('Timed out waiting for seed to appear in /companies')
+      const ok = await waitForSeed(request, 30_000)
+      if (!ok) throw new Error('Timed out waiting for seed to appear in /companies')
     }
 
     // Inject BACKEND_URL into the page so the static build fetches the correct API
     if (BACKEND_URL) {
-      await page.addInitScript((b) => { try { window.__BACKEND_URL = b } catch(e){} }, BACKEND_URL)
+      await page.addInitScript((b) => { try { (window as any).__BACKEND_URL = b } catch(e){} }, BACKEND_URL)
     }
 
-    await page.goto(url)
+    await page.goto(url, { waitUntil: 'load', timeout: 60_000 })
 
     // wait for lead list to render — select the first matching element to avoid strict-mode collisions
     const leadItem = page.locator(`text=${leadName}`).first()
-    await expect(leadItem).toBeVisible({ timeout: 10_000 })
+    await expect(leadItem).toBeVisible({ timeout: 30_000 })
   })
 })

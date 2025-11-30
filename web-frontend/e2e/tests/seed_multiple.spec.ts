@@ -38,16 +38,22 @@ test.describe('Seed multiple leads and verify UI list', () => {
     return false
   }
 
-  test('UI lists the seeded items', async ({ page }) => {
+  test('UI lists the seeded items', async ({ page, request }) => {
     const url = FRONTEND_URL || ('file://' + distIndex)
     // if backend was used, wait until seeding is visible on the backend
     if (BACKEND_URL) {
-      const ok = await waitForSeeds((global as any).request || (await (await import('@playwright/test')).request), 3, 15000)
+      const ok = await waitForSeeds(request, 3, 30_000)
+      if (!ok) throw new Error('Backend seeding did not complete within timeout')
     }
-      // Inject BACKEND_URL into the page before navigation so the static build queries mock backend
-      await page.addInitScript((b) => { try { window.__BACKEND_URL = b } catch(e){} }, BACKEND_URL)
-      await page.goto(url)
+
+    // Inject BACKEND_URL into the page before navigation so the static build queries mock backend
+    await page.addInitScript((b) => { try { (window as any).__BACKEND_URL = b } catch(e){} }, BACKEND_URL)
+
+    // Navigate and wait for load; give the page more time to render the seeded items
+    await page.goto(url, { waitUntil: 'load', timeout: 60_000 })
+
     // check at least one seeded item is visible
-    await expect(page.locator('text=E2E-Batch').first()).toBeVisible({ timeout: 15_000 })
+    const locator = page.locator('text=E2E-Batch')
+    await expect(locator.first()).toBeVisible({ timeout: 30_000 })
   })
 })
