@@ -70,7 +70,8 @@ jobs:
     needs: test-backend
     strategy:
       matrix:
-        node-version: [18, 20]
+        # Vite requires Node 20+; run tests on modern Node versions only
+        node-version: [20, 22]
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js
