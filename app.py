@@ -455,46 +455,46 @@ if __name__ == "__main__":
         mime="text/csv",
     )
 
-# --------- Invoice (PDF) a export výsledků ---------
-st.sidebar.header("Akce")
-month_detect = datetime.now().strftime("%Y-%m")
-sel_month = st.sidebar.selectbox("Měsíc", options=[month_detect], index=0)
-if st.sidebar.button("Vystavit fakturu (PDF)"):
-    sel_df = combined[["login", "name", "commission"]]
-    sel_df = sel_df.rename(columns={"commission": "commission"}).fillna(0)
-    pdf_buf = generate_invoice_pdf(sel_df, sel_month)
-    pdf_name = f"Faktura_{sel_month}.pdf"
-    st.download_button(
-        "Stáhnout PDF fakturu",
-        data=pdf_buf,
-        file_name=pdf_name,
-        mime="application/pdf",
-    )
+    # --------- Invoice (PDF) a export výsledků ---------
+    st.sidebar.header("Akce")
+    month_detect = datetime.now().strftime("%Y-%m")
+    sel_month = st.sidebar.selectbox("Měsíc", options=[month_detect], index=0)
+    if st.sidebar.button("Vystavit fakturu (PDF)"):
+        sel_df = combined[["login", "name", "commission"]]
+        sel_df = sel_df.rename(columns={"commission": "commission"}).fillna(0)
+        pdf_buf = generate_invoice_pdf(sel_df, sel_month)
+        pdf_name = f"Faktura_{sel_month}.pdf"
+        st.download_button(
+            "Stáhnout PDF fakturu",
+            data=pdf_buf,
+            file_name=pdf_name,
+            mime="application/pdf",
+        )
 
-if st.sidebar.button("Exportovat výsledky (CSV)"):
-    out_buf = combined.to_csv(index=False).encode("utf-8")
-    csv_name = f"provize_{sel_month}.csv"
-    st.download_button(
-        "Stáhnout CSV",
-        data=out_buf,
-        file_name=csv_name,
-        mime="text/csv",
-    )
+    if st.sidebar.button("Exportovat výsledky (CSV)"):
+        out_buf = combined.to_csv(index=False).encode("utf-8")
+        csv_name = f"provize_{sel_month}.csv"
+        st.download_button(
+            "Stáhnout CSV",
+            data=out_buf,
+            file_name=csv_name,
+            mime="text/csv",
+        )
 
-st.sidebar.markdown(
+    st.sidebar.markdown(
+        """
+    **Poznámky k perzistenci koeficientů**
+    - Koeficienty se ukládají do `session_state` (platí během jedné relace Streamlit).
+    - Pokud chcete zachovat koeficienty mezi relacemi, použijte tlačítko
+        *Exportovat koeficienty* a tento soubor si uložte lokálně.
+        Při dalším spuštění aplikace jej nahrajte přes upload (náhled):
+        aplikace umí importovat CSV přes file_uploader (TODO).
     """
-**Poznámky k perzistenci koeficientů**
-- Koeficienty se ukládají do `session_state` (platí během jedné relace Streamlit).
-- Pokud chcete zachovat koeficienty mezi relacemi, použijte tlačítko
-    *Exportovat koeficienty* a tento soubor si uložte lokálně.
-    Při dalším spuštění aplikace jej nahrajte přes upload (náhled):
-    aplikace umí importovat CSV přes file_uploader (TODO).
-"""
-)
+    )
 
-# Konec aplikace
-st.caption(
-    "Aplikace běží bez přímého přístupu k lokálnímu disku — vše přes upload. "
-    "Pokud chcete perzistentní uložiště, je potřeba explicitně povolit "
-    "backend úložiště nebo použít export/import CSV."
-)
+    # Konec aplikace
+    st.caption(
+        "Aplikace běží bez přímého přístupu k lokálnímu disku — vše přes upload. "
+        "Pokud chcete perzistentní uložiště, je potřeba explicitně povolit "
+        "backend úložiště nebo použít export/import CSV."
+    )
