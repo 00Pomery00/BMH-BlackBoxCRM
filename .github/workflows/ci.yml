@@ -103,6 +103,25 @@ jobs:
         working-directory: ./web-frontend
         run: |
           npx playwright install --with-deps
+
+      - name: Serve frontend `dist` (SPA fallback)
+        working-directory: ./web-frontend
+        run: |
+          # Use `serve -s` for SPA fallback; npx will fetch it if missing
+          npx serve -s dist -l 5173 > ../frontend-serve.log 2>&1 &
+          echo $! > ../frontend.pid
+
+      - name: Wait for frontend to be available
+        run: |
+          for i in {1..30}; do
+            if curl -sSf http://127.0.0.1:5173/ >/dev/null 2>&1; then
+              echo 'frontend ready'
+              exit 0
+            fi
+            sleep 1
+          done
+          tail -n +1 ../frontend-serve.log || true
+          exit 1
       - name: Skip e2e here (run in `e2e-with-backend` job)
         working-directory: ./web-frontend
         run: |
@@ -300,10 +319,10 @@ jobs:
         run: |
           npx playwright install --with-deps
 
-      - name: Run Playwright E2E (pointing to local backend)
+      - name: Run Playwright E2E (pointing to local backend and frontend)
         env:
           BACKEND_URL: 'http://127.0.0.1:8000'
-          FRONTEND_URL: ''
+          FRONTEND_URL: 'http://127.0.0.1:5173'
         working-directory: ./web-frontend
         run: |
           # generate traces on failure and write test-results to ./playwright-results
