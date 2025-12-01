@@ -104,6 +104,25 @@ jobs:
         run: |
           npx playwright install --with-deps
 
+      - name: Serve frontend `dist` for E2E (SPA fallback)
+        working-directory: ./web-frontend
+        run: |
+          # use installed serve binary from devDependencies
+          npm run --silent serve:dist > ../frontend-serve.log 2>&1 &
+          echo $! > ../frontend.pid
+
+      - name: Wait for frontend to be available (e2e)
+        run: |
+          for i in {1..30}; do
+            if curl -sSf http://127.0.0.1:5173/ >/dev/null 2>&1; then
+              echo 'frontend ready'
+              exit 0
+            fi
+            sleep 1
+          done
+          tail -n +1 ../frontend-serve.log || true
+          exit 1
+
       - name: Serve frontend `dist` (SPA fallback)
         working-directory: ./web-frontend
         run: |
@@ -338,6 +357,15 @@ jobs:
             web-frontend/playwright-report/**
             backend.log
             web-frontend/test-results/**
+
+      - name: Stop frontend
+        if: always()
+        run: |
+          if [ -f frontend.pid ]; then
+            kill "$(cat frontend.pid)" || true
+          else
+            pkill -f "serve -s" || true
+          fi
 
       - name: Stop backend
         if: always()
