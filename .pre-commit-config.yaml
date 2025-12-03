@@ -11,8 +11,8 @@ repos:
     hooks:
       - id: prevent-logs
         name: Prevent committing runtime log or DB files
-        entry: scripts/prevent-logs-commit.sh
-        language: script
+        entry: python scripts/prevent_logs.py
+        language: system
         files: '\.(log|db|bak|sqlite)$'
 
   # Python formatters

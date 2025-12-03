@@ -23,5 +23,8 @@ ci-artifacts/
 web-frontend/test-results/
 # Local test DB\ntest.db
 
+# Local runtime logs
+logs/
+
 *storybook.log
 storybook-static
