@@ -1,14 +1,14 @@
 import io
 from datetime import datetime
 
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+import streamlit as st
+from fpdf import FPDF
+
 
 def run_streamlit():
-    import matplotlib.pyplot as plt
-    import numpy as np
-    import pandas as pd
-    import streamlit as st
-    from fpdf import FPDF
-
     # --------- Konfigurace a styl ---------
     st.set_page_config(page_title="BMH Provizní portál", layout="wide")
 
@@ -67,14 +67,11 @@ def run_streamlit():
         return None
 
     def normalize_companies(dfs):
-        # dfs: list of DataFrames potentially with companies/leads info
-        # Spočítáme agregace per login
         frames = []
         for df in dfs:
             if df is None:
                 continue
             df = df.copy()
-            # najít login/username
             login_col = find_col(df, ["login", "Login", "USERNAME", "user"])
             name_col = find_col(df, ["name", "Name", "Jméno", "full_name"])
             new_bmsl_col = find_col(df, ["new_bmsl", "New BMSL", "new_bmsl", "bmsl"])
@@ -83,7 +80,6 @@ def run_streamlit():
             cashback_col = find_col(df, ["cashback", "Cashback"])
             zadrzene_col = find_col(df, ["zadr", "zadržen", "withheld"])
 
-            # normalize minimal
             if login_col is None and name_col is None:
                 continue
             key = login_col or name_col
@@ -96,7 +92,6 @@ def run_streamlit():
                     zadrzene_col: "sum" if zadrzene_col else (lambda x: 0),
                 }
             )
-            # normalize columns
             cols_map = {}
             if new_bmsl_col:
                 cols_map[new_bmsl_col] = "new_bmsl"
@@ -114,7 +109,6 @@ def run_streamlit():
         if not frames:
             return pd.DataFrame()
         merged = pd.concat(frames)
-        # group by login_or_name sum
         out = merged.groupby("login_or_name").sum().reset_index()
         return out
 
@@ -125,8 +119,6 @@ def run_streamlit():
         return LOGIN_MAP.get(s, login)
 
     def compute_commission(row):
-        # formule:
-        # (New BMSL × 78 Kč + Strat FEE × 0.7) × Celkový koeficient – cashback – zadržené
         new_bmsl = row.get("new_bmsl", 0) or 0
         strat_fee = row.get("strat_fee", 0) or 0
         coef = row.get("total_coef", 1) or 1
@@ -145,7 +137,6 @@ def run_streamlit():
         pdf.cell(0, 10, f"Provizní faktura - {month_label}", ln=True)
         pdf.ln(4)
         pdf.set_font("Arial", size=10)
-        # header
         pdf.cell(40, 8, "Login", border=1)
         pdf.cell(60, 8, "Jméno", border=1)
         pdf.cell(30, 8, "Provize (Kč)", border=1, ln=True)
@@ -195,7 +186,6 @@ def run_streamlit():
         sheets3 = read_excel_sheets(f3)
         sheets4 = read_excel_sheets(f4)
 
-        # vyber relevantních sheetů ze všech workbooků
         def pick_sheets(all_sheets, names):
             for n in names:
                 for key in all_sheets.keys():
@@ -203,7 +193,6 @@ def run_streamlit():
                         return all_sheets[key]
             return None
 
-        # Relevantní listy, pokusíme se je najít v každém souboru
         perf_names = ["Výkon", "Performance", "Performance"]
         performance = pick_sheets(sheets3, perf_names) or pick_sheets(
             sheets1, perf_names
@@ -214,13 +203,12 @@ def run_streamlit():
             sheets3, ["Strat"]
         )
         acq = pick_sheets(sheets1, ["ACQ"])
-        sales_amb = pick_sheets(sheets2, ["Sales Ambition", "Ambition"])
-        orgchart = pick_sheets(sheets2, ["Orgchart", "Org"])
+        _sales_amb = pick_sheets(sheets2, ["Sales Ambition", "Ambition"])
+        _orgchart = pick_sheets(sheets2, ["Orgchart", "Org"])
         bml_fee = pick_sheets(sheets2, ["BML-FEE", "FEE"])
         hw_sub = pick_sheets(sheets2, ["HW Subsidy", "HW"])
         tickount_df = pick_sheets(sheets4, ["Tickount"]) or next(iter(sheets4.values()))
 
-        # Normalize aggregate
         dfs_list = [performance, contracts, strat_prod, acq, bml_fee, hw_sub]
         agg = normalize_companies(dfs_list)
         if agg.empty:
@@ -229,48 +217,46 @@ def run_streamlit():
                 "Zkontrolujte strukturu uploadovaných souborů."
             )
 
-        # mapování login -> jméno
         agg["login"] = agg["login_or_name"].astype(str)
         agg["name"] = agg["login"].apply(map_login_to_name)
 
-        # Merge tickount info
         if tickount_df is not None:
-            # ensure login column
             tick_login_col = find_col(tickount_df, ["login", "Login", "LOGIN"])
             if tick_login_col:
                 tickount_df = tickount_df.rename(columns={tick_login_col: "login"})
             else:
-                # pokud není login, vytvoříme náhodný sloupec
                 tickount_df["login"] = tickount_df.index.astype(str)
         else:
             tickount_df = pd.DataFrame(columns=["login"])
 
-        # default coefficients (z tickount nebo 1)
         coeffs = {}
         if "coeffs" not in st.session_state:
-            # try load from tickount if columns exist
             if "login" in tickount_df.columns:
                 for _, r in tickount_df.iterrows():
                     lg = str(r.get("login"))
                     band_val = (
                         r.get("Band", "") if "Band" in tickount_df.columns else ""
                     )
-                    if "Koef_hlavni" in tickount_df.columns:
-                        coef_main_val = float(r.get("Koef_hlavni", 1))
-                    else:
-                        coef_main_val = 1
-                    if "Koef_strategicke" in tickount_df.columns:
-                        coef_strat_val = float(r.get("Koef_strategicke", 1))
-                    else:
-                        coef_strat_val = 1
-                    if "Bonus_koef" in tickount_df.columns:
-                        bonus_val = float(r.get("Bonus_koef", 1))
-                    else:
-                        bonus_val = 1
-                    if "Poznamka" in tickount_df.columns:
-                        note_val = r.get("Poznamka", "")
-                    else:
-                        note_val = ""
+                    coef_main_val = (
+                        float(r.get("Koef_hlavni", 1))
+                        if "Koef_hlavni" in tickount_df.columns
+                        else 1
+                    )
+                    coef_strat_val = (
+                        float(r.get("Koef_strategicke", 1))
+                        if "Koef_strategicke" in tickount_df.columns
+                        else 1
+                    )
+                    bonus_val = (
+                        float(r.get("Bonus_koef", 1))
+                        if "Bonus_koef" in tickount_df.columns
+                        else 1
+                    )
+                    note_val = (
+                        r.get("Poznamka", "")
+                        if "Poznamka" in tickount_df.columns
+                        else ""
+                    )
                     coeffs[lg] = {
                         "login": lg,
                         "name": map_login_to_name(lg),
@@ -282,7 +268,6 @@ def run_streamlit():
                     }
             st.session_state["coeffs"] = coeffs
 
-        # build combined table
         combined = agg.copy()
         col_list = [
             "login",
@@ -295,7 +280,6 @@ def run_streamlit():
         ]
         combined = combined[col_list].fillna(0)
 
-        # attach coefficients from session_state
         def attach_coeffs(r):
             lg = r["login"]
             c = st.session_state.get("coeffs", {}).get(lg, None)
@@ -314,87 +298,82 @@ def run_streamlit():
         combined[coef_cols] = combined.apply(attach_coeffs, axis=1)
         combined["commission"] = combined.apply(compute_commission, axis=1)
 
-    # --------- Tabs (7) ---------
-    tabs = st.tabs(
-        [
-            "Shrnutí",
-            "Hlavní provize",
-            "Strategické provize",
-            "Cashback",
-            "Cashback – strategické",
-            "Reklamace & zadržené",
-            "Tickount + koeficienty",
-        ]
-    )
-
-    with tabs[0]:
-        st.header("Shrnutí")
-        total_comm = combined["commission"].sum()
-        st.metric("Celkové provize (Kč)", f"{total_comm:,.2f}")
-        st.markdown("### Nejlepší 10 podle provize")
-        st.dataframe(combined.sort_values("commission", ascending=False).head(10))
-        # graf vývoje: pokud máme časová data, použít je; jinak simulovat jednoduchý trend
-        st.markdown("### Trend provizí (posledních 12 měsíců) - pokud dostupné")
-        # zde zkusíme vytvořit dummy časovou řadu součtu commission pro ukázku
-        months = pd.date_range(end=pd.Timestamp.today(), periods=12, freq="M")
-        vals = np.linspace(max(0, total_comm * 0.8), total_comm, 12)
-        fig, ax = plt.subplots()
-        ax.plot(months, vals, marker="o", color="#7b1fa2")
-        ax.set_title("Vývoj provizí (posledních 12 měsíců)")
-        ax.set_ylabel("Kč")
-        st.pyplot(fig)
-
-    with tabs[1]:
-        st.header("Hlavní provize")
-        cols_main = [
-            "login",
-            "name",
-            "new_bmsl",
-            "coef_main",
-            "bonus_coef",
-            "total_coef",
-            "commission",
-        ]
-        st.dataframe(combined[cols_main].sort_values("commission", ascending=False))
-
-    with tabs[2]:
-        st.header("Strategické provize")
-        cols_strat = ["login", "name", "strat_fee", "coef_strat"]
-        st.dataframe(combined[cols_strat].sort_values("strat_fee", ascending=False))
-
-    with tabs[3]:
-        st.header("Cashback")
-        cols_cashback = ["login", "name", "cashback"]
-        st.dataframe(combined[cols_cashback].sort_values("cashback", ascending=False))
-
-    with tabs[4]:
-        st.header("Cashback – strategické")
-        st.write(
-            "Zde by se zobrazovaly strategické cashbacky; "
-            "aktuálně sloupec 'strat_fee' dostupný v datech."
+        # --------- Tabs (7) ---------
+        tabs = st.tabs(
+            [
+                "Shrnutí",
+                "Hlavní provize",
+                "Strategické provize",
+                "Cashback",
+                "Cashback – strategické",
+                "Reklamace & zadržené",
+                "Tickount + koeficienty",
+            ]
         )
-        st.dataframe(combined[["login", "name", "strat_fee", "cashback"]])
 
-    with tabs[5]:
-        st.header("Reklamace & zadržené")
-        st.dataframe(combined[["login", "name", "withheld"]])
+        with tabs[0]:
+            st.header("Shrnutí")
+            total_comm = combined["commission"].sum()
+            st.metric("Celkové provize (Kč)", f"{total_comm:,.2f}")
+            st.markdown("### Nejlepší 10 podle provize")
+            st.dataframe(combined.sort_values("commission", ascending=False).head(10))
+            st.markdown("### Trend provizí (posledních 12 měsíců) - pokud dostupné")
+            months = pd.date_range(end=pd.Timestamp.today(), periods=12, freq="M")
+            vals = np.linspace(max(0, total_comm * 0.8), total_comm, 12)
+            fig, ax = plt.subplots()
+            ax.plot(months, vals, marker="o", color="#7b1fa2")
+            ax.set_title("Vývoj provizí (posledních 12 měsíců)")
+            ax.set_ylabel("Kč")
+            st.pyplot(fig)
 
-    with tabs[6]:
-        st.header("Tickount + individuální koeficienty")
-        st.markdown(
-            "Níže vidíte obsah nahraného Tickount souboru a tabulku s "
-            "možností editace koeficientů."
-        )
-        st.markdown("**Raw Tickount**")
-        st.dataframe(tickount_df)
+        with tabs[1]:
+            st.header("Hlavní provize")
+            cols_main = [
+                "login",
+                "name",
+                "new_bmsl",
+                "coef_main",
+                "bonus_coef",
+                "total_coef",
+                "commission",
+            ]
+            st.dataframe(combined[cols_main].sort_values("commission", ascending=False))
 
-        # prepare editable table for coefficients
-        coeffs_df = None
-        # build from session_state
-        coeffs_state = st.session_state.get("coeffs", {})
-        if coeffs_state:
-            coeffs_df = pd.DataFrame.from_dict(coeffs_state, orient="index")
-            # normalize columns
+        with tabs[2]:
+            st.header("Strategické provize")
+            cols_strat = ["login", "name", "strat_fee", "coef_strat"]
+            st.dataframe(combined[cols_strat].sort_values("strat_fee", ascending=False))
+
+        with tabs[3]:
+            st.header("Cashback")
+            cols_cashback = ["login", "name", "cashback"]
+            st.dataframe(
+                combined[cols_cashback].sort_values("cashback", ascending=False)
+            )
+
+        with tabs[4]:
+            st.header("Cashback – strategické")
+            st.write(
+                "Zde by se zobrazovaly strategické cashbacky; "
+                "aktuálně sloupec 'strat_fee' dostupný v datech."
+            )
+            st.dataframe(combined[["login", "name", "strat_fee", "cashback"]])
+
+        with tabs[5]:
+            st.header("Reklamace & zadržené")
+            st.dataframe(combined[["login", "name", "withheld"]])
+
+        with tabs[6]:
+            st.header("Tickount + individuální koeficienty")
+            st.markdown(
+                "Níže vidíte obsah nahraného Tickount souboru a tabulku s "
+                "možností editace koeficientů."
+            )
+            st.markdown("**Raw Tickount**")
+            st.dataframe(tickount_df)
+
+            coeffs_df = None
+            coeffs_state = st.session_state.get("coeffs", {})
             coeffs_cols = [
                 "login",
                 "name",
@@ -405,96 +384,96 @@ def run_streamlit():
                 "total_coef",
                 "note",
             ]
-            coeffs_df = coeffs_df[coeffs_cols]
-        else:
-            coeffs_df = pd.DataFrame(columns=coeffs_cols)
+            if coeffs_state:
+                coeffs_df = pd.DataFrame.from_dict(coeffs_state, orient="index")
+                coeffs_df = coeffs_df[coeffs_cols]
+            else:
+                coeffs_df = pd.DataFrame(columns=coeffs_cols)
+
+            st.markdown(
+                '**Upravte koeficienty (jednotlivě). Poté klikněte na "Uložit koeficienty".**'
+            )
+            edited = st.data_editor(coeffs_df, num_rows="dynamic")
+
+            if st.button("Uložit koeficienty"):
+                new = {}
+                for _, r in edited.fillna("").iterrows():
+                    lg = str(r.get("login", ""))
+                    if not lg:
+                        continue
+                    coef_main_val = float(r.get("coef_main") or 1.0)
+                    coef_strat_val = float(r.get("coef_strat") or 1.0)
+                    bonus_val = float(r.get("bonus_coef") or 1.0)
+                    total_val = float(
+                        r.get("total_coef") or (coef_main_val * bonus_val)
+                    )
+                    new[lg] = {
+                        "login": lg,
+                        "name": r.get("name", ""),
+                        "band": r.get("band", ""),
+                        "coef_main": coef_main_val,
+                        "coef_strat": coef_strat_val,
+                        "bonus_coef": bonus_val,
+                        "total_coef": total_val,
+                        "note": r.get("note", ""),
+                    }
+                st.session_state["coeffs"] = new
+                st.success(
+                    "Koeficienty uloženy do session. "
+                    "Pro přenos mezi relacemi stáhněte export."
+                )
+
+            csv_buf = edited.to_csv(index=False).encode("utf-8")
+            csv_name = "coefficients_export.csv"
+            st.download_button(
+                "Exportovat koeficienty (CSV)",
+                data=csv_buf,
+                file_name=csv_name,
+                mime="text/csv",
+            )
+
+        # --------- Invoice (PDF) a export výsledků ---------
+        st.sidebar.header("Akce")
+        month_detect = datetime.now().strftime("%Y-%m")
+        sel_month = st.sidebar.selectbox("Měsíc", options=[month_detect], index=0)
+        if st.sidebar.button("Vystavit fakturu (PDF)"):
+            sel_df = combined[["login", "name", "commission"]].fillna(0)
+            pdf_buf = generate_invoice_pdf(sel_df, sel_month)
+            pdf_name = f"Faktura_{sel_month}.pdf"
+            st.download_button(
+                "Stáhnout PDF fakturu",
+                data=pdf_buf,
+                file_name=pdf_name,
+                mime="application/pdf",
+            )
+
+        if st.sidebar.button("Exportovat výsledky (CSV)"):
+            out_buf = combined.to_csv(index=False).encode("utf-8")
+            csv_name = f"provize_{sel_month}.csv"
+            st.download_button(
+                "Stáhnout CSV",
+                data=out_buf,
+                file_name=csv_name,
+                mime="text/csv",
+            )
+
+        st.sidebar.markdown(
+            """
+        **Poznámky k perzistenci koeficientů**
+        - Koeficienty se ukládají do `session_state` (platí během jedné relace Streamlit).
+        - Pokud chcete zachovat koeficienty mezi relacemi, použijte tlačítko
+            *Exportovat koeficienty* a tento soubor si uložte lokálně.
+            Při dalším spuštění aplikace jej nahrajte přes upload (náhled):
+            aplikace umí importovat CSV přes file_uploader (TODO).
+        """
+        )
+
+        st.caption(
+            "Aplikace běží bez přímého přístupu k lokálnímu disku — vše přes upload. "
+            "Pokud chcete perzistentní uložiště, je potřeba explicitně povolit "
+            "backend úložiště nebo použít export/import CSV."
+        )
 
 
 if __name__ == "__main__":
     run_streamlit()
-
-    st.markdown(
-        '**Upravte koeficienty (jednotlivě). Poté klikněte na "Uložit koeficienty".**'
-    )
-    edited = st.data_editor(coeffs_df, num_rows="dynamic")
-
-    if st.button("Uložit koeficienty"):
-        # zapis do session_state
-        new = {}
-        for _, r in edited.fillna("").iterrows():
-            lg = str(r.get("login", ""))
-            if not lg:
-                continue
-            coef_main_val = float(r.get("coef_main") or 1.0)
-            coef_strat_val = float(r.get("coef_strat") or 1.0)
-            bonus_val = float(r.get("bonus_coef") or 1.0)
-            total_val = float(r.get("total_coef") or (coef_main_val * bonus_val))
-            new[lg] = {
-                "login": lg,
-                "name": r.get("name", ""),
-                "band": r.get("band", ""),
-                "coef_main": coef_main_val,
-                "coef_strat": coef_strat_val,
-                "bonus_coef": bonus_val,
-                "total_coef": total_val,
-                "note": r.get("note", ""),
-            }
-        st.session_state["coeffs"] = new
-        st.success(
-            "Koeficienty uloženy do session. "
-            "Pro přenos mezi relacemi stáhněte export."
-        )
-
-    # nabídka exportu pro perzistenci
-    csv_buf = edited.to_csv(index=False).encode("utf-8")
-    csv_name = "coefficients_export.csv"
-    st.download_button(
-        "Exportovat koeficienty (CSV)",
-        data=csv_buf,
-        file_name=csv_name,
-        mime="text/csv",
-    )
-
-    # --------- Invoice (PDF) a export výsledků ---------
-    st.sidebar.header("Akce")
-    month_detect = datetime.now().strftime("%Y-%m")
-    sel_month = st.sidebar.selectbox("Měsíc", options=[month_detect], index=0)
-    if st.sidebar.button("Vystavit fakturu (PDF)"):
-        sel_df = combined[["login", "name", "commission"]]
-        sel_df = sel_df.rename(columns={"commission": "commission"}).fillna(0)
-        pdf_buf = generate_invoice_pdf(sel_df, sel_month)
-        pdf_name = f"Faktura_{sel_month}.pdf"
-        st.download_button(
-            "Stáhnout PDF fakturu",
-            data=pdf_buf,
-            file_name=pdf_name,
-            mime="application/pdf",
-        )
-
-    if st.sidebar.button("Exportovat výsledky (CSV)"):
-        out_buf = combined.to_csv(index=False).encode("utf-8")
-        csv_name = f"provize_{sel_month}.csv"
-        st.download_button(
-            "Stáhnout CSV",
-            data=out_buf,
-            file_name=csv_name,
-            mime="text/csv",
-        )
-
-    st.sidebar.markdown(
-        """
-    **Poznámky k perzistenci koeficientů**
-    - Koeficienty se ukládají do `session_state` (platí během jedné relace Streamlit).
-    - Pokud chcete zachovat koeficienty mezi relacemi, použijte tlačítko
-        *Exportovat koeficienty* a tento soubor si uložte lokálně.
-        Při dalším spuštění aplikace jej nahrajte přes upload (náhled):
-        aplikace umí importovat CSV přes file_uploader (TODO).
-    """
-    )
-
-    # Konec aplikace
-    st.caption(
-        "Aplikace běží bez přímého přístupu k lokálnímu disku — vše přes upload. "
-        "Pokud chcete perzistentní uložiště, je potřeba explicitně povolit "
-        "backend úložiště nebo použít export/import CSV."
-    )
