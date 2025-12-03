@@ -63,7 +63,8 @@ jobs:
           }
       - name: Run Alembic migrations
         run: |
-          python -m alembic -c backend/alembic.ini upgrade head
+          cd backend
+          python -m alembic -c alembic.ini upgrade head
       - name: Run fu_auth smoke test
         run: |
           python -m pytest -q backend/tests/test_fu_auth_smoke.py
@@ -309,7 +310,8 @@ jobs:
 
       - name: Run Alembic migrations
         run: |
-          python -m alembic -c backend/alembic.ini upgrade head
+          cd backend
+          python -m alembic -c alembic.ini upgrade head
 
       - name: Start backend (uvicorn) in background
         run: |
