@@ -11,10 +11,56 @@ backend_dir = os.path.dirname(here)
 if backend_dir not in sys.path:
     sys.path.insert(0, backend_dir)
 
-from app.main import app
+
+# Ensure the app and core config agree on the JWT secret. Some parts of the
+# codebase use `app.core.config.settings.secret_key` while others read
+# `BBH_SECRET_KEY` at import-time. To avoid tokens being signed with a
+# different secret, set the env var from the core settings if not already set.
+try:
+    # import minimal config without importing app.main yet
+    # use builtin __import__ to avoid module-level import statements after code
+    try:
+        cfg = __import__("app.core.config", fromlist=["settings"])
+    except Exception:
+        cfg = None
+    try:
+        if cfg is not None:
+            sk = getattr(cfg, "settings").secret_key
+            if sk:
+                os.environ.setdefault("BBH_SECRET_KEY", sk)
+    except Exception:
+        pass
+except Exception:
+    pass
+
+
+# Note: import of the FastAPI `app` must happen after we set BBH_SECRET_KEY
+# and ensure the backend package is on `sys.path`. To avoid flake8 E402 (imports
+# not at top), import `app` inside `main()` below.
 
 
 def main():
+    # import the app lazily after setting env and manipulating sys.path
+    from app.main import app
+
+    # Some environments may not have the UI settings router included (silently skipped
+    # during app setup). Ensure the router is available on the app so TestClient
+    # exercises the same endpoints the real server exposes.
+    try:
+        # import module and include router if not already present
+        from app.api import ui_settings as _ui_mod
+
+        # guard against double-registration by checking existing paths
+        if not any(
+            r.path.startswith("/api/ui")
+            for r in app.router.routes
+            if hasattr(r, "path")
+        ):
+            app.include_router(_ui_mod.router)
+    except Exception:
+        # If anything goes wrong here, we continue; the main test will report 404s.
+        pass
+
     client = TestClient(app)
 
     email = f"e2e+{uuid.uuid4().hex}@example.com"

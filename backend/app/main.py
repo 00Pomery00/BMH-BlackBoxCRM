@@ -1,12 +1,9 @@
 import asyncio
 import datetime
-import weakref
 from contextlib import asynccontextmanager
-from pathlib import Path
 
 from fastapi import Depends, FastAPI
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
+from fastapi.middleware.cors import CORSMiddleware
 
 from . import (
     ai_processor,
@@ -19,63 +16,10 @@ from . import (
     schemas,
     security,
 )
+from .db import SessionLocal, engine
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATABASE_URL = f"sqlite:///{BASE_DIR / 'test.db'}"
-
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-
-# Wrap the sessionmaker so we can keep weakrefs to created Session instances.
-_maker = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-class SessionFactory:
-    def __init__(self, maker):
-        self._maker = maker
-        self._instances = weakref.WeakSet()
-
-    def __call__(self):
-        s = self._maker()
-        try:
-            self._instances.add(s)
-        except Exception:
-            pass
-        return s
-
-    def expire_all(self):
-        for s in list(self._instances):
-            try:
-                s.expire_all()
-            except Exception:
-                pass
-
-
-SessionLocal = SessionFactory(_maker)
-
-
-# Try to ensure the `dead` column exists on older DBs created before the column
-# was introduced. If the table doesn't exist yet, creating all tables will set
-# up the full schema.
-models.Base.metadata.create_all(bind=engine)
-try:
-    with engine.connect() as conn:
-        conn.execute(
-            text("ALTER TABLE webhook_queue ADD COLUMN dead INTEGER DEFAULT 0")
-        )
-        conn.commit()
-except Exception:
-    # if the table doesn't exist yet or column already present, ignore errors
-    pass
-
-# Ensure user table has expected columns for auth (best-effort ALTERs for demo)
-try:
-    with engine.connect() as conn:
-        conn.execute(text("ALTER TABLE users ADD COLUMN email VARCHAR"))
-        conn.execute(text("ALTER TABLE users ADD COLUMN hashed_password VARCHAR"))
-        conn.execute(text("ALTER TABLE users ADD COLUMN is_active INTEGER DEFAULT 1"))
-        conn.commit()
-except Exception:
-    pass
+# Register auth routes early
+from .users import router as users_router
 
 app = FastAPI(title="BlackBox CRM 2025 - Demo")
 
@@ -86,7 +30,6 @@ app.middleware("http")(audit.audit_middleware)
 # Prefer an explicit list of local dev origins plus a regex fallback for other
 # localhost ports. This ensures dev servers on different ports (vite, preview,
 # Playwright) can call the API without CORS failures.
-from fastapi.middleware.cors import CORSMiddleware
 
 _dev_origins = [
     "http://localhost:5173",
@@ -125,9 +68,7 @@ try:
     admin.add_view(ModelView(models.AutomationFlow, engine))
 except Exception:
     pass
-# Register auth routes
-from .users import router as users_router  # noqa: E402
-
+# include the users router
 app.include_router(users_router)
 
 # Provide a minimal compatibility shim for fastapi-users endpoints used in tests

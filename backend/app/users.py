@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 
 from . import models, schemas
 from .core.security import get_password_hash
-from .main import SessionLocal
+from .db import SessionLocal
 from .security import (
     create_access_token,
     get_current_user,

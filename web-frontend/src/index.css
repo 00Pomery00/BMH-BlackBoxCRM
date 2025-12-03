@@ -1,3 +1,5 @@
+@import './styles/tokens.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,17 +13,11 @@ body {
   --violet: #7b1fa2;
   --violet-dark: #5e0f86;
   --accent: var(--violet);
-  @import './styles/tokens.css';
-  @tailwind base;
-  @tailwind components;
-  @tailwind utilities;
   --bg: #f8fafc;
   --card-bg: #ffffff;
   --muted: #6b7280;
   --sidebar-width: 260px;
 }
-
-@import './styles/tokens.css';
 
 header[role='banner'] {
   background: linear-gradient(90deg, var(--violet), var(--violet-dark));
