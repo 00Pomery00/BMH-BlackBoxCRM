@@ -63,12 +63,10 @@ jobs:
           }
       - name: Run Alembic migrations
         run: |
-          cd backend
-          python -m alembic -c alembic.ini upgrade head
+          python -m alembic -c backend/alembic.ini upgrade head
       - name: Run fu_auth smoke test
         run: |
-          cd backend
-          python -m pytest -q tests/test_fu_auth_smoke.py
+          python -m pytest -q backend/tests/test_fu_auth_smoke.py
       - name: Run backend tests
         run: |
           python -m pytest -q backend/tests
@@ -311,12 +309,11 @@ jobs:
 
       - name: Run Alembic migrations
         run: |
-          cd backend
-          python -m alembic -c alembic.ini upgrade head
+          python -m alembic -c backend/alembic.ini upgrade head
 
       - name: Start backend (uvicorn) in background
         run: |
-          nohup python -m uvicorn app.main:app --host 127.0.0.1 --port 8000 > backend.log 2>&1 &
+          nohup python -m uvicorn backend.app.main:app --host 127.0.0.1 --port 8000 > backend.log 2>&1 &
           echo $! > backend.pid
 
       - name: Wait for backend health
