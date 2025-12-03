@@ -66,3 +66,33 @@ def create_or_update_lead(db: Session, lead: dict):
         db.add(contact)
         db.commit()
     return comp
+
+
+def get_user_setting(db: Session, user_id: int, key: str):
+    return (
+        db.query(models.UserSetting)
+        .filter(models.UserSetting.user_id == user_id)
+        .filter(models.UserSetting.key == key)
+        .first()
+    )
+
+
+def set_user_setting(db: Session, user_id: int, key: str, value: str):
+    existing = (
+        db.query(models.UserSetting)
+        .filter(models.UserSetting.user_id == user_id)
+        .filter(models.UserSetting.key == key)
+        .first()
+    )
+    if existing:
+        existing.value = value
+        existing.updated_at = datetime.datetime.utcnow()
+        db.add(existing)
+        db.commit()
+        db.refresh(existing)
+        return existing
+    s = models.UserSetting(user_id=user_id, key=key, value=value)
+    db.add(s)
+    db.commit()
+    db.refresh(s)
+    return s

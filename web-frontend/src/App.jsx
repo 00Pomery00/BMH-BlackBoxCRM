@@ -2,6 +2,9 @@ import React, { useEffect, useState } from 'react';
 import './i18n';
 
 import Header from './components/Header';
+import Sidebar from './components/layout/Sidebar';
+import Topbar from './components/layout/Topbar';
+import Footer from './components/layout/Footer';
 import { fetchCompanies } from './api';
 import Login from './components/Login';
 import AdminTelemetry from './components/AdminTelemetry';
@@ -24,6 +27,58 @@ export default function App() {
         console.error('Failed to parse bbx_session', e);
       }
     }
+  }, []);
+  // Apply saved UI settings (theme, colors, sidebar width)
+  useEffect(() => {
+    const s = localStorage.getItem('bbx_ui_settings');
+    if (!s) return;
+    try {
+      const cfg = JSON.parse(s);
+      if (cfg.accent) document.documentElement.style.setProperty('--accent', cfg.accent);
+      if (cfg.violet) document.documentElement.style.setProperty('--violet', cfg.violet);
+      if (cfg.violetDark)
+        document.documentElement.style.setProperty('--violet-dark', cfg.violetDark);
+      if (cfg.bg) document.documentElement.style.setProperty('--bg', cfg.bg);
+      if (cfg.cardBg) document.documentElement.style.setProperty('--card-bg', cfg.cardBg);
+      if (cfg.sidebarWidth)
+        document.documentElement.style.setProperty('--sidebar-width', `${cfg.sidebarWidth}px`);
+      if (cfg.theme === 'dark') document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+    } catch (e) {
+      console.error('Failed to apply ui settings', e);
+    }
+  }, []);
+
+  // If user is logged in, try to fetch persisted settings from backend and merge
+  useEffect(() => {
+    const token = localStorage.getItem('bbx_token');
+    if (!token) return;
+    fetch('/api/ui/settings', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => {
+        if (!r.ok) throw new Error('no-settings');
+        return r.json();
+      })
+      .then((data) => {
+        try {
+          const cfg = data.settings || {};
+          // apply each known setting
+          if (cfg.accent) document.documentElement.style.setProperty('--accent', cfg.accent);
+          if (cfg.violet) document.documentElement.style.setProperty('--violet', cfg.violet);
+          if (cfg.violetDark)
+            document.documentElement.style.setProperty('--violet-dark', cfg.violetDark);
+          if (cfg.bg) document.documentElement.style.setProperty('--bg', cfg.bg);
+          if (cfg.cardBg) document.documentElement.style.setProperty('--card-bg', cfg.cardBg);
+          if (cfg.sidebarWidth)
+            document.documentElement.style.setProperty('--sidebar-width', `${cfg.sidebarWidth}px`);
+          if (cfg.theme === 'dark') document.documentElement.classList.add('dark');
+          else document.documentElement.classList.remove('dark');
+        } catch (e) {
+          console.warn('Failed to apply remote ui settings', e);
+        }
+      })
+      .catch(() => {});
   }, []);
   // useTranslation not required here; i18n is initialized globally via ./i18n
   const [companies, setCompanies] = useState([]);
@@ -48,82 +103,10 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen bg-gray-50">
-      {/* Sidebar navigace s ikonami */}
-      <aside className="w-60 bg-gradient-to-b from-violet-800 to-violet-900 text-white flex flex-col py-6 px-0 shadow-lg">
-        <div className="mb-8 px-6 flex items-center gap-3">
-          <img src="/logo.png" alt="logo" className="w-10 h-10 rounded bg-white p-1" />
-          <span className="text-2xl font-bold tracking-wide">BlackBox</span>
-        </div>
-        <nav className="flex-1 flex flex-col gap-1 px-2">
-          <button
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
-              page === 'home' ? 'bg-violet-600/80' : ''
-            }`}
-            onClick={() => setPage('home')}
-          >
-            <span className="material-icons">dashboard</span> <span>Dashboard</span>
-          </button>
-          <button
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
-              page === 'leads' ? 'bg-violet-600/80' : ''
-            }`}
-            onClick={() => setPage('leads')}
-          >
-            <span className="material-icons">list_alt</span> <span>Leady</span>
-          </button>
-          <button
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
-              page === 'companies' ? 'bg-violet-600/80' : ''
-            }`}
-            onClick={() => setPage('companies')}
-          >
-            <span className="material-icons">business</span> <span>Firmy</span>
-          </button>
-          <button
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
-              page === 'stats' ? 'bg-violet-600/80' : ''
-            }`}
-            onClick={() => setPage('stats')}
-          >
-            <span className="material-icons">bar_chart</span> <span>Statistiky</span>
-          </button>
-          <button
-            className={`flex items-center gap-3 px-4 py-2 rounded-lg transition ${
-              page === 'profile' ? 'bg-violet-600/80' : ''
-            }`}
-            onClick={() => setPage('profile')}
-          >
-            <span className="material-icons">person</span> <span>Profil</span>
-          </button>
-        </nav>
-        <div className="mt-8 px-6">
-          <button
-            onClick={() => {
-              window.localStorage.removeItem('bbx_token');
-              setIsLoggedIn(false);
-            }}
-            className="flex items-center gap-2 text-sm text-violet-200 hover:text-white"
-          >
-            <span className="material-icons">logout</span> Odhlásit
-          </button>
-        </div>
-      </aside>
+      <Sidebar page={page} onNavigate={setPage} />
       {/* Hlavní obsah s horním headerem ala webkit-admin */}
       <main className="flex-1 flex flex-col">
-        <div className="flex items-center justify-between px-8 py-4 bg-white shadow-sm border-b">
-          <Header onLogout={() => setIsLoggedIn(false)} />
-          {/* User box vpravo nahoře */}
-          <div className="flex items-center gap-3">
-            <img
-              src="/avatar.png"
-              alt="avatar"
-              className="w-9 h-9 rounded-full border-2 border-violet-400"
-            />
-            <div className="text-sm font-medium text-gray-700">
-              {window._BBX?.username || 'Uživatel'}
-            </div>
-          </div>
-        </div>
+        <Topbar onLogout={() => setIsLoggedIn(false)} />
         <div className="flex-1 p-8">
           {page === 'home' && <Home companies={companies} onNavigate={setPage} />}
           {page === 'leads' && <Leads companies={companies} />}
@@ -133,6 +116,7 @@ export default function App() {
           {/* admin telemetry - pouze pro admina */}
           {window._BBX && window._BBX.role === 'admin' && <AdminTelemetry />}
         </div>
+        <Footer />
       </main>
     </div>
   );

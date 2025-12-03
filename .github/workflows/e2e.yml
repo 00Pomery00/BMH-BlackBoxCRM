@@ -70,9 +70,10 @@ jobs:
           nohup python -m uvicorn app.main:app --host 127.0.0.1 --port 8002 > uvicorn_out.log 2>&1 &
           echo $! > uvicorn.pid
 
-      - name: Serve frontend dist
+      - name: Serve frontend dist (SPA fallback)
         run: |
-          npx http-server web-frontend/dist -p 5173 &
+          # use `serve -s` so client-side routes like /login fallback to index.html
+          npx serve -s web-frontend/dist -l 5173 &
 
       - name: Wait for backend
         run: |
@@ -166,9 +167,10 @@ jobs:
           nohup python -m uvicorn app.main:app --host 127.0.0.1 --port 8002 > uvicorn_out.log 2>&1 &
           echo $! > uvicorn.pid
 
-      - name: Serve frontend dist
+      - name: Serve frontend dist (SPA fallback)
         run: |
-          npx http-server web-frontend/dist -p 5173 &
+          # use `serve -s` so client-side routes like /login fallback to index.html
+          npx serve -s web-frontend/dist -l 5173 &
 
       - name: Wait for backend
         run: |

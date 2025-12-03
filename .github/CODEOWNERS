@@ -1,8 +1,11 @@
-# CODEOWNERS - assign ownership to repository workflows and infra to repo owner
+# Code owners for infrastructure, CI and scripts
 # Format: <pattern> <owner>
 
-# Make the repo owner responsible for workflow changes and CI gates
-.github/workflows/ @00Pomery00
+# CI workflow files and scripts - request review from devops
+.github/workflows/* @00Pomery00/devops @00Pomery00
+scripts/* @00Pomery00/devops @00Pomery00
+backend/Dockerfile @00Pomery00/devops @00Pomery00
+web-frontend/Dockerfile @00Pomery00/devops @00Pomery00
 
-# Default owner for repo-level changes
-/ @00Pomery00
+# Frontend component ownership (example)
+web-frontend/src/components/* @00Pomery00

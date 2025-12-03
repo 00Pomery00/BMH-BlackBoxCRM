@@ -13,6 +13,22 @@ export default function Profile() {
     showCategories: localStorage.getItem('bbx_showCategories') === '1',
   });
   const [msg, setMsg] = useState('');
+  const [uiSettings, setUiSettings] = useState(() => {
+    try {
+      const s = localStorage.getItem('bbx_ui_settings');
+      return s
+        ? JSON.parse(s)
+        : {
+            theme: localStorage.getItem('bbx_theme') || 'light',
+            accent: null,
+            violet: null,
+            violetDark: null,
+            sidebarWidth: null,
+          };
+    } catch (e) {
+      return { theme: localStorage.getItem('bbx_theme') || 'light' };
+    }
+  });
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;
@@ -27,6 +43,47 @@ export default function Profile() {
     i18n.changeLanguage(profile.lang);
     localStorage.setItem('bbx_showIds', profile.showIds ? '1' : '0');
     localStorage.setItem('bbx_showCategories', profile.showCategories ? '1' : '0');
+    // Save UI settings and apply immediately
+    try {
+      const prev = JSON.parse(localStorage.getItem('bbx_ui_settings') || '{}');
+      const merged = { ...prev, ...uiSettings };
+      localStorage.setItem('bbx_ui_settings', JSON.stringify(merged));
+      if (merged.theme === 'dark') document.documentElement.classList.add('dark');
+      else document.documentElement.classList.remove('dark');
+      if (merged.accent) document.documentElement.style.setProperty('--accent', merged.accent);
+      if (merged.violet) document.documentElement.style.setProperty('--violet', merged.violet);
+      if (merged.violetDark)
+        document.documentElement.style.setProperty('--violet-dark', merged.violetDark);
+      if (merged.bg) document.documentElement.style.setProperty('--bg', merged.bg);
+      if (merged.cardBg) document.documentElement.style.setProperty('--card-bg', merged.cardBg);
+      if (merged.sidebarWidth)
+        document.documentElement.style.setProperty('--sidebar-width', `${merged.sidebarWidth}px`);
+      // store theme separately for Header compatibility
+      localStorage.setItem('bbx_theme', merged.theme || 'light');
+    } catch (e) {
+      console.error('Failed to save ui settings', e);
+    }
+    // If user is authenticated, persist to backend as well
+    try {
+      const token = localStorage.getItem('bbx_token');
+      if (token) {
+        fetch('/api/ui/settings', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({ settings: uiSettings }),
+        }).catch((err) => console.warn('Failed to persist ui settings to backend', err));
+      }
+    } catch (e) {
+      console.warn('Persist to backend failed', e);
+    }
+  }
+
+  function handleUiChange(e) {
+    const { name, value, type, checked } = e.target;
+    setUiSettings((u) => ({ ...u, [name]: type === 'checkbox' ? checked : value }));
   }
 
   return (
@@ -109,6 +166,54 @@ export default function Profile() {
             />
             Zobrazovat kategorie prvků
           </label>
+        </div>
+        <hr />
+        <h3 className="text-lg font-medium">Vzhled a rozložení</h3>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-sm font-medium mb-1">Režim</label>
+            <select
+              name="theme"
+              value={uiSettings.theme || 'light'}
+              onChange={handleUiChange}
+              className="w-full border rounded px-3 py-2"
+            >
+              <option value="light">Světlý</option>
+              <option value="dark">Tmavý</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Barva akcentu</label>
+            <input
+              type="color"
+              name="accent"
+              value={uiSettings.accent || '#7b1fa2'}
+              onChange={handleUiChange}
+              className="w-full h-10 p-1"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">
+              Tmavší odstín akcentu (volitelně)
+            </label>
+            <input
+              type="color"
+              name="violetDark"
+              value={uiSettings.violetDark || '#5e0f86'}
+              onChange={handleUiChange}
+              className="w-full h-10 p-1"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium mb-1">Šířka bočního menu (px)</label>
+            <input
+              name="sidebarWidth"
+              type="number"
+              value={uiSettings.sidebarWidth || 240}
+              onChange={handleUiChange}
+              className="w-full border rounded px-3 py-2"
+            />
+          </div>
         </div>
         <button
           type="submit"

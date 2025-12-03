@@ -52,6 +52,15 @@ class User(Base):
     role = Column(String, default="user")
 
 
+class UserSetting(Base):
+    __tablename__ = "user_settings"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, index=True)
+    key = Column(String, index=True, nullable=False)
+    value = Column(Text, default="")
+    updated_at = Column(DateTime, default=datetime.datetime.utcnow)
+
+
 class WebhookQueue(Base):
     __tablename__ = "webhook_queue"
     id = Column(Integer, primary_key=True, index=True)

@@ -82,19 +82,29 @@ app = FastAPI(title="BlackBox CRM 2025 - Demo")
 # Register audit middleware for structured logging
 app.middleware("http")(audit.audit_middleware)
 
-# Development CORS: allow the frontend static server and local Playwright origins
-try:
-    from fastapi.middleware.cors import CORSMiddleware
+# Development CORS: allow the frontend static server and local Playwright origins.
+# Prefer an explicit list of local dev origins plus a regex fallback for other
+# localhost ports. This ensures dev servers on different ports (vite, preview,
+# Playwright) can call the API without CORS failures.
+from fastapi.middleware.cors import CORSMiddleware
 
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-except Exception:
-    pass
+_dev_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+    "http://localhost:5175",
+    "http://127.0.0.1:5175",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_dev_origins,
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --- Admin UI (sqladmin) registration ---
 try:
@@ -158,6 +168,14 @@ try:
     from .api.telemetry import router as telemetry_router
 
     app.include_router(telemetry_router)
+except Exception:
+    pass
+
+# UI settings API
+try:
+    from .api.ui_settings import router as ui_settings_router
+
+    app.include_router(ui_settings_router)
 except Exception:
     pass
 

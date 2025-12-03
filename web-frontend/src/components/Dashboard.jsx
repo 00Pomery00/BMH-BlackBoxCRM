@@ -1,6 +1,8 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import KpiCard from './ui/KpiCard';
+import SimpleBarChart from './ui/BarChart';
+import ActivityFeed from './ActivityFeed';
 import LeadList from './LeadList';
 import useElementDebug from '../hooks/useElementDebug';
 
@@ -59,6 +61,17 @@ export default function Dashboard({ companies = [] }) {
     },
   };
 
+  // Sample sparkline data for KPI cards
+  const sampleSpark = [{ value: 10 }, { value: 30 }, { value: 20 }, { value: 50 }, { value: 40 }];
+
+  const salesData = [
+    { name: 'Mon', value: 40 },
+    { name: 'Tue', value: 30 },
+    { name: 'Wed', value: 50 },
+    { name: 'Thu', value: 70 },
+    { name: 'Fri', value: 60 },
+  ];
+
   return (
     <section className="mb-6" data-id="dashboard-section" data-category="panel">
       <h2 className="text-xl font-semibold mb-4" data-id="dashboard-title" data-category="nadpis">
@@ -80,7 +93,7 @@ export default function Dashboard({ companies = [] }) {
               className="cursor-move"
               style={{ position: 'relative' }}
             >
-              <KpiCard title={kpi.title} value={kpi.value} />
+              <KpiCard title={kpi.title} value={kpi.value} sparkline={sampleSpark} />
               {showIds && (
                 <span
                   style={{
@@ -153,7 +166,10 @@ export default function Dashboard({ companies = [] }) {
             data-id="dashboard-activity-list"
             data-category="tabulka"
           >
-            {t('no_recent_activity')}
+            <SimpleBarChart data={salesData} />
+            <div className="mt-4">
+              <ActivityFeed />
+            </div>
           </div>
         </aside>
       </div>
