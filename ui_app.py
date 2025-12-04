@@ -1,12 +1,38 @@
 import io
 from datetime import datetime
-from typing import Any, Dict, List, Optional
+from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
-import matplotlib.pyplot as plt
+# Optional heavy deps: import for type-checking, otherwise try/except and
+# expose names as `Any` so the editor/type-checker (Pylance) doesn't emit
+# hundreds of "unknown member" diagnostics when these packages are not
+# installed in the environment used by the language server.
+if TYPE_CHECKING:  # pragma: no cover - only for static type checkers
+    import matplotlib.pyplot as plt  # type: ignore
+    import pandas as pd  # type: ignore
+    import streamlit as st  # type: ignore
+    from fpdf import FPDF  # type: ignore
+else:
+    try:
+        import streamlit as st  # type: ignore
+    except Exception:
+        st: Any = None  # type: ignore
+
+    try:
+        import pandas as pd  # type: ignore
+    except Exception:
+        pd: Any = None  # type: ignore
+
+    try:
+        import matplotlib.pyplot as plt  # type: ignore
+    except Exception:
+        plt: Any = None  # type: ignore
+
+    try:
+        from fpdf import FPDF  # type: ignore
+    except Exception:
+        FPDF: Any = None  # type: ignore
+
 import numpy as np
-import pandas as pd
-import streamlit as st
-from fpdf import FPDF
 
 
 def run_streamlit():
