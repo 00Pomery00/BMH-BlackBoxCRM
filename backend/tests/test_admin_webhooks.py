@@ -1,12 +1,13 @@
-from app import integrations, models
-from app.main import app
 from fastapi.testclient import TestClient
+
+from app import integrations, models
+from backend.app.main import app
 
 client = TestClient(app)
 
 
 def test_admin_webhook_dlq_and_requeue():
-    from app.main import SessionLocal
+    from backend.app.main import SessionLocal
 
     db = SessionLocal()
     # cleanup
@@ -23,7 +24,7 @@ def test_admin_webhook_dlq_and_requeue():
     db.commit()
 
     # admin token
-    from app import security
+    from backend.app import security
 
     admin_token = security.create_access_token(
         {"sub": "adminuser", "uid": 1, "role": "admin"}

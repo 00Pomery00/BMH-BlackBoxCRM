@@ -1,6 +1,7 @@
-from app import crud, models
-from app.main import app
 from fastapi.testclient import TestClient
+
+from app import crud, models
+from backend.app.main import app
 
 client = TestClient(app)
 
@@ -8,7 +9,7 @@ client = TestClient(app)
 def test_leads_export_filters():
     # create some companies
     # NOTE: test DB is the same test.db used by the app
-    from app.main import SessionLocal
+    from backend.app.main import SessionLocal
 
     db = SessionLocal()
     # cleanup companies table for predictable test

@@ -1,0 +1,14 @@
+{
+  "name": "ai-team-launch",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dashboard": "echo Starting dashboard && (cd dashboard && (npm start || echo no dashboard start script))",
+    "agents": "echo Starting agents && (python agents/trend-scout.py & node agents/code-guardian.js & python agents/test-oracle.py & node agents/multi-tenant-guard.js)",
+    "workflows": "echo Running workflows checks",
+    "ai-team-launch": "concurrently \"npm run dashboard\" \"npm run agents\" \"npm run workflows\""
+  },
+  "devDependencies": {
+    "concurrently": "^8.0.0"
+  }
+}

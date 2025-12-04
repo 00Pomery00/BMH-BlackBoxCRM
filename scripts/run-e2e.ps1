@@ -1,34 +1,44 @@
-#!/usr/bin/env pwsh
 <#
-Simple helper to run local E2E tests:
-- Activate Python venv
-- Start backend (uvicorn) on 127.0.0.1:8002
-- Start static server for `web-frontend/dist` on 5173
-- Run `npx playwright test`
-
-This script launches background processes; stop them by closing the shell or killing ports 8002/5173.
+Run full local e2e: start backend, start frontend, wait for health, run Playwright tests.
 #>
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
 
-param()
+$repoRoot = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+Push-Location $repoRoot
 
-Write-Output 'Activating venv'
-& .\.venv\Scripts\Activate.ps1
+Write-Host 'Starting backend (background)...'
+Start-Process -FilePath 'powershell' -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-File','.\scripts\start-backend.ps1' -WindowStyle Hidden
 
-Write-Output 'Starting backend (uvicorn) on 127.0.0.1:8002'
-Push-Location .\backend
-Start-Process -FilePath .\.venv\Scripts\python.exe -ArgumentList '-m','uvicorn','app.main:app','--host','127.0.0.1','--port','8002' -NoNewWindow -PassThru | Out-Null
+Write-Host 'Starting frontend (background)...'
+Start-Process -FilePath 'powershell' -ArgumentList '-NoProfile','-ExecutionPolicy','Bypass','-File','.\scripts\start-frontend.ps1' -WindowStyle Hidden
+
+Write-Host 'Waiting for backend /health (up to 60s)'
+$max = 60
+$i = 0
+while ($i -lt $max) {
+    try {
+        $r = Invoke-WebRequest -UseBasicParsing -Uri http://127.0.0.1:8002/health -TimeoutSec 5 -ErrorAction Stop
+        if ($r.StatusCode -eq 200) { Write-Host 'Backend healthy'; break }
+    } catch {}
+    Start-Sleep -Seconds 1
+    $i++
+}
+if ($i -ge $max) { Write-Error 'Backend did not become healthy in time'; Pop-Location; exit 1 }
+
+Write-Host 'Running Playwright e2e tests (web-frontend) with single worker for stability...'
+Start-Sleep -Seconds 2
+# Use npx to run Playwright with a single worker to reduce flakiness.
+if (Get-Command npx -ErrorAction SilentlyContinue) {
+    Push-Location web-frontend
+    $env:BACKEND_URL='http://127.0.0.1:8002'
+    $env:FRONTEND_URL='http://127.0.0.1:5173'
+    npx playwright test --workers=1
+    Pop-Location
+} else {
+    Write-Error 'npx not found to run Playwright tests.'
+    Pop-Location
+    exit 1
+}
+
 Pop-Location
-
-Write-Output 'Serving frontend dist on port 5173'
-Start-Process -FilePath 'python' -ArgumentList '-m','http.server','5173' -WorkingDirectory '.\web-frontend\dist' -NoNewWindow -PassThru | Out-Null
-
-Start-Sleep -Seconds 1
-
-Write-Output 'Running Playwright tests (use CTRL+C to stop)'
-Push-Location .\web-frontend
-$env:BACKEND_URL='http://127.0.0.1:8002'
-$env:FRONTEND_URL='http://127.0.0.1:5173'
-npx playwright test
-Pop-Location
-
-Write-Output 'Done'

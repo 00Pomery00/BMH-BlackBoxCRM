@@ -1,6 +1,6 @@
 import os
 import warnings
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 from dotenv import load_dotenv
@@ -17,17 +17,24 @@ load_dotenv()
 # Secrets and settings (use env vars in production)
 # Prefer explicit env var. If not set, generate an ephemeral secret for this process
 # to avoid checking a hard-coded secret into source. In production set `BBH_SECRET_KEY`.
-SECRET_KEY = os.getenv("BBH_SECRET_KEY") or os.getenv("SECRET_KEY")
-if not SECRET_KEY:
-    import secrets
 
-    SECRET_KEY = secrets.token_hex(32)
-    warnings.warn(
-        (
-            "No BBH_SECRET_KEY set — generated ephemeral secret for this process. "
-            "Set BBH_SECRET_KEY in environment for production."
+SECRET_KEY = os.getenv("BBH_SECRET_KEY")
+if not SECRET_KEY:
+    if os.getenv("ENV", "development") == "production":
+        raise RuntimeError(
+            "No BBH_SECRET_KEY set! Set BBH_SECRET_KEY in environment "
+            "for production."
         )
-    )
+    else:
+        import secrets
+
+        SECRET_KEY = secrets.token_hex(32)
+        warnings.warn(
+            (
+                "No BBH_SECRET_KEY set  generated ephemeral secret for this process. "
+                "Set BBH_SECRET_KEY in environment for production."
+            )
+        )
 
 ALGORITHM = os.getenv("BBH_JWT_ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("BBH_ACCESS_TOKEN_EXPIRE_MINUTES", 60 * 24))
@@ -66,13 +73,9 @@ def verify_password(plain_password, hashed_password):
     return pwd_context.verify(plain_password, hashed_password)
 
 
-def get_password_hash(password):
-    return pwd_context.hash(password)
-
-
 def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
     to_encode = data.copy()
-    expire = datetime.utcnow() + (
+    expire = datetime.now(timezone.utc) + (
         expires_delta or timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     )
     to_encode.update({"exp": expire})

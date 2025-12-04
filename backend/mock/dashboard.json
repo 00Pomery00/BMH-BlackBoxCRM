@@ -1,0 +1,27 @@
+[
+  {
+    "id": "dashboard-1",
+    "name": "dashboard sample 1",
+    "createdAt": "2025-11-28T07:50:17.880Z"
+  },
+  {
+    "id": "dashboard-2",
+    "name": "dashboard sample 2",
+    "createdAt": "2025-11-28T07:50:17.880Z"
+  },
+  {
+    "id": "dashboard-3",
+    "name": "dashboard sample 3",
+    "createdAt": "2025-11-28T07:50:17.880Z"
+  },
+  {
+    "id": "dashboard-4",
+    "name": "dashboard sample 4",
+    "createdAt": "2025-11-28T07:50:17.880Z"
+  },
+  {
+    "id": "dashboard-5",
+    "name": "dashboard sample 5",
+    "createdAt": "2025-11-28T07:50:17.880Z"
+  }
+]

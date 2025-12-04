@@ -2,13 +2,15 @@ import datetime
 import json
 import logging
 import time
+from pathlib import Path
 from threading import Lock
 from typing import Dict
 
 import httpx
-from app import models
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+
+from . import models
 
 # Simple in-memory cache and rate limiter for OpenGov enrichment
 _cache = {}
@@ -23,8 +25,9 @@ _buckets_lock = Lock()
 _RATE_CAPACITY = 5
 _RATE_REFILL_PER_SEC = 1
 
-# Use the same sqlite file as the app for demo purposes
-DATABASE_URL = "sqlite:///./test.db"
+# Use the same sqlite file as the app for demo purposes (absolute backend path)
+BACKEND_DIR = Path(__file__).resolve().parent.parent
+DATABASE_URL = f"sqlite:///{BACKEND_DIR / 'test.db'}"
 engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -33,7 +36,7 @@ def opengov_enrich(name: str) -> Dict:
     if not name:
         return {}
     # check cache first
-    now = datetime.datetime.utcnow().timestamp()
+    now = datetime.datetime.now(datetime.timezone.utc).timestamp()
     with _cache_lock:
         entry = _cache.get(name)
         if entry:
@@ -62,7 +65,7 @@ def opengov_enrich(name: str) -> Dict:
 
 
 def _consume_token(host: str) -> bool:
-    now = datetime.datetime.utcnow().timestamp()
+    now = datetime.datetime.now(datetime.timezone.utc).timestamp()
     with _buckets_lock:
         bucket = _buckets.get(host)
         if not bucket:
@@ -103,7 +106,7 @@ def enqueue_webhook(db, url: str, payload: Dict):
         url=url,
         payload=json.dumps(payload),
         attempts=0,
-        next_attempt_at=datetime.datetime.utcnow(),
+        next_attempt_at=datetime.datetime.now(datetime.timezone.utc),
     )
     db.add(w)
     db.commit()
@@ -117,7 +120,7 @@ def process_queue_once(db=None, max_attempts: int = 5):
     if db is None:
         db = SessionLocal()
         local_db = True
-    now = datetime.datetime.utcnow()
+    now = datetime.datetime.now(datetime.timezone.utc)
     rows = (
         db.query(models.WebhookQueue)
         .filter(models.WebhookQueue.next_attempt_at <= now)
@@ -138,9 +141,9 @@ def process_queue_once(db=None, max_attempts: int = 5):
                 row.last_error = (row.last_error or "") + ";failed"
                 # exponential backoff
                 delay = (2**row.attempts) * 1
-                row.next_attempt_at = datetime.datetime.utcnow() + datetime.timedelta(
-                    seconds=delay
-                )
+                row.next_attempt_at = datetime.datetime.now(
+                    datetime.timezone.utc
+                ) + datetime.timedelta(seconds=delay)
                 if row.attempts >= max_attempts:
                     # mark as dead-letter (keep record for admin review)
                     row.dead = 1
@@ -153,9 +156,9 @@ def process_queue_once(db=None, max_attempts: int = 5):
         except Exception as e:
             row.attempts = (row.attempts or 0) + 1
             row.last_error = str(e)
-            row.next_attempt_at = datetime.datetime.utcnow() + datetime.timedelta(
-                seconds=30
-            )
+            row.next_attempt_at = datetime.datetime.now(
+                datetime.timezone.utc
+            ) + datetime.timedelta(seconds=30)
             db.add(row)
             db.commit()
     if local_db:

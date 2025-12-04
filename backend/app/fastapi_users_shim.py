@@ -1,13 +1,15 @@
 import json as _json
+import logging
 import os
 from pathlib import Path
 from urllib.parse import parse_qs as _parse_qs
 
-from fastapi import APIRouter, Form, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from sqlalchemy.orm import Session
 
-from . import models, security
+from . import models
+from .core.security import create_access_token, get_password_hash, verify_password
 from .main import SessionLocal
 
 router = APIRouter()
@@ -131,7 +133,17 @@ async def fu_register(request: Request):
         existing = db.query(models.User).filter(models.User.email == email).first()
         if existing:
             raise HTTPException(status_code=400, detail="REGISTER_USER_ALREADY_EXISTS")
-        hashed = security.pwd_context.hash(password)
+        # Log password metadata (type/length) for CI debugging — do not log actual secret
+        _log = logging.getLogger("app.fastapi_users_shim")
+        try:
+            if isinstance(password, (bytes, bytearray)):
+                _log.info("Register password type=bytes length=%d", len(password))
+            else:
+                _pwbytes = str(password).encode("utf-8", errors="ignore")
+                _log.info("Register password type=str utf8_bytes=%d", len(_pwbytes))
+        except Exception:
+            _log.debug("Could not determine password length/type")
+        hashed = get_password_hash(password)
         u = models.User(username=email, email=email, hashed_password=hashed)
         db.add(u)
         db.commit()
@@ -211,11 +223,9 @@ async def fu_login(request: Request):
         u = db.query(models.User).filter(models.User.email == username).first()
         if not u or not u.hashed_password:
             raise HTTPException(status_code=401, detail="invalid credentials")
-        if not security.pwd_context.verify(password, u.hashed_password):
+        if not verify_password(password, u.hashed_password):
             raise HTTPException(status_code=401, detail="invalid credentials")
-        token = security.create_access_token(
-            {"sub": u.email, "uid": u.id, "role": u.role}
-        )
+        token = create_access_token({"sub": u.email, "uid": u.id, "role": u.role})
         return {"access_token": token, "token_type": "bearer"}
     finally:
         db.close()

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { listAutomations, createAutomation, runAutomation } from '../api';
+import { useTranslation } from 'react-i18next';
 
 export default function Automations() {
+  const { t } = useTranslation();
   const [flows, setFlows] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newName, setNewName] = useState('');
@@ -32,24 +34,24 @@ export default function Automations() {
       const res = await createAutomation(payload);
       if (!res.ok) {
         const txt = await res.text();
-        setMessage('Create failed: ' + txt);
+        setMessage(t('create_failed') + ': ' + txt);
         return;
       }
       setNewName('');
       setNewDef('{\n  "steps": []\n}');
       await load();
-      setMessage('Created');
+      setMessage(t('created'));
     } catch (err) {
       setMessage(String(err));
     }
   }
 
   async function handleRun(id) {
-    setMessage('Running...');
+    setMessage(t('running'));
     try {
       const res = await runAutomation(id, { dry_run: true });
       const json = await res.json();
-      setMessage('Run result: ' + JSON.stringify(json).slice(0, 300));
+      setMessage(t('run_result') + ': ' + JSON.stringify(json).slice(0, 300));
     } catch (err) {
       setMessage(String(err));
     }
@@ -57,14 +59,14 @@ export default function Automations() {
 
   return (
     <div className="p-4 rounded border mt-4">
-      <h2 className="text-xl font-semibold mb-2">Automatizace (admin)</h2>
+      <h2 className="text-xl font-semibold mb-2">{t('automations_admin')}</h2>
       {message && <div className="mb-2 text-sm text-gray-700">{message}</div>}
       <div className="mb-4">
         <form onSubmit={handleCreate} className="space-y-2">
           <div>
             <input
               className="border px-2 py-1 w-full"
-              placeholder="Název procesu"
+              placeholder={t('flow_name')}
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
             />
@@ -78,19 +80,19 @@ export default function Automations() {
           </div>
           <div>
             <button className="bg-blue-600 text-white px-3 py-1 rounded" type="submit">
-              Vytvořit (ověřit)
+              {t('create_validate')}
             </button>
           </div>
         </form>
       </div>
 
       <div>
-        <h3 className="font-medium mb-2">Existující toky</h3>
+        <h3 className="font-medium mb-2">{t('existing_flows')}</h3>
         {loading ? (
-          <div>Načítání...</div>
+          <div>{t('loading')}</div>
         ) : (
           <div className="space-y-2">
-            {flows.length === 0 && <div className="text-sm text-gray-500">Žádné toky</div>}
+            {flows.length === 0 && <div className="text-sm text-gray-500">{t('no_flows')}</div>}
             {flows.map((f) => (
               <div key={f.id} className="p-2 border rounded flex items-center justify-between">
                 <div>
@@ -101,7 +103,7 @@ export default function Automations() {
                     className="px-2 py-1 bg-green-600 text-white rounded"
                     onClick={() => handleRun(f.id)}
                   >
-                    Simulace
+                    {t('dry_run')}
                   </button>
                 </div>
               </div>
