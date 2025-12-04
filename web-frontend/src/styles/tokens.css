@@ -16,9 +16,8 @@
 
 .card {
   background: var(--card-bg);
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.04), 0 1px 3px rgba(16, 24, 40, 0.06);
-  padding: 1rem;
+  /* Use Tailwind utilities where possible; keep CSS var for easy runtime theming */
+  @apply rounded-lg shadow-sm p-4;
 }
 
 .kpi {
@@ -31,4 +30,9 @@
 .accent-bg {
   background-color: var(--accent);
   color: white;
+}
+
+.btn-primary {
+  background: var(--accent);
+  @apply text-white px-4 py-2 rounded;
 }
