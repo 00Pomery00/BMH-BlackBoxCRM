@@ -2,7 +2,7 @@ import React from 'react';
 import LineChart from '../ui/LineChart';
 import { useWidgetRegistry } from '../../hooks/useWidgetRegistry';
 
-export default function ChartOpportunitiesWidget({ config }) {
+function ChartOpportunitiesWidget({ config }) {
   const { getDemoData } = useWidgetRegistry();
   return (
     <div className="bg-white p-6 rounded shadow-sm">
@@ -16,3 +16,5 @@ export default function ChartOpportunitiesWidget({ config }) {
     </div>
   );
 }
+
+export default React.memo(ChartOpportunitiesWidget);

@@ -2,7 +2,7 @@ import React from 'react';
 import AreaChart from '../ui/AreaChart';
 import { useWidgetRegistry } from '../../hooks/useWidgetRegistry';
 
-export default function ChartRevenueTrendWidget({ config }) {
+function ChartRevenueTrendWidget({ config }) {
   const { getDemoData } = useWidgetRegistry();
   return (
     <div className="bg-white p-6 rounded shadow-sm">
@@ -11,3 +11,5 @@ export default function ChartRevenueTrendWidget({ config }) {
     </div>
   );
 }
+
+export default React.memo(ChartRevenueTrendWidget);

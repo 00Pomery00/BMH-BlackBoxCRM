@@ -1,7 +1,7 @@
 import React from 'react';
 import KpiCard from '../ui/KpiCard';
 
-export default function KpiRevenueWidget({ config }) {
+function KpiRevenueWidget({ config }) {
   return (
     <KpiCard
       title={config.title || 'Revenue'}
@@ -11,3 +11,5 @@ export default function KpiRevenueWidget({ config }) {
     />
   );
 }
+
+export default React.memo(KpiRevenueWidget);

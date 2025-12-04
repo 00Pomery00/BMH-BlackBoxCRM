@@ -2,7 +2,7 @@ import React from 'react';
 import BarChart from '../ui/BarChart';
 import { useWidgetRegistry } from '../../hooks/useWidgetRegistry';
 
-export default function ChartSalesFunnelWidget({ config }) {
+function ChartSalesFunnelWidget({ config }) {
   const { getDemoData } = useWidgetRegistry();
   return (
     <div className="bg-white p-6 rounded shadow-sm">
@@ -11,3 +11,5 @@ export default function ChartSalesFunnelWidget({ config }) {
     </div>
   );
 }
+
+export default React.memo(ChartSalesFunnelWidget);

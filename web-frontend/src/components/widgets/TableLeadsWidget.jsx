@@ -1,7 +1,7 @@
 import React from 'react';
 import DataTable from '../ui/DataTable';
 
-export default function TableLeadsWidget({ config, companies }) {
+function TableLeadsWidget({ config, companies }) {
   return (
     <div className="bg-white p-6 rounded shadow-sm">
       <h3 className="text-lg font-medium mb-4">{config.title || 'Active Leads'}</h3>
@@ -17,3 +17,5 @@ export default function TableLeadsWidget({ config, companies }) {
     </div>
   );
 }
+
+export default React.memo(TableLeadsWidget);

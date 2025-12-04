@@ -1,6 +1,8 @@
 import React from 'react';
 import ActivityFeed from '../ActivityFeed';
 
-export default function WidgetActivityFeed({ activities }) {
+function WidgetActivityFeed({ activities }) {
   return <ActivityFeed activities={activities} />;
 }
+
+export default React.memo(WidgetActivityFeed);

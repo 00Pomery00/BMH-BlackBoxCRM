@@ -3,6 +3,8 @@
  * Každý widget má: id, label, kategori, icon, komponentu, default config
  */
 
+import { useMemo, useCallback } from 'react';
+
 /**
  * @typedef {Object} WidgetConfig
  * @property {string} [title]
@@ -215,18 +217,13 @@ export const WIDGET_REGISTRY = [
  * Hook pro práci s widget registrem
  */
 export function useWidgetRegistry() {
-  const getWidgetById = (id) => WIDGET_REGISTRY.find((w) => w.id === id);
-
-  const getWidgetsByCategory = (category) => WIDGET_REGISTRY.filter((w) => w.category === category);
-
-  const getAllCategories = () => Object.values(WIDGET_CATEGORIES);
-
   /**
-   * Demo data pro verschiedene widget typy
+   * Demo data pro různé widget typy
    * V reálné aplikaci by data přicházela z API
+   * Memoizované aby se nerekonstruovalo při každém rendu
    * @type {Object.<string, any[]>}
    */
-  const DEMO_DATA = {
+  const DEMO_DATA = useMemo(() => ({
     opportunitiesData: [
       { month: 'Feb', value: 67 },
       { month: 'Mar', value: 60 },
@@ -254,14 +251,25 @@ export function useWidgetRegistry() {
       { id: 2, name: 'Simmons', type: 'Question', status: 'New', priority: 'High' },
       { id: 3, name: 'Marvin', type: 'Question', status: 'New', priority: 'High' },
     ],
-  };
+  }), []);
+
+  // Memoizované funkce pro práci s registry
+  const getWidgetById = useCallback((id) => WIDGET_REGISTRY.find((w) => w.id === id), []);
+
+  const getWidgetsByCategory = useCallback(
+    (category) => WIDGET_REGISTRY.filter((w) => w.category === category),
+    []
+  );
+
+  const getAllCategories = useCallback(() => Object.values(WIDGET_CATEGORIES), []);
 
   /**
    * Vrátí demo data pro daný widget
+   * Memoizované aby se nevytvářela nová funkce při každém rendu
    * @param {string} widgetId - ID widgetu (např. 'chart_opportunities')
    * @returns {any[]|Object} Demo data pro widget, nebo prázdné pole
    */
-  const getDemoData = (widgetId) => {
+  const getDemoData = useCallback((widgetId) => {
     switch (widgetId) {
       case 'chart_opportunities':
       case 'chart_revenue_trend':
@@ -275,7 +283,7 @@ export function useWidgetRegistry() {
       default:
         return [];
     }
-  };
+  }, [DEMO_DATA]);
 
   return {
     WIDGET_REGISTRY,

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useCallback } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import KpiCustomersWidget from './widgets/KpiCustomersWidget';
 import KpiRevenueWidget from './widgets/KpiRevenueWidget';
@@ -16,10 +16,10 @@ import WidgetGamification from './widgets/WidgetGamification';
 import WidgetActivityFeed from './widgets/WidgetActivityFeed';
 
 /**
- * DynamicDashboard - renderuje widgety podle konfiguraci uživatele
+ * DynamicDashboard - renderuje widgety podle konfiguraci uživatele (optimized with memoization)
  * Čte z bbx_ui_settings.dashboardConfig
  */
-export default function DynamicDashboard({ companies = [], gamification = {}, activities = [] }) {
+function DynamicDashboard({ companies = [], gamification = {}, activities = [] }) {
   // Read settings with error handling using useLocalStorage hook
   const [settings] = useLocalStorage(
     'bbx_ui_settings',
@@ -36,7 +36,8 @@ export default function DynamicDashboard({ companies = [], gamification = {}, ac
     widgetOrder: [],
   };
 
-  const widgetFactory = {
+  // Memoize widget factory to prevent recreation on each render
+  const widgetFactory = useMemo(() => ({
     kpi_customers: KpiCustomersWidget,
     kpi_revenue: KpiRevenueWidget,
     kpi_invoices: KpiInvoicesWidget,
@@ -51,10 +52,10 @@ export default function DynamicDashboard({ companies = [], gamification = {}, ac
     widget_inbox: WidgetInbox,
     widget_gamification: WidgetGamification,
     widget_activity_feed: WidgetActivityFeed,
-  };
+  }), []);
 
-  // Renderuj widget podle typu
-  function renderWidget(widgetId, widgetConfig) {
+  // Memoize renderWidget function to prevent recreation on each render
+  const renderWidget = useCallback((widgetId, widgetConfig) => {
     const WidgetComponent = widgetFactory[widgetId];
     if (!WidgetComponent) return null;
     // Speciální props pro některé widgety
@@ -68,7 +69,7 @@ export default function DynamicDashboard({ companies = [], gamification = {}, ac
       return <WidgetComponent activities={activities} />;
     }
     return <WidgetComponent config={widgetConfig} />;
-  }
+  }, [widgetFactory, companies, gamification, activities]);
 
   if (!config.enabledWidgets || config.enabledWidgets.length === 0) {
     return (
@@ -104,3 +105,5 @@ export default function DynamicDashboard({ companies = [], gamification = {}, ac
     </div>
   );
 }
+
+export default React.memo(DynamicDashboard);

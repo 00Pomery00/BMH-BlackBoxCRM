@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function WidgetInbox({ config }) {
+function WidgetInbox({ config }) {
   return (
     <div className="bg-white p-6 rounded shadow-sm">
       <h3 className="text-lg font-medium mb-4">{config.title || 'My Inbox'}</h3>
@@ -12,3 +12,5 @@ export default function WidgetInbox({ config }) {
     </div>
   );
 }
+
+export default React.memo(WidgetInbox);

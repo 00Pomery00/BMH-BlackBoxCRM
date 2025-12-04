@@ -2,7 +2,7 @@ import React from 'react';
 import DataTable from '../ui/DataTable';
 import { useWidgetRegistry } from '../../hooks/useWidgetRegistry';
 
-export default function TableSalesAnalyticsWidget({ config }) {
+function TableSalesAnalyticsWidget({ config }) {
   const { getDemoData } = useWidgetRegistry();
   return (
     <div className="bg-white p-6 rounded shadow-sm">
@@ -20,3 +20,5 @@ export default function TableSalesAnalyticsWidget({ config }) {
     </div>
   );
 }
+
+export default React.memo(TableSalesAnalyticsWidget);

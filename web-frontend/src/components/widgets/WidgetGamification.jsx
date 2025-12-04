@@ -1,6 +1,8 @@
 import React from 'react';
 import GamificationPanel from '../GamificationPanel';
 
-export default function WidgetGamification({ gamification }) {
+function WidgetGamification({ gamification }) {
   return <GamificationPanel stats={gamification} />;
 }
+
+export default React.memo(WidgetGamification);

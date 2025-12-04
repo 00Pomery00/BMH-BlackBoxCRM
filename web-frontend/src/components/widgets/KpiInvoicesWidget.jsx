@@ -1,7 +1,7 @@
 import React from 'react';
 import KpiCard from '../ui/KpiCard';
 
-export default function KpiInvoicesWidget({ config }) {
+function KpiInvoicesWidget({ config }) {
   return (
     <KpiCard
       title={config.title || 'Invoices'}
@@ -11,3 +11,5 @@ export default function KpiInvoicesWidget({ config }) {
     />
   );
 }
+
+export default React.memo(KpiInvoicesWidget);

@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function TableOpportunitiesWidget({ config }) {
+function TableOpportunitiesWidget({ config }) {
   return (
     <div className="bg-white p-6 rounded shadow-sm">
       <h3 className="text-lg font-medium mb-4">{config.title || 'Opportunities'}</h3>
@@ -8,3 +8,5 @@ export default function TableOpportunitiesWidget({ config }) {
     </div>
   );
 }
+
+export default React.memo(TableOpportunitiesWidget);

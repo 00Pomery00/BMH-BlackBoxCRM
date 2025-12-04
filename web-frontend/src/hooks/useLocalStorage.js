@@ -15,6 +15,7 @@ import { useState } from 'react';
 
 /**
  * Safe localStorage hook with JSON serialization
+ * Performance optimized with stable getter/setter references
  *
  * @template T
  * @param {string} key - localStorage key name

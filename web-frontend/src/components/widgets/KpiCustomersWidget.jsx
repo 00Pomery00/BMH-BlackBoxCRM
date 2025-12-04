@@ -2,11 +2,11 @@ import React from 'react';
 import KpiCard from '../ui/KpiCard';
 
 /**
- * Widget: KPI Customers
+ * Widget: KPI Customers (memoized for performance)
  * @param {object} props
  * @param {object} props.config
  */
-export default function KpiCustomersWidget({ config }) {
+function KpiCustomersWidget({ config }) {
   return (
     <KpiCard
       title={config.title || 'Customers'}
@@ -16,3 +16,5 @@ export default function KpiCustomersWidget({ config }) {
     />
   );
 }
+
+export default React.memo(KpiCustomersWidget);

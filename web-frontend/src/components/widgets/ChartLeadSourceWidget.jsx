@@ -2,7 +2,7 @@ import React from 'react';
 import PieChart from '../ui/PieChart';
 import { useWidgetRegistry } from '../../hooks/useWidgetRegistry';
 
-export default function ChartLeadSourceWidget({ config }) {
+function ChartLeadSourceWidget({ config }) {
   const { getDemoData } = useWidgetRegistry();
   return (
     <div className="bg-white p-6 rounded shadow-sm">
@@ -11,3 +11,5 @@ export default function ChartLeadSourceWidget({ config }) {
     </div>
   );
 }
+
+export default React.memo(ChartLeadSourceWidget);
