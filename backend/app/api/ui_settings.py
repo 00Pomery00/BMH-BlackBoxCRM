@@ -39,6 +39,12 @@ def post_settings(
     try:
         raw = json.dumps(settings)
         s = crud.set_user_setting(db, user.id, "ui_settings", raw)
-        return {"status": "ok", "updated_at": s.updated_at}
+        # Return ISO formatted timestamp for consistency
+        updated = None
+        try:
+            updated = s.updated_at.isoformat()
+        except Exception:
+            updated = str(s.updated_at)
+        return {"status": "ok", "updated_at": updated}
     except Exception:
         raise HTTPException(status_code=500, detail="Failed to save settings")
