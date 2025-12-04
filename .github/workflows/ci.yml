@@ -42,11 +42,25 @@ jobs:
       - name: Export PYTHONPATH
         shell: pwsh
         run: |
+          # Ensure backend module imports work on Windows runners
           Add-Content -Path $env:GITHUB_ENV -Value "PYTHONPATH=$env:GITHUB_WORKSPACE"
-      - name: Run backend tests
+
+      - name: Run backend tests (produce junit + logs)
         shell: pwsh
+        working-directory: backend
         run: |
-          python -m pytest -q backend/tests
+          mkdir -Force test-results
+          python -m pytest -q tests --junitxml=test-results/junit.xml -o log_cli=true -o log_cli_level=INFO || $LASTEXITCODE = $LASTEXITCODE
+
+      - name: Upload backend test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-test-results
+          path: |
+            backend/test-results
+            backend/uvicorn_out.log
+            backend/login_debug.log
 
   frontend-build:
     name: Frontend Build (Node)
