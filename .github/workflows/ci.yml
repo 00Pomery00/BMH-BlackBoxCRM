@@ -48,18 +48,23 @@ jobs:
       - name: "Diagnostics: Print Python, pip and workspace"
         shell: pwsh
         run: |
-          Write-Host "== Python and pip versions =="
-          python -V
-          pip --version
-          Write-Host "== pip freeze =="
-          pip freeze
-          Write-Host "== Environment vars (selected) =="
-          Write-Host "GITHUB_WORKSPACE: $env:GITHUB_WORKSPACE"
-          Write-Host "PYTHONPATH: $env:PYTHONPATH"
-          Write-Host "== Workspace listing (top) =="
-          Get-ChildItem -Path $env:GITHUB_WORKSPACE | Select-Object Name,Mode,Length | Format-Table -AutoSize
-          Write-Host "== backend listing (depth 2) =="
-          if (Test-Path -Path "backend") { Get-ChildItem -Path backend -Recurse -Depth 2 | Select-Object FullName,Mode,Length | Format-Table -AutoSize } else { Write-Host 'backend folder not present' }
+          # Ensure diagnostics file exists so we can always upload it as an artifact
+          New-Item -ItemType Directory -Path backend/test-results -Force | Out-Null
+          $diag = 'backend/test-results/ci-diagnostics.txt'
+          "== START DIAGNOSTICS ==" | Out-File -FilePath $diag -Encoding utf8 -Append
+          "== Python and pip versions ==" | Out-File -FilePath $diag -Encoding utf8 -Append
+          python -V 2>&1 | Out-File -FilePath $diag -Encoding utf8 -Append
+          pip --version 2>&1 | Out-File -FilePath $diag -Encoding utf8 -Append
+          "== pip freeze ==" | Out-File -FilePath $diag -Encoding utf8 -Append
+          pip freeze 2>&1 | Out-File -FilePath $diag -Encoding utf8 -Append
+          "== Environment vars (selected) ==" | Out-File -FilePath $diag -Encoding utf8 -Append
+          "GITHUB_WORKSPACE: $env:GITHUB_WORKSPACE" | Out-File -FilePath $diag -Encoding utf8 -Append
+          "PYTHONPATH: $env:PYTHONPATH" | Out-File -FilePath $diag -Encoding utf8 -Append
+          "== Workspace listing (top) ==" | Out-File -FilePath $diag -Encoding utf8 -Append
+          Get-ChildItem -Path $env:GITHUB_WORKSPACE | Select-Object Name,Mode,Length | Out-String | Out-File -FilePath $diag -Encoding utf8 -Append
+          "== backend listing (depth 2) ==" | Out-File -FilePath $diag -Encoding utf8 -Append
+          if (Test-Path -Path "backend") { Get-ChildItem -Path backend -Recurse -Depth 2 | Select-Object FullName,Mode,Length | Out-String | Out-File -FilePath $diag -Encoding utf8 -Append } else { "backend folder not present" | Out-File -FilePath $diag -Encoding utf8 -Append }
+          "== END DIAGNOSTICS ==" | Out-File -FilePath $diag -Encoding utf8 -Append
 
       - name: Run backend tests (produce junit + logs)
         shell: pwsh
