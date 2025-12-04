@@ -73,7 +73,7 @@ function DynamicDashboard({ companies = [], gamification = {}, activities = [] }
 
   if (!config.enabledWidgets || config.enabledWidgets.length === 0) {
     return (
-      <div className="p-6 max-w-6xl mx-auto bg-yellow-50 border border-yellow-200 rounded text-yellow-800">
+      <div data-testid="dashboard-empty" className="p-6 max-w-6xl mx-auto bg-yellow-50 border border-yellow-200 rounded text-yellow-800">
         <h2 className="text-xl font-semibold mb-2">⚠️ Žádné komponenty vybrány</h2>
         <p>
           Jděte do <strong>Profil → Moje Komponenty</strong> a vyberte si komponenty, které chcete
@@ -84,14 +84,18 @@ function DynamicDashboard({ companies = [], gamification = {}, activities = [] }
   }
 
   return (
-    <div className="p-6 max-w-6xl mx-auto space-y-6">
+    <div data-testid="dynamic-dashboard" className="p-6 max-w-6xl mx-auto space-y-6">
       {/* Render KPI cards v horní řadě (grid 4 kolonami) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
         {config.widgetOrder
           .filter((id) =>
             ['kpi_customers', 'kpi_revenue', 'kpi_invoices', 'kpi_profit'].includes(id)
           )
-          .map((widgetId) => renderWidget(widgetId, config.widgetConfigs[widgetId]))}
+          .map((widgetId) => (
+            <div key={widgetId} data-testid={`widget-${widgetId.replace(/_/g, '-')}`}>
+              {renderWidget(widgetId, config.widgetConfigs[widgetId])}
+            </div>
+          ))}
       </div>
 
       {/* Render zbytku widgetů v normálním fluidu */}
@@ -100,7 +104,11 @@ function DynamicDashboard({ companies = [], gamification = {}, activities = [] }
           .filter(
             (id) => !['kpi_customers', 'kpi_revenue', 'kpi_invoices', 'kpi_profit'].includes(id)
           )
-          .map((widgetId) => renderWidget(widgetId, config.widgetConfigs[widgetId]))}
+          .map((widgetId) => (
+            <div key={widgetId} data-testid={`widget-${widgetId.replace(/_/g, '-')}`}>
+              {renderWidget(widgetId, config.widgetConfigs[widgetId])}
+            </div>
+          ))}
       </div>
     </div>
   );
