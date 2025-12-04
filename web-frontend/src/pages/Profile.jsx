@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import DashboardBuilder from '../components/DashboardBuilder';
+import { useLocalStorage } from '../hooks/useLocalStorage';
 
 export default function Profile() {
   const { t, i18n } = useTranslation();
@@ -15,27 +16,27 @@ export default function Profile() {
   });
   const [msg, setMsg] = useState('');
   const [activeTab, setActiveTab] = useState('general'); // 'general', 'theme', 'dashboard'
-  const [uiSettings, setUiSettings] = useState(() => {
-    try {
-      const s = localStorage.getItem('bbx_ui_settings');
-      return s
-        ? JSON.parse(s)
-        : {
-            theme: localStorage.getItem('bbx_theme') || 'light',
-            accent: null,
-            violet: null,
-            violetDark: null,
-            sidebarWidth: null,
-            dashboardConfig: {
-              enabledWidgets: ['kpi_customers', 'kpi_revenue', 'kpi_invoices', 'kpi_profit'],
-              widgetConfigs: {},
-              widgetOrder: [],
-            },
-          };
-    } catch (e) {
-      return { theme: localStorage.getItem('bbx_theme') || 'light' };
+
+  // Use custom hook for bbx_ui_settings with proper JSON parsing/error handling
+  const [uiSettings, setUiSettings] = useLocalStorage(
+    'bbx_ui_settings',
+    {
+      theme: 'light',
+      accent: null,
+      violet: null,
+      violetDark: null,
+      sidebarWidth: null,
+      dashboardConfig: {
+        enabledWidgets: ['kpi_customers', 'kpi_revenue', 'kpi_invoices', 'kpi_profit'],
+        widgetConfigs: {},
+        widgetOrder: [],
+      },
+    },
+    {
+      validate: (v) => v && typeof v === 'object',
+      suppressErrors: true,
     }
-  });
+  );
 
   function handleChange(e) {
     const { name, value, type, checked } = e.target;

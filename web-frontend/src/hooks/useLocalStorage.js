@@ -7,6 +7,13 @@
 import { useState } from 'react';
 
 /**
+ * @typedef {Object} DashboardConfig
+ * @property {string[]} enabledWidgets
+ * @property {Object.<string, any>} widgetConfigs
+ * @property {string[]} widgetOrder
+ */
+
+/**
  * Safe localStorage hook with JSON serialization
  *
  * @template T

@@ -41,6 +41,7 @@ function validateDashboardConfig(config) {
  * Provides unified access to dashboard config from localStorage.
  * Handles read/write with validation and error recovery.
  *
+ * @param {DashboardConfig} initialConfig - Initial config to set
  * @returns {Object} Dashboard config interface
  * @returns {DashboardConfig} .config - Current config
  * @returns {Function} .setConfig - Update entire config
