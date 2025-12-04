@@ -62,7 +62,8 @@ def apply_migration(conn, planned):
     try:
         for row in planned:
             cur.execute(
-                "INSERT INTO users (email, hashed_password, is_active, role, is_superuser, is_verified) VALUES (?, ?, ?, ?, ?, ?)",
+                "INSERT INTO users (email, hashed_password, is_active, role, is_superuser, is_verified) "
+                "VALUES (?, ?, ?, ?, ?, ?)",
                 row,
             )
         conn.commit()

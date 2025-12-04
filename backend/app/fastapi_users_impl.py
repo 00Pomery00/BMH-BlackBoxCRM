@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import logging
 import os
+from pathlib import Path
 from typing import Optional
 
 logger = logging.getLogger(__name__)
@@ -42,7 +43,10 @@ else:
     _FASTAPI_USERS_AVAILABLE = True
 
 # Configuration
-DATABASE_URL_ASYNC = os.getenv("DATABASE_URL_ASYNC", "sqlite+aiosqlite:///./test.db")
+_BACKEND_DIR = Path(__file__).resolve().parent.parent
+DATABASE_URL_ASYNC = os.getenv(
+    "DATABASE_URL_ASYNC", f"sqlite+aiosqlite:///{_BACKEND_DIR / 'test.db'}"
+)
 SECRET = os.getenv("BBH_SECRET_KEY", "CHANGE_ME_FOR_PRODUCTION")
 
 metadata = MetaData()

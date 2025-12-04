@@ -1,11 +1,11 @@
 import asyncio
 import datetime
-import os
-import weakref
 from contextlib import asynccontextmanager
-from pathlib import Path
 
-from app import (
+from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+from . import (
     ai_processor,
     audit,
     crud,
@@ -16,85 +16,38 @@ from app import (
     schemas,
     security,
 )
-from fastapi import Depends, FastAPI
-from sqlalchemy import create_engine, text
-from sqlalchemy.orm import sessionmaker
+from .db import SessionLocal, engine
 
-BASE_DIR = Path(__file__).resolve().parent.parent
-DATABASE_URL = f"sqlite:///{BASE_DIR / 'test.db'}"
-
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-
-# Wrap the sessionmaker so we can keep weakrefs to created Session instances.
-_maker = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-
-
-class SessionFactory:
-    def __init__(self, maker):
-        self._maker = maker
-        self._instances = weakref.WeakSet()
-
-    def __call__(self):
-        s = self._maker()
-        try:
-            self._instances.add(s)
-        except Exception:
-            pass
-        return s
-
-    def expire_all(self):
-        for s in list(self._instances):
-            try:
-                s.expire_all()
-            except Exception:
-                pass
-
-
-SessionLocal = SessionFactory(_maker)
-
-
-# Try to ensure the `dead` column exists on older DBs created before the column
-# was introduced. If the table doesn't exist yet, creating all tables will set
-# up the full schema.
-models.Base.metadata.create_all(bind=engine)
-try:
-    with engine.connect() as conn:
-        conn.execute(
-            text("ALTER TABLE webhook_queue ADD COLUMN dead INTEGER DEFAULT 0")
-        )
-        conn.commit()
-except Exception:
-    # if the table doesn't exist yet or column already present, ignore errors
-    pass
-
-# Ensure user table has expected columns for auth (best-effort ALTERs for demo)
-try:
-    with engine.connect() as conn:
-        conn.execute(text("ALTER TABLE users ADD COLUMN email VARCHAR"))
-        conn.execute(text("ALTER TABLE users ADD COLUMN hashed_password VARCHAR"))
-        conn.execute(text("ALTER TABLE users ADD COLUMN is_active INTEGER DEFAULT 1"))
-        conn.commit()
-except Exception:
-    pass
+# Register auth routes early
+from .users import router as users_router
 
 app = FastAPI(title="BlackBox CRM 2025 - Demo")
 
 # Register audit middleware for structured logging
 app.middleware("http")(audit.audit_middleware)
 
-# Development CORS: allow the frontend static server and local Playwright origins
-try:
-    from fastapi.middleware.cors import CORSMiddleware
+# Development CORS: allow the frontend static server and local Playwright origins.
+# Prefer an explicit list of local dev origins plus a regex fallback for other
+# localhost ports. This ensures dev servers on different ports (vite, preview,
+# Playwright) can call the API without CORS failures.
 
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["http://127.0.0.1:5173", "http://localhost:5173"],
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-except Exception:
-    pass
+_dev_origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    "http://localhost:5174",
+    "http://127.0.0.1:5174",
+    "http://localhost:5175",
+    "http://127.0.0.1:5175",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=_dev_origins,
+    allow_origin_regex=r"^https?://(localhost|127\.0\.0\.1)(:\d+)?$",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # --- Admin UI (sqladmin) registration ---
 try:
@@ -115,9 +68,7 @@ try:
     admin.add_view(ModelView(models.AutomationFlow, engine))
 except Exception:
     pass
-# Register auth routes
-from app.users import router as users_router  # noqa: E402
-
+# include the users router
 app.include_router(users_router)
 
 # Provide a minimal compatibility shim for fastapi-users endpoints used in tests
@@ -150,6 +101,30 @@ try:
     from .admin_automations import router as admin_automations_router
 
     app.include_router(admin_automations_router)
+except Exception:
+    pass
+
+# Telemetry API
+try:
+    from .api.telemetry import router as telemetry_router
+
+    app.include_router(telemetry_router)
+except Exception:
+    pass
+
+# UI settings API
+try:
+    from .api.ui_settings import router as ui_settings_router
+
+    app.include_router(ui_settings_router)
+except Exception:
+    pass
+
+# Admin telemetry summary
+try:
+    from .api.admin_telemetry import router as admin_telemetry_router
+
+    app.include_router(admin_telemetry_router)
 except Exception:
     pass
 
@@ -407,7 +382,7 @@ def admin_requeue_webhook(
     row.attempts = 0
     row.last_error = ""
     row.dead = 0
-    row.next_attempt_at = datetime.datetime.utcnow()
+    row.next_attempt_at = datetime.datetime.now(datetime.timezone.utc)
     db.add(row)
     db.commit()
     # Ensure any other in-process sessions (like test sessions) see this update

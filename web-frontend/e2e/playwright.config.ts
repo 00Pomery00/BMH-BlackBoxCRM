@@ -16,6 +16,7 @@ export default defineConfig({
     headless: true,
     viewport: { width: 1280, height: 720 },
     actionTimeout: 5000,
+    baseURL: 'http://localhost:5173',
     // Keep screenshots/videos/traces on failure for easier debugging
     screenshot: 'only-on-failure',
     video: 'retain-on-failure',
@@ -28,5 +29,12 @@ export default defineConfig({
     ['list'],
     ['html', { outputFolder: path.resolve(__dirname, '..', 'playwright-report'), open: 'never' }]
   ],
-  // Note: not starting webServer here; tests use served `dist` in CI/local helper.
+  // Start dev server before tests
+  webServer: {
+    command: 'npx serve -s dist -l 5173',
+    cwd: path.resolve(__dirname, '..'),
+    port: 5173,
+    timeout: 120_000,
+    reuseExistingServer: !process.env.CI,
+  },
 })
