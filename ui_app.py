@@ -1,5 +1,6 @@
 import io
 from datetime import datetime
+from typing import Any, Dict, List, Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -44,7 +45,7 @@ def run_streamlit():
 
     # --------- Pomocné funkce ---------
     @st.cache_data
-    def read_excel_sheets(uploaded_file):
+    def read_excel_sheets(uploaded_file: Any) -> Dict[str, pd.DataFrame]:
         # vrací dict(sheetname -> DataFrame)
         try:
             return pd.read_excel(uploaded_file, sheet_name=None)
@@ -52,7 +53,7 @@ def run_streamlit():
             st.error(f"Chyba při načítání excelu: {e}")
             return {}
 
-    def find_col(df, candidates):
+    def find_col(df: Optional[pd.DataFrame], candidates: List[str]) -> Optional[str]:
         if df is None:
             return None
         cols = {c.lower(): c for c in df.columns}
@@ -66,7 +67,7 @@ def run_streamlit():
                     return c
         return None
 
-    def normalize_companies(dfs):
+    def normalize_companies(dfs: List[Optional[pd.DataFrame]]) -> pd.DataFrame:
         frames = []
         for df in dfs:
             if df is None:
@@ -112,13 +113,13 @@ def run_streamlit():
         out = merged.groupby("login_or_name").sum().reset_index()
         return out
 
-    def map_login_to_name(login):
+    def map_login_to_name(login: Any) -> str:
         if pd.isna(login):
             return ""
         s = str(login).upper()
         return LOGIN_MAP.get(s, login)
 
-    def compute_commission(row):
+    def compute_commission(row: pd.Series) -> float:
         new_bmsl = row.get("new_bmsl", 0) or 0
         strat_fee = row.get("strat_fee", 0) or 0
         coef = row.get("total_coef", 1) or 1
@@ -130,7 +131,7 @@ def run_streamlit():
             val = 0
         return val
 
-    def generate_invoice_pdf(df, month_label):
+    def generate_invoice_pdf(df: pd.DataFrame, month_label: str) -> io.BytesIO:
         pdf = FPDF()
         pdf.add_page()
         pdf.set_font("Arial", "B", 16)
@@ -186,7 +187,9 @@ def run_streamlit():
         sheets3 = read_excel_sheets(f3)
         sheets4 = read_excel_sheets(f4)
 
-        def pick_sheets(all_sheets, names):
+        def pick_sheets(
+            all_sheets: Dict[str, pd.DataFrame], names: List[str]
+        ) -> Optional[pd.DataFrame]:
             for n in names:
                 for key in all_sheets.keys():
                     if n.lower() in key.lower():
@@ -280,7 +283,7 @@ def run_streamlit():
         ]
         combined = combined[col_list].fillna(0)
 
-        def attach_coeffs(r):
+        def attach_coeffs(r: pd.Series) -> pd.Series:
             lg = r["login"]
             c = st.session_state.get("coeffs", {}).get(lg, None)
             if c:
